@@ -1,0 +1,38 @@
+/* .buttons-photos{
+  max-width: 250px;
+  font-size: 1rem;
+} */
+.container-controls-btns-photos{
+  gap: 5px;
+}
+.container-controls-btns-photos > button{
+  background: white;
+  border: 1px solid var(--bs-primary);
+  width: 25px;
+  height: 25px;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  border-radius: 1000px;
+  transition: all .3s ease 0s;
+  padding: 1px 7px;
+  font-size: 1rem;
+}
+.container-controls-btns-photos > button:first-of-type{
+
+  padding: 1px 8px;
+  font-size: 1.4rem;
+}
+.container-controls-btns-photos > button:hover{
+  background: var(--bs-primary);
+  color: white;
+}
+.img-reception{
+  display: inline-block;
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  object-position: center;
+  cursor: pointer;
+  background: silver;
+}

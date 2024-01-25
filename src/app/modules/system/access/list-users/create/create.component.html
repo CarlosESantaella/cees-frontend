@@ -1,0 +1,130 @@
+<div class="modal-content">
+  <div class="modal-header" id="kt_modal_add_user_header">
+    <h2 class="fw-bolder">Crear Usuario </h2>
+
+    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close"
+      (click)="modal.dismiss()">
+      <span class="svg-icon svg-icon-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+            fill="currentColor" />
+          <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form" >
+      <div class="fv-row mb-7">
+        <!--begin::Label-->
+        <label class="required fw-bold fs-6 mb-2">Nombre de usuario</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Nombre de usuario..."
+          formControlName="name" />
+        <div *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+          <p class="text-danger" *ngIf="name?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="name?.errors?.['minlength']">
+            Debes introducir un mínimo de {{ name?.errors?.['minlength'].requiredLength }} caracteres
+          </p>
+        </div>
+        <!--end::Input-->
+      </div>
+      <div class="fv-row mb-7">
+        <!--begin::Label-->
+        <label class="required fw-bold fs-6 mb-2">Email</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Email de usuario..."
+          formControlName="email" />
+        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+          <p class="text-danger" *ngIf="email?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="email?.errors?.['email']">
+            Debe ingresar un formato de email correcto
+          </p>
+
+        </div>
+        <!--end::Input-->
+      </div>
+      <!--end::Input group-->
+      <!--begin::Input group-->
+      <div class="fv-row mb-7">
+        <!--begin::Label-->
+        <label class="required fw-bold fs-6 mb-2">Contraseña</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <input type="password" autocomplete name="password" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Contraseña..." formControlName="password" />
+        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+          <p class="text-danger" *ngIf="password?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="password?.errors?.['minlength']">
+            Debes introducir un mínimo de {{ password?.errors?.['minlength'].requiredLength }} caracteres
+          </p>
+        </div>
+        <!--end::Input-->
+      </div>
+      <div class="fv-row mb-7">
+        <!--begin::Label-->
+        <label class="required fw-bold fs-6 mb-2">Confirmar contraseña</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <input type="password" autocomplete formControlName="confirm_password" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Confirmar contraseña..." value="" />
+        <div *ngIf="confirm_password?.invalid && (confirm_password?.dirty || confirm_password?.touched)">
+          <p class="text-danger" *ngIf="confirm_password?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="confirm_password?.errors?.['confirmedValidator']">
+            Contraseñas no coinciden
+          </p>
+        </div>
+        <!--end::Input-->
+      </div>
+      <!--end::Input group-->
+      <!--begin::Input group-->
+      <div class="mb-7">
+        <!--begin::Label-->
+        <label class="required fw-bold fs-6 mb-5">Rol</label>
+        <!--end::Label-->
+        <!--begin::Roles-->
+        <ng-container *ngFor="let rol of all_rols; let i = index">
+          <!--begin::Input row-->
+          <div class="d-flex fv-row">
+            <!--begin::Radio-->
+            <div class="form-check form-check-custom form-check-solid">
+              <!--begin::Input-->
+              <input class="form-check-input me-3" formControlName="profile" type="radio" [value]="rol.id"
+                 [checked]='i == 0' />
+              <!--end::Input-->
+              <!--begin::Label-->
+              <label class="form-check-label" for="kt_modal_update_role_option_0">
+                <div class="fw-bolder text-gray-800">{{ rol.name }}</div>
+              </label>
+              <!--end::Label-->
+            </div>
+            <!--end::Radio-->
+          </div>
+          <!--end::Input row-->
+          <div class='separator separator-dashed my-5'></div>
+        </ng-container>
+        <div *ngIf="profile?.invalid && (profile?.dirty || profile?.touched)">
+          <p class="text-danger" *ngIf="profile?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+        <!--end::Input row-->
+        <!--end::Roles-->
+      </div>
+      <!--end::Input group-->
+      <div class="fv-row mb-7 text-center">
+        <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>
