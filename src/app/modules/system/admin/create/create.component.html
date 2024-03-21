@@ -29,6 +29,19 @@
         </div>
       </div>
       <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Usuario</label>
+        <input type="text" formControlName="username" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Usuario..." value="" />
+        <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+          <p class="text-danger" *ngIf="username?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="username?.errors?.['minlength']">
+            Debes introducir un mínimo de {{ username?.errors?.['minlength'].requiredLength }} caracteres
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
         <label class="required fw-bold fs-6 mb-2">Email</label>
         <input type="text" formControlName="email" class="form-control form-control-solid mb-3 mb-lg-0"
           placeholder="Email..." value="" />

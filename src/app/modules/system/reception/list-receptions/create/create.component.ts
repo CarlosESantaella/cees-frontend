@@ -54,6 +54,11 @@ export class CreateComponent {
       model: ['', Validators.required],
       serie: ['', Validators.required],
       capability: ['', Validators.required],
+      location: ['', Validators.required],
+      specific_location: ['', Validators.required],
+      type_of_job: ['Nuevo', Validators.required],
+      equipment_owner: ['', Validators.required],
+      customer_inventory: ['', Validators.required],
       comments: [''],
       // state: ['', Validators.required],
     });
@@ -89,12 +94,50 @@ export class CreateComponent {
   get photos(): FormArray {
     return this.form.get('photos') as FormArray;
   }
+  get location() {
+    return this.form.get('location');
+  }
+  get specific_location() {
+    return this.form.get('specific_location');
+  }
+  get type_of_job() {
+    return this.form.get('type_of_job');
+  }
+  get equipment_owner() {
+    return this.form.get('equipment_owner');
+  }
+  get customer_inventory() {
+    return this.form.get('customer_inventory');
+  }
   // get state() {
   //   return this.form.get('state');
   // }
   get comments() {
     return this.form.get('comments');
   }
+  // get comments(){
+  //   return this.form.get('comments');
+  // }
+  // get state(){
+  //   return this.form.get('state');
+  // }
+  // get comments(){
+  //   return this.form.get('comments');
+  // }
+
+  // validateImageArray(control: any) {
+  //   const images = control.value;
+  //   const tipoPermitido = ['image/jpeg', 'image/png', 'image/gif']; // Puedes ajustar según tus necesidades
+
+  //   for (const image of images) {
+  //     const tipoArchivo = image.type;
+  //     if (!tipoPermitido.includes(tipoArchivo)) {
+  //       return { tipoInvalido: true };
+  //     }
+  //   }
+
+  //   return null;
+  // }
 
   //manejo de agregar o quitar fotos
   addPhoto() {
@@ -112,40 +155,131 @@ export class CreateComponent {
   }
 
   //manejo del preview de las fotos
-  handleFileInput(event: Event, i: any) {
+  handleFileInput(event: any, i: any) {
     const target = event.target as HTMLInputElement;
 
     const files = target.files as FileList;
 
     const file = files[0];
+
+
+
+    if (files.length > 0) {
+      let validate_file = this.validateImageType(file);
+      if (validate_file) {
+        if (file) this.readFile(file, i);
+      } else {
+        event.target.value = null;
+      }
+    }
+
     // if(file){
     //   // Actualizamos el valor del formulario
     //   this.photos.controls[i].get('photo')?.setValue(file);
     // }
-    if (file) this.readFile(file, i);
   }
 
   readFile(file: File, i: any) {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      console.log(file, 'file hola mundo');
-
       let preview = reader.result as string;
       let input = document.querySelector('#img-file-' + i) as HTMLInputElement;
       input.src = preview;
     };
     reader.readAsDataURL(file);
   }
-  // get comments(){
-  //   return this.form.get('comments');
-  // }
-  // get state(){
-  //   return this.form.get('state');
-  // }
-  // get comments(){
-  //   return this.form.get('comments');
-  // }
+
+  validateImageType(file: File): boolean {
+    const tipoPermitido = ['image/jpeg', 'image/png', 'image/gif']; // Ajusta según tus necesidades
+    return tipoPermitido.includes(file.type);
+  }
+
+  validateSerie($event: any) {
+    const target = $event.target as HTMLInputElement;
+    this.crudService.api_path_show = '/receptions/find';
+    let query_params: string = '';
+    query_params = '?serial='+target.value;
+    query_params += '&location=none';
+    query_params += '&specific_location=none';
+    query_params += '&customer_inventory=none';
+    console.log(query_params);
+
+    this.crudService.show(query_params).subscribe((resp) => {
+      // this.tableService.DATA = resp;
+      if(resp.exists){
+        this.equipment_type?.setValue(resp.equipment_type);
+        this.brand?.setValue(resp.brand);
+        this.model?.setValue(resp.model);
+        this.serie?.setValue(resp.serie);
+        this.capability?.setValue(resp.capability);
+        this.location?.setValue(resp.location);
+        this.specific_location?.setValue(resp.specific_location);
+        this.type_of_job?.setValue(resp.type_of_job);
+        this.equipment_owner?.setValue(resp.equipment_owner);
+        this.customer_inventory?.setValue(resp.customer_inventory);
+        this.comments?.setValue(resp.comments);
+      }
+    });
+    // console.log($event.target.value);
+  }
+
+  validateUbications($event: any){
+    const target = $event.target as HTMLInputElement;
+    this.crudService.api_path_show = '/receptions/find';
+    let query_params: string = '';
+    query_params = '?serial=none';
+    query_params += '&location='+this.location?.value;
+    query_params += '&specific_location='+this.specific_location?.value;
+    query_params += '&customer_inventory=none';
+
+    this.crudService.show(query_params).subscribe((resp) => {
+      // this.tableService.DATA = resp;
+      if(resp.exists){
+        this.equipment_type?.setValue(resp.equipment_type);
+        this.brand?.setValue(resp.brand);
+        this.model?.setValue(resp.model);
+        this.serie?.setValue(resp.serie);
+        this.capability?.setValue(resp.capability);
+        this.location?.setValue(resp.location);
+        this.specific_location?.setValue(resp.specific_location);
+        this.type_of_job?.setValue(resp.type_of_job);
+        this.equipment_owner?.setValue(resp.equipment_owner);
+        this.customer_inventory?.setValue(resp.customer_inventory);
+        this.comments?.setValue(resp.comments);
+      }
+    });
+  }
+
+  validateCustomerInventory($event: any){
+    const target = $event.target as HTMLInputElement;
+    this.crudService.api_path_show = '/receptions/find';
+    let query_params: string = '';
+    query_params = '?serial=none';
+    query_params += '&location=none';
+    query_params += '&specific_location=none';
+    query_params += '&customer_inventory='+target.value;
+    console.log(query_params);
+
+    this.crudService.show(query_params).subscribe((resp) => {
+      // this.tableService.DATA = resp;
+      if(resp.exists){
+        this.equipment_type?.setValue(resp.equipment_type);
+        this.brand?.setValue(resp.brand);
+        this.model?.setValue(resp.model);
+        this.serie?.setValue(resp.serie);
+        this.capability?.setValue(resp.capability);
+        this.location?.setValue(resp.location);
+        this.specific_location?.setValue(resp.specific_location);
+        this.type_of_job?.setValue(resp.type_of_job);
+        this.customer_inventory?.setValue(resp.customer_inventory);
+        this.equipment_owner?.setValue(resp.equipment_owner);
+        this.comments?.setValue(resp.comments);
+      }
+    });
+    
+
+  }
 
   onSubmit() {
     let form_values = this.form.value;
@@ -157,6 +291,7 @@ export class CreateComponent {
     const serie: any = this.serie?.value;
     const capability: any = this.capability?.value;
     const comments: any = this.comments?.value;
+    console.log(client_id, 'id del cliente');
 
     form_data.append('client_id', client_id);
     form_data.append('equipment_type', equipment_type);
@@ -164,6 +299,11 @@ export class CreateComponent {
     form_data.append('model', model);
     form_data.append('serie', serie);
     form_data.append('capability', capability);
+    form_data.append('location', this.location?.value);
+    form_data.append('specific_location', this.specific_location?.value);
+    form_data.append('type_of_job', this.type_of_job?.value);
+    form_data.append('equipment_owner', this.equipment_owner?.value);
+    form_data.append('customer_inventory', this.customer_inventory?.value);
     form_data.append('comments', comments);
 
     this.file_inputs.forEach((item, i) => {
@@ -176,7 +316,7 @@ export class CreateComponent {
       }
     });
 
-    console.log(form_data);
+    console.log(form_data, 'form dataaas');
 
     this.createEvent.emit(form_data);
     this.modal.dismiss();

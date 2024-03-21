@@ -13,6 +13,7 @@ export class CrudService {
   api_path_show: string = '';
   api_path_create: string = '';
   api_path_update: string = '';
+  api_path_update_patch: string = '';
   api_path_update_post: string = '';
   api_path_delete: string = '';
 
@@ -28,6 +29,7 @@ export class CrudService {
       Authorization: `Bearer ${this.auth_token}`,
     });
     let URL = environment.api_domain + this.api_path_list;
+    console.log(URL, 'url');
     return this.http
       .get(URL, {
         headers: headers
@@ -35,18 +37,19 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.message == 'Token inválido'){
+            if(error.error.error == 'Token inválido'){
               this.authService.logout();
             }
           }
-          let errors = error.error.errors;
+          let errors = error.error?.errors;
+          
           const keys = Object.keys(errors);
           keys.forEach(key => {
             let value = errors[key];
             this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
           });
           return of(error);
-        })
+        }) 
       );
   }
 
@@ -55,6 +58,8 @@ export class CrudService {
       Authorization: 'Bearer ' + this.auth_token,
     });
     let URL = environment.api_domain + this.api_path_show + id;
+    console.log(URL, 'url');
+    
     return this.http
       .get(URL, {
         headers: headers,
@@ -62,11 +67,12 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.message == 'Token inválido'){
+            if(error.error.error == 'Token inválido'){
               this.authService.logout();
             }
           }
-          let errors = error.error.errors;
+          console.log(error, 'error 21');
+          let errors = error.error?.errors;
           const keys = Object.keys(errors);
           keys.forEach(key => {
             let value = errors[key];
@@ -90,11 +96,11 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.message == 'Token inválido'){
+            if(error.error.error == 'Token inválido'){
               this.authService.logout();
             }
           }
-          let errors = error.error.errors;
+          let errors = error.error?.errors;
           const keys = Object.keys(errors);
           keys.forEach(key => {
             let value = errors[key];
@@ -121,11 +127,43 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.message == 'Token inválido'){
+            if(error.error.error == 'Token inválido'){
               this.authService.logout();
             }
           }
-          let errors = error.error.errors;
+          console.log(error, 'error 21');
+          let errors = error.error?.errors;
+          const keys = Object.keys(errors);
+          keys.forEach(key => {
+            let value = errors[key];
+            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+          });
+          return of(error);
+        })
+      );
+  }
+
+  updatePatch(data: any, id: string | number) {
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.auth_token}`
+    });
+
+    let URL = environment.api_domain + this.api_path_update_patch + id;
+
+    console.log(data, 'antes de enviar');
+    
+    return this.http
+      .patch(URL, data, {
+        headers: headers,
+      })
+      .pipe(
+        catchError((error: any) => {
+          if(error.status == 401){
+            if(error.error.error == 'Token inválido'){
+              this.authService.logout();
+            }
+          }
+          let errors = error.error?.errors;
           const keys = Object.keys(errors);
           keys.forEach(key => {
             let value = errors[key];
@@ -143,8 +181,6 @@ export class CrudService {
 
     let URL = environment.api_domain + this.api_path_update_post + id;
 
-    console.log(data, 'antes de enviar');
-
     return this.http
       .post(URL, data, {
         headers: headers,
@@ -152,11 +188,11 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.message == 'Token inválido'){
+            if(error.error.error == 'Token inválido'){
               this.authService.logout();
             }
           }
-          let errors = error.error.errors;
+          let errors = error.error?.errors;
           const keys = Object.keys(errors);
           keys.forEach(key => {
             let value = errors[key];
@@ -180,11 +216,11 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.message == 'Token inválido'){
+            if(error.error.error == 'Token inválido'){
               this.authService.logout();
             }
           }
-          let errors = error.error.errors;
+          let errors = error.error?.errors;
           const keys = Object.keys(errors);
           keys.forEach(key => {
             let value = errors[key];

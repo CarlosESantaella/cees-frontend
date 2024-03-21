@@ -115,6 +115,16 @@ export class ListRolsComponent {
               return object_aux;
 
               break;
+            case 'MANAGE ITEMS':
+              object_aux.text = 'Items';
+              return object_aux;
+
+              break;
+            case 'MANAGE RATES':
+              object_aux.text = 'Tarifas';
+              return object_aux;
+
+              break;
           }
         })
         .filter((item) => item != null);

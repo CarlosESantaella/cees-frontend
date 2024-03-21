@@ -49,7 +49,7 @@ export class AuthService {
   login(email: string, password: string): any {
     return this.http_client
       .post(`${environment.api_domain}/auth`, {
-        email: email,
+        username: email,
         password: password,
       })
       .pipe(

@@ -18,7 +18,7 @@ export class ListReceptionsComponent {
   // 'equipment_type', 'brand', 'model', 'serie', 'capability', 'client_id'
   // : (tipo producto, marca, modelo, número de serie, observaciones, fotos, estado)
   tableColumns: any[] = [
-    { label: 'ID', field: 'id' },
+    { label: 'ID', field: 'custom_id' },
     // { label: 'Cliente', field: 'full_name_client' },
     { label: 'Tipo de producto', field: 'equipment_type' },
     { label: 'Marca', field: 'brand' },
@@ -36,6 +36,7 @@ export class ListReceptionsComponent {
         create: true,
         edit: true,
         delete: true,
+        pdf: true
       },
     },
   ];
@@ -82,6 +83,7 @@ export class ListReceptionsComponent {
 
   edit(data: any) {
     console.log(data.get('id'), 'holasd d');
+    this.crudService.api_path_update = '/receptions/';
     this.crudService.updatePost(data, data.get('id')).subscribe((resp) => {
       console.log(resp, 2334);
       if(!resp?.error){
@@ -117,7 +119,26 @@ export class ListReceptionsComponent {
       }
     });
   }
+  setIndexReception(data: any){
+    let formData: any = new FormData();
+
+    formData.append('index_reception', data);
+    formData = {
+      "index_reception": data
+    };
+    this.crudService.api_path_update = '/configurations';
+    this.crudService.update(formData, '').subscribe((resp) => {
+      if(!resp?.error){
+        this.toastService.show({
+          message: 'Configuración de recepción editada con exito',
+          classname: 'bg-success text-dark',
+        });
+
+      }
+    });
+  }
 }
+
 
 
 // import {Component} from '@angular/core';

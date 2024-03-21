@@ -19,8 +19,13 @@ export class ListClientsComponent {
     { label: 'ID', field: 'id' },
     { label: 'Nombre completo', field: 'full_name' },
     { label: 'Dirección', field: 'address' },
-    { label: 'NIT', field: 'identification' },
+    { label: 'Teléfono', field: 'cellphone' },
+    { label: 'NIT', field: 'NIT/identification' },
     { label: 'Contacto', field: 'contact' },
+    { label: 'Celular', field: 'cell' },
+    { label: 'Ciudad', field: 'city' },
+    { label: 'Email', field: 'email' },
+    { label: 'Observaciones', field: 'comments' },
   ];
   allData: any[] = [];
 

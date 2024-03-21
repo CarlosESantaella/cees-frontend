@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @charset "UTF-8";
+/* @import'primeng/resources/themes/bootstrap4-light-blue/theme.css'; */
 html,
 body {
     height: 100%;
@@ -355,7 +356,7 @@ button:not(:disabled) {
 textarea {
     resize: vertical;
 }
-fieldset {
+/* fieldset {
     min-width: 0;
     padding: 0;
     margin: 0;
@@ -368,10 +369,17 @@ legend {
     margin-bottom: 0.5rem;
     font-size: calc(1.275rem + 0.3vw);
     line-height: inherit;
+} */
+fieldset{
+    border-radius: 10px;
+    border: 1px solid rgb(220, 220, 220);
+}
+legend {
+    font-size: .9rem;
 }
 @media (min-width: 1200px) {
     legend {
-        font-size: 1.5rem;
+        font-size: .9rem;
     }
 }
 legend + * {
@@ -44120,3 +44128,8 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.p-multiselect{
+    width: 100% !important;
+}

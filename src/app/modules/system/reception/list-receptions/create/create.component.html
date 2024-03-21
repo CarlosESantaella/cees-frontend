@@ -57,7 +57,7 @@
                 <div class="col-md-6 mb-2" [formGroupName]="i">
                   <label class="required fs-5 fw-bold d-block">Foto nº {{ i + 1 }}</label>
                   <!-- <label [for]="'fullname' + i">Identificación CI/Pasaporte</label> -->
-                  <input class="form-control d-none img_input" #file_input type="file" [id]="'foto_' + i"
+                  <input class="form-control d-none img_input" accept="image/*" #file_input type="file" [id]="'foto_' + i"
                     formControlName="photo" (change)="handleFileInput($event, i)" />
                   <label class="d-block text-center" [for]="'foto_'+i">
                     <img class="img-thumbnail img-reception" [id]="'img-file-'+i"
@@ -69,13 +69,16 @@
                       Campo requerido
                     </p>
                   </div>
+                  <!-- <div *ngIf="form.get('photos').hasError('tipoInvalido')">
+                    Solo se permiten archivos de imagen (JPEG, PNG, GIF).
+                  </div> -->
                 </div>
               </ng-container>
             </div>
           </ng-container>
         </div>
         <div class="col-md-6 fv-row fv-plugins-icon-container mb-3">
-          <label class="required fs-5 fw-bold">Tipo de producto</label>
+          <label class="required fs-5 fw-bold">Clase de equipo</label>
           <input type="text" class="form-control form-control-solid" placeholder="" formControlName="equipment_type">
           <div *ngIf="equipment_type?.invalid && (equipment_type?.dirty || equipment_type?.touched)">
             <p class="text-danger" *ngIf="equipment_type?.errors?.['required']">
@@ -112,9 +115,63 @@
         </div>
         <div class="col-md-6 fv-row fv-plugins-icon-container mb-3">
           <label class="required fs-5 fw-bold">Número de serie</label>
-          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="serie">
+          <input type="text" class="form-control form-control-solid" (blur)="validateSerie($event)" placeholder="" formControlName="serie">
           <div *ngIf="serie?.invalid && (serie?.dirty || serie?.touched)">
             <p class="text-danger" *ngIf="serie?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Ubicación</label>
+          <input type="text" class="form-control form-control-solid" (blur)="validateUbications($event)" placeholder="" formControlName="location">
+          <div *ngIf="location?.invalid && (location?.dirty || location?.touched)">
+            <p class="text-danger" *ngIf="location?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Ubicación específica</label>
+          <input type="text" class="form-control form-control-solid" (blur)="validateUbications($event)" placeholder="" formControlName="specific_location">
+          <div *ngIf="specific_location?.invalid && (specific_location?.dirty || specific_location?.touched)">
+            <p class="text-danger" *ngIf="specific_location?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Tipo de trabajo</label>
+          <!-- <input type="text" class="form-control form-control-solid" placeholder="" formControlName="type_of_job"> -->
+          <select formControlName="type_of_job" class="form-select">
+            <option value="Nuevo">
+              Nuevo
+            </option>
+            <option value="Garantia">
+              Garantía
+            </option>
+          </select>
+          <div *ngIf="type_of_job?.invalid && (type_of_job?.dirty || type_of_job?.touched)">
+            <p class="text-danger" *ngIf="type_of_job?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Persona que entrega</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="equipment_owner">
+          <div *ngIf="equipment_owner?.invalid && (equipment_owner?.dirty || equipment_owner?.touched)">
+            <p class="text-danger" *ngIf="equipment_owner?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Inventario del cliente</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" (blur)="validateCustomerInventory($event)" formControlName="customer_inventory">
+          <div *ngIf="customer_inventory?.invalid && (customer_inventory?.dirty || customer_inventory?.touched)">
+            
+            <p class="text-danger" *ngIf="customer_inventory?.errors?.['required']">
               Campo requerido
             </p>
           </div>

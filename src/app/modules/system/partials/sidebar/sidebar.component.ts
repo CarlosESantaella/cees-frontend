@@ -41,6 +41,7 @@ export class SidebarComponent {
   permissions: string[] = [];
 
   @ViewChild('receptions') receptions_option?: ElementRef;
+  @ViewChild('items') items_option?: ElementRef;
   @ViewChild('access') access_option?: ElementRef;
   @ViewChild('subMenuReceptions') subMenuReceptions?: ElementRef;
   @ViewChild('aside') aside?: ElementRef;
@@ -62,11 +63,13 @@ export class SidebarComponent {
       this.route_title = data['permission'];
     });
     let permissions_json = JSON.parse(authService.user).profile_data.permissions;
+
     
 
     Object.entries(permissions_json).forEach(([key, value]) => {
       this.permissions.push(key);
     });
+    console.log(this.permissions, 'permisos');
 
     if(JSON.parse(authService.user).profile == 1){
       this.permissions = ['MANAGE ADMINS'];
@@ -148,6 +151,18 @@ export class SidebarComponent {
         this.cdr.detectChanges();
       }, 300);
     }
+    if (this.router.url.includes('items')) {
+      let element = this.items_option?.nativeElement;
+      element.classList.add('hover', 'showing');
+      const children = element.children[1] as HTMLElement;
+      children.style.display = 'block';
+      children.style.maxHeight = children.scrollHeight + 'px';
+      setTimeout(() => {
+        element.classList.remove('showing');
+        element.classList.add('show');
+        this.cdr.detectChanges();
+      }, 300);
+    }
   }
 
   openOption(event: any) {
@@ -189,6 +204,7 @@ export class SidebarComponent {
 
   validateOptions(options: string[]){
     let option_exists = false;
+    
     options.forEach((value: string, i: number)=> {
       if(this.permissions.includes(value)){
         option_exists = true;

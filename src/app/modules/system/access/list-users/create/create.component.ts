@@ -46,7 +46,7 @@ export class CreateComponent {
 
     this.crudService.list().subscribe((resp) => {
       this.all_rols = resp;
-      this.profile?.setValue(this.all_rols[0].id);
+      this.profile?.setValue(this.all_rols[0]?.id);
       console.log(resp);
     });
 

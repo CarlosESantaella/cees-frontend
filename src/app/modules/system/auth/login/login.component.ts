@@ -30,7 +30,7 @@ export class LoginComponent {
 
   ngOnInit() {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', Validators.required],
     });
   }
@@ -38,16 +38,16 @@ export class LoginComponent {
   get password() {
     return this.form.get('password');
   }
-  get email() {
-    return this.form.get('email');
+  get username() {
+    return this.form.get('username');
   }
 
   onSubmit() {
-    // this.toastService.show({ message: 'Error: contraseña o email incorrectos, intentelo nuevamente.', classname: 'bg-danger text-light ' });
+    // this.toastService.show({ message: 'Error: contraseña o username incorrectos, intentelo nuevamente.', classname: 'bg-danger text-light ' });
 
-    console.log(this.form.value.email, this.form.value.password);
+    console.log(this.form.value.username, this.form.value.password);
     this.authService
-      .login(this.form.value.email, this.form.value.password)
+      .login(this.form.value.username, this.form.value.password)
       .subscribe(
         (resp: any) => {
           // Maneja el resultado exitoso aquí
@@ -65,7 +65,7 @@ export class LoginComponent {
           // Maneja el error aquí
           this.toastService.show({
             message:
-              'Error: contraseña o email incorrectos, intentelo nuevamente.',
+              'Error: contraseña o usuario incorrectos, intentelo nuevamente.',
             classname: 'bg-danger text-light ',
           });
 

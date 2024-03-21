@@ -25,6 +25,7 @@ export class CreateComponent {
     this.form = this.fb.group(
       {
         name: ['', [Validators.required, Validators.minLength(6)]],
+        username: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
@@ -37,6 +38,9 @@ export class CreateComponent {
 
   get name() {
     return this.form.get('name');
+  }
+  get username() {
+    return this.form.get('username');
   }
   get password() {
     return this.form.get('password');

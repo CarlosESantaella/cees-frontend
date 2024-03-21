@@ -23,6 +23,7 @@ export class AdminComponent {
   tableColumns: any[] = [
     { label: 'ID', field: 'id' },
     { label: 'Nombre', field: 'name' },
+    { label: 'Usuario', field: 'username' },
     { label: 'Email', field: 'email' }
   ];
   allData: any[] = [];
