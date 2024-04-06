@@ -22,7 +22,37 @@ export class CrudService {
   constructor(public http: HttpClient, public authService: AuthService, @Inject(ToastService) private toastService: ToastService) // public authservice: AuthService
   {}
 
+  get(url: string){
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.auth_token}`,
+    });
+    let full_url = environment.api_domain + url;
 
+    console.log(full_url, 'url');
+    
+    return this.http
+      .get(full_url, {
+        headers: headers
+      })
+      .pipe(
+        catchError((error: any) => {
+          if(error.status == 401){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
+              this.authService.logout();
+            }
+          }
+          let errors = error.error?.errors;
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
+          return of(error);
+        })
+      );
+  }
 
   list(search?: any, state?: any) {
     let headers = new HttpHeaders({
@@ -37,17 +67,18 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
           let errors = error.error?.errors;
-          
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         }) 
       );
@@ -67,17 +98,19 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
-          console.log(error, 'error 21');
+          
           let errors = error.error?.errors;
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         })
       );
@@ -96,16 +129,18 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
           let errors = error.error?.errors;
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         })
       );
@@ -127,17 +162,20 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
-          console.log(error, 'error 21');
+          
           let errors = error.error?.errors;
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         })
       );
@@ -159,16 +197,18 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
           let errors = error.error?.errors;
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         })
       );
@@ -180,6 +220,7 @@ export class CrudService {
     });
 
     let URL = environment.api_domain + this.api_path_update_post + id;
+    console.log(data, 'antes de enviar');
 
     return this.http
       .post(URL, data, {
@@ -188,16 +229,18 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
           let errors = error.error?.errors;
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         })
       );
@@ -216,16 +259,18 @@ export class CrudService {
       .pipe(
         catchError((error: any) => {
           if(error.status == 401){
-            if(error.error.error == 'Token inválido'){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
               this.authService.logout();
             }
           }
           let errors = error.error?.errors;
-          const keys = Object.keys(errors);
-          keys.forEach(key => {
-            let value = errors[key];
-            this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
-          });
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
           return of(error);
         })
       );

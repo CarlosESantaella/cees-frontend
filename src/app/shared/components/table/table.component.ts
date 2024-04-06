@@ -60,6 +60,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { consumerPollProducersForChange } from '@angular/core/primitives/signals';
 import { CrudService } from '../../services/crud.service';
 import { environment } from '../../../../environments/environment.development';
+import { AuthService } from '../../services/auth.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'ngbd-table',
@@ -128,7 +130,9 @@ export class TableComponent {
   constructor(
     public ngbModal: NgbModal,
     public dialog: MatDialog,
-    public service: TableService
+    public service: TableService,
+    public authService: AuthService,
+    public http: HttpClient
   ) {
     this.crudService = inject(CrudService);
   }
@@ -210,6 +214,9 @@ export class TableComponent {
         break;
       case 'pdf':
         this.exportPdf(this.actions[0].name, id);
+        break;
+      case 'mail':
+        this.sendMail(this.actions[0].name, id);
         break;
     }
   }
@@ -411,7 +418,9 @@ export class TableComponent {
   exportPdf(name: string, id: any){
     switch (name) {
       case 'Recepcion':
-        window.open(`${environment.api_domain}/receptions/${id}/pdf`);
+        const token = this.authService.token;
+
+        window.open(`${environment.api_web}/receptions/${id}/pdf?token=${token}`);
         break;
    
     }
@@ -420,7 +429,8 @@ export class TableComponent {
   exportExcel(){
     switch (this.actions[0].name) {
       case 'Recepcion':
-        let query_params = '';
+        const token = this.authService.token;
+        let query_params = '?token='+token;
         let start_date = '';
         let end_date = '';
         let counter = 0;
@@ -435,30 +445,40 @@ export class TableComponent {
             }
 
           });
-          query_params += '?start_date='+start_date+'&end_date='+end_date;
-          counter++;
+          query_params += '&start_date='+start_date+'&end_date='+end_date;
+        
         }
         if(this.client_selected != ''){
-          if(counter != 0){
-            query_params += '&client_id='+this.client_selected;
-          }else{
-            query_params += '?client_id='+this.client_selected;
-          }
-          counter++;
+          query_params += '&client_id='+this.client_selected;
+
         }
         if(this.service.searchTerm.trim() != ''){
-          if(counter != 0){
-            query_params += '&search='+this.service.searchTerm;
-          }else{
-            query_params += '?search='+this.service.searchTerm;
-          }
-          counter++;
+          query_params += '&search='+this.service.searchTerm;
         }
+
+        
+
         window.open(`${environment.api_web}/receptions/excel${query_params}`, '_blank');
         break;
    
     }
     
+  }
+
+  sendMail(name: string, id: any){
+    switch (name) {
+      case 'Recepcion':
+
+        const token = this.authService.token;
+
+        // window.open(`${environment.api_web}/receptions/${id}/send-mail?token=${token}`);
+        this.crudService.get(`/receptions/${id}/send-mail`).subscribe((response: any) => {
+          console.log(response);
+        });
+
+        break;
+   
+    }
   }
 
   emitDeleteEvent(id: any) {

@@ -12,6 +12,45 @@
           <!--begin::Container-->
           <div id="kt_content_container" class="container-xxl">
             <div id="kt_content_container" class="container-xxl">
+              <div class="card mb-4">
+                <div class="card-header">
+                  <div class="card-title">
+                    <h3>General</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="form_receptions" (ngSubmit)="onSubmitReceptions()">
+                    <div class="row">
+                      <div class="col-md-6 mb-2" >
+                        <label class="required fs-5 fw-bold d-block">Logo</label>
+                        <!-- <label [for]="'fullname' + i">Identificación CI/Pasaporte</label> -->
+                        <input class="form-control d-none img_input" accept="image/*" #file_input type="file"
+                           id="logo_path" formControlName="logo_path" (change)="handleFileInput($event)" />
+                        <label class="d-block text-center" for="logo_path">
+                          @if(validateSrcImg()){
+                          <img class="img-thumbnail img-logo" id="logo" [src]="logo_data" alt="" />
+
+                          }@else{
+                          <img class="img-thumbnail img-logo" id="logo"
+                            src="/assets/media/receptions/placeholder.png" alt="" />
+                          }
+
+  
+                        </label>
+                        <!-- <div
+                          *ngIf="logo_path?.invalid && (logo_path?.dirty || logo_path?.touched)">
+                          <p class="text-danger" *ngIf="logo_path?.errors?.['required']">
+                            Campo requerido
+                          </p>
+                        </div> -->
+                      </div>
+                      <div class="fv-row mb-7 text-center">
+                        <button type="submit" [disabled]="!form_receptions.valid" class="btn btn-primary">Actualizar</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
               <div class="card">
                 <div class="card-header">
                   <div class="card-title">
@@ -41,6 +80,7 @@
                   </form>
                 </div>
               </div>
+
             </div>
           </div>
           <!--end::Container-->

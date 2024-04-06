@@ -36,7 +36,8 @@ export class ListReceptionsComponent {
         create: true,
         edit: true,
         delete: true,
-        pdf: true
+        pdf: true,
+        mail: true
       },
     },
   ];
@@ -126,8 +127,8 @@ export class ListReceptionsComponent {
     formData = {
       "index_reception": data
     };
-    this.crudService.api_path_update = '/configurations';
-    this.crudService.update(formData, '').subscribe((resp) => {
+    this.crudService.api_path_update_post = '/configurations';
+    this.crudService.updatePost(formData, '').subscribe((resp) => {
       if(!resp?.error){
         this.toastService.show({
           message: 'Configuración de recepción editada con exito',
