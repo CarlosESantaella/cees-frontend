@@ -120,6 +120,15 @@ export class ListReceptionsComponent {
       }
     });
   }
+
+  sendMail(id: number){
+    this.crudService.get(`/receptions/${id}/send-mail`).subscribe((response: any) => {
+      this.toastService.show({
+        message: 'Reporte enviado con exito',
+        classname: 'bg-success text-dark',
+      });
+    });
+  }
   setIndexReception(data: any){
     let formData: any = new FormData();
 

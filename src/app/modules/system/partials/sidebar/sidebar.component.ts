@@ -42,6 +42,7 @@ export class SidebarComponent {
 
   @ViewChild('receptions') receptions_option?: ElementRef;
   @ViewChild('items') items_option?: ElementRef;
+  @ViewChild('diagnoses') diagnoses_option?: ElementRef;
   @ViewChild('access') access_option?: ElementRef;
   @ViewChild('subMenuReceptions') subMenuReceptions?: ElementRef;
   @ViewChild('aside') aside?: ElementRef;
@@ -153,6 +154,18 @@ export class SidebarComponent {
     }
     if (this.router.url.includes('items')) {
       let element = this.items_option?.nativeElement;
+      element.classList.add('hover', 'showing');
+      const children = element.children[1] as HTMLElement;
+      children.style.display = 'block';
+      children.style.maxHeight = children.scrollHeight + 'px';
+      setTimeout(() => {
+        element.classList.remove('showing');
+        element.classList.add('show');
+        this.cdr.detectChanges();
+      }, 300);
+    }
+    if (this.router.url.includes('diagnoses')) {
+      let element = this.diagnoses_option?.nativeElement;
       element.classList.add('hover', 'showing');
       const children = element.children[1] as HTMLElement;
       children.style.display = 'block';

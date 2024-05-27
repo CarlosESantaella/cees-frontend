@@ -11,6 +11,8 @@ import {
   ElementRef,
   inject,
 } from '@angular/core';
+import { format, parseISO } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 import { FormsModule } from '@angular/forms';
 import {
   NgbDropdownModule,
@@ -33,6 +35,8 @@ import { CreateComponent as CreateAdminComponent } from '../../../modules/system
 import { CreateComponent as CreateReceptionComponent } from '../../../modules/system/reception/list-receptions/create/create.component';
 import { CreateComponent as CreateRateComponent } from '../../../modules/system/item/list-rates/create/create.component';
 import { CreateComponent as CreateItemComponent } from '../../../modules/system/item/list-items/create/create.component';
+import { CreateComponent as CreateDiagnosesComponent } from '../../../modules/system/diagnoses/list-diagnoses/create/create.component';
+import { CreateComponent as CreateFeilureModeComponent } from '../../../modules/system/diagnoses/list-failure-modes/create/create.component';
 // Edit something
 import { EditComponent as EditUserComponent } from '../../../modules/system/access/list-users/edit/edit.component';
 import { EditComponent as EditClientComponent } from '../../../modules/system/reception/list-clients/edit/edit.component';
@@ -41,11 +45,13 @@ import { EditComponent as EditAdminComponent } from '../../../modules/system/adm
 import { EditComponent as EditReceptionComponent } from '../../../modules/system/reception/list-receptions/edit/edit.component';
 import { EditComponent as EditRateComponent } from '../../../modules/system/item/list-rates/edit/edit.component';
 import { EditComponent as EditItemComponent } from '../../../modules/system/item/list-items/edit/edit.component';
+import { EditComponent as EditFailureModeComponent } from '../../../modules/system/diagnoses/list-failure-modes/edit/edit.component';
 
 //others
 import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog.component';
 import { CalendarModule } from 'primeng/calendar';
 import { FieldsetModule } from 'primeng/fieldset';
+import { DialogModule } from 'primeng/dialog';
 
 import {
   MatDialog,
@@ -62,6 +68,10 @@ import { CrudService } from '../../services/crud.service';
 import { environment } from '../../../../environments/environment.development';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ToastService } from '../../services/toast.service';
+import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { es } from 'date-fns/locale';
 
 @Component({
   selector: 'ngbd-table',
@@ -89,11 +99,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     EditAdminComponent,
     MatButtonModule,
     CalendarModule,
-    FieldsetModule
+    FieldsetModule,
+    InputSwitchModule,
+    SafeHtmlPipe,
+    DialogModule
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
-  providers: [TableService, DecimalPipe],
+  providers: [TableService, DecimalPipe, SafeHtmlPipe],
 })
 export class TableComponent {
   // data$: Observable<any[]>;
@@ -109,11 +122,13 @@ export class TableComponent {
   @Input() clients: any[] = [];
   @Output() deleteEvent = new EventEmitter<any>();
   @Output() editEvent = new EventEmitter<any>();
+  @Output() sendMailEvent = new EventEmitter<any>();
   @Output() createEvent = new EventEmitter<any>();
   @Output() setIndexReceptionsEvent = new EventEmitter<any>();
 
   n_actions: number = 0;
   crudService!: any;
+  toastService!: any;
   number_reception_disabled: boolean = false;
   names_clients: string = '';
   custom_currency: string = '';
@@ -121,6 +136,19 @@ export class TableComponent {
   date: any;
   client_selected: any = [];
   clients_all: any = [];
+
+  status_switches: any = {};
+
+
+  //modals
+  visibleDiagnosisFiles: boolean = false;
+  diagnosis_id_selected: number = 0;
+  diagnosis_files_selected: any = {};
+  diagnosis_file: any = null;
+  
+  visibleFailureMode: boolean = false;
+  failure_mode_selected: number | string = '';
+  all_failure_modes: any = [];
 
   @ViewChildren(TableSortableDirective)
   headers!: QueryList<TableSortableDirective>;
@@ -135,16 +163,21 @@ export class TableComponent {
     public http: HttpClient
   ) {
     this.crudService = inject(CrudService);
+    this.toastService = inject(ToastService);
   }
 
+
+
   ngOnInit() {
+
+
     if (this.actions[0].name == 'Recepcion') {
       this.crudService.api_path_show = '/configurations';
 
       this.crudService.show('').subscribe((resp: any) => {
         // this.tableService.DATA = resp;
         this.custom_currency = resp.currency;
-        console.log(resp, 'se cargo');
+        
         if (resp.index_reception != null) {
           this.number_reception_disabled = true;
           this.number_reception.nativeElement.value = resp.index_reception;
@@ -171,7 +204,29 @@ export class TableComponent {
       });
     }
 
+    if (this.actions[0].name == 'Diagnostico') {
+      this.crudService.api_path_list = '/failure-modes';
+
+      this.crudService.get(`/failure-modes`).subscribe((resp: any) => {
+        // this.tableService.DATA = resp;
+        this.all_failure_modes = resp;
+        if (this.all_failure_modes.length > 0) {
+          this.failure_mode_selected = this.all_failure_modes[0].id;
+        }
+        console.log('failure modes', resp);
+      });
+    }
+
     this.initTable(this.data);
+
+    if(this.actions[0].name == 'Diagnostico'){
+      this.data$.subscribe((data: any) => {
+        data.forEach((diagnosis: any) => {
+          this.status_switches['id_'+diagnosis['id']] = (diagnosis['status'] == 1)? true : false;
+        });
+      });
+    }
+
   }
 
   validateNumbers($event: any) {
@@ -295,6 +350,26 @@ export class TableComponent {
           this.createEvent.emit(resp);
         });
         break;
+      case 'Diagnostico':
+        const modalRefDiagnoses = this.ngbModal.open(CreateDiagnosesComponent, {
+          centered: true,
+          size: 'lg',
+        });
+        // modalRefItem.componentInstance.name = this.actions[0].name;
+        modalRefDiagnoses.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
+      case 'Modo de falla':
+        const modalRefFeilureMode = this.ngbModal.open(CreateFeilureModeComponent, {
+          centered: true,
+          size: 'lg',
+        });
+        // modalRefItem.componentInstance.name = this.actions[0].name;
+        modalRefFeilureMode.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
     }
   }
 
@@ -396,6 +471,21 @@ export class TableComponent {
           this.editEvent.emit(resp);
         });
         break;
+      case 'Modo de falla':
+        const modalRefFailureMode = this.ngbModal.open(EditFailureModeComponent, {
+          centered: true,
+          size: 'lg',
+        });
+        // console.log(id, 'id');
+        // console.log(this.data.filter((row) => row.id == id)[0], 'data');
+        modalRefFailureMode.componentInstance.data = this.data.filter(
+          (row) => row.id == id
+        )[0];
+        modalRefFailureMode.componentInstance.editEvent.subscribe((resp: any) => {
+          console.log('cerro');
+          this.editEvent.emit(resp);
+        });
+        break;
     }
   }
 
@@ -470,12 +560,19 @@ export class TableComponent {
       case 'Recepcion':
 
         const token = this.authService.token;
-
-        // window.open(`${environment.api_web}/receptions/${id}/send-mail?token=${token}`);
-        this.crudService.get(`/receptions/${id}/send-mail`).subscribe((response: any) => {
-          console.log(response);
+        this.dialog
+        .open(ConfirmationDialog, {
+          data: {
+            title: 'Enviar Email',
+            message: '¿Seguro deseas enviar reporte al cliente de esta recepción?',
+          },
+        })
+        .afterClosed()
+        .subscribe((confirmado: boolean) => {
+          if (confirmado) {
+            this.sendMailEvent.emit(id);
+          }
         });
-
         break;
    
     }
@@ -489,6 +586,7 @@ export class TableComponent {
     // for(property in this.actions[0].actions)
     // switch(this.actions[0].actions)
   }
+
   searchByDateAndClient(event: any){
     let data_to_send:any = new Object();
     let query_params = '';
@@ -527,6 +625,130 @@ export class TableComponent {
     });
     
   }
+
+  changeStatusSwitch(status_switch: boolean | number, diagnosis_id: number){
+    status_switch = (status_switch)? 1 : 0;
+    this.crudService.patch(`/diagnoses/${diagnosis_id}/status/${status_switch}`, {}).subscribe((response: any) => {
+      console.log(response);
+    });
+  }
+
+  handleDiagnosisFile(event: any) {
+    const target = event.target as HTMLInputElement;
+
+    const files = target.files as FileList;
+
+    if (files.length > 0) {
+      const file = files[0];
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      this.crudService.post(`/diagnoses/${this.diagnosis_id_selected}/upload-file`, formData).subscribe((response: any) => {
+        console.log('response', response);
+        this.diagnosis_files_selected.push(response);
+        target.value = '';
+      });
+    }
+  }
+
+  updateFileDianosis(event: any, file_id: number){
+    const target = event.target as HTMLInputElement;
+
+    const files = target.files as FileList;
+
+    if (files.length > 0) {
+      const file = files[0];
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      this.crudService.deleteApi(`/diagnoses/${this.diagnosis_id_selected}/files/${file_id}`).subscribe((response_delete_file: any) => {
+
+        console.log('response delete', response_delete_file);
+
+        console.log('this.diagnosis_files_selected', this.diagnosis_files_selected);
+        console.log('file_id', file_id);
+
+        this.diagnosis_files_selected = this.diagnosis_files_selected.filter((diagnosis_file: any) => {
+          return diagnosis_file.id != file_id;
+        });
+        this.crudService.post(`/diagnoses/${this.diagnosis_id_selected}/upload-file`, formData).subscribe((response: any) => {
+          console.log('response', response);
+          this.diagnosis_files_selected.push(response);
+          target.value = '';
+        });
+      })
+    }
+  }
+
+  handleFileToUpdate(file_id: number){
+    console.log('file_id', file_id);
+  }
+
+  deleteFileDianosis(file_id: number){
+    this.crudService.deleteApi(`/diagnoses/${this.diagnosis_id_selected}/files/${file_id}`).subscribe((response_delete_file: any) => {
+
+      console.log('response delete', response_delete_file);
+
+      this.diagnosis_files_selected = this.diagnosis_files_selected.filter((diagnosis_file: any) => {
+        return diagnosis_file.id != file_id;
+      });
+    });
+  }
+
+  showDialogFilesDianoses(diagnosis_id: number){
+    this.diagnosis_id_selected = diagnosis_id;
+    this.visibleDiagnosisFiles = true;
+
+    this.crudService.get(`/diagnoses/${this.diagnosis_id_selected}`).subscribe((response: any) => {
+      console.log('response', response);
+      this.diagnosis_files_selected = response.files;
+    });
+
+  }
+
+
+  updateFailureMode(){
+    console.log('failure', this.failure_mode_selected);
+    // /api/diagnoses/1/failure-modes
+    let data = {
+      failure_modes: [this.failure_mode_selected]
+    }
+    this.crudService.put(`/diagnoses/${this.diagnosis_id_selected}/failure-modes`, data).subscribe((resp: any) => {
+
+      this.data = this.data.map((response_data: any) => {
+        if(this.diagnosis_id_selected == response_data.id){
+          if(response_data.failure_modes && response_data.failure_modes.length > 0){
+            response_data.failure_modes.splice(0, response_data.failure_modes.length);
+          }else{
+            response_data.failure_modes = [];
+          }
+          response_data.failure_modes.push(resp[0]);
+        }
+        return response_data;
+      });
+      this.initTable(this.data);
+      this.visibleFailureMode = false;
+      this.toastService.show({
+        message: 'Modo de falla actualizado con exito',
+        classname: 'bg-success text-dark',
+      });
+
+    });
+  }
+
+  showDialogFailureMode(diagnosis_id: number){
+    this.diagnosis_id_selected = diagnosis_id;
+    this.visibleFailureMode = true;
+
+    this.crudService.get(`/diagnoses/${this.diagnosis_id_selected}`).subscribe((response: any) => {
+      console.log('response', response);
+      this.diagnosis_files_selected = response.files;
+    });
+
+  }
+
   onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach((header) => {
@@ -566,6 +788,28 @@ export class TableComponent {
       if (pipe == 'custom_currency') {
         console.log(this.custom_currency, 'hola mundo33');
         return value + this.custom_currency;
+      }
+      if(pipe == 'date'){
+        // const timeZone = 'America/Bogota';
+        const craeted_at_date = parseISO(value);
+        return format(craeted_at_date, 'dd-MM-yyyy hh:mm a', { locale: es });
+      }
+    } else {
+      return value;
+    }
+  }
+  getFormattedValueHTML(record: any, field: string, pipe: string | undefined): any {
+    var value = record[field];
+
+    if (pipe) {
+
+      if(pipe == 'status_switch'){
+        value = (value == 0)? false : true;
+        return `<input type="checkbox" checked="${value}"> hola`;
+      }
+      if(pipe == 'files_diagnoses'){
+        value = (value == 0)? false : true;
+        return `<input type="checkbox" checked="${value}"> hola`;
       }
     } else {
       return value;

@@ -7,7 +7,7 @@ import { ListRatesComponent } from './list-rates/list-rates.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '../home',
+    redirectTo: 'list',
     pathMatch: 'full'
   },
   {

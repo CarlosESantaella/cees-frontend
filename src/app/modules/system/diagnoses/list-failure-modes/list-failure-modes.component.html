@@ -1,0 +1,24 @@
+<div class="d-flex flex-column flex-root">
+    <div class="page d-flex flex-row flex-column-fluid">
+        <app-sidebar></app-sidebar>
+        <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+            <app-header></app-header>
+            <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                <div class="post d-flex flex-column-fluid" id="kt_post">
+
+                    <!--begin::Container-->
+                    <div id="kt_content_container" class="container-xxl">
+                        <div id="kt_content_container" class="container-xxl">
+                            <ngbd-table [columns]="tableColumns" [data]="allData" [actions]="actions"
+                                (createEvent)="create($event)" (editEvent)="edit($event)"
+                                (deleteEvent)="delete($event)"></ngbd-table>
+                        </div>
+                    </div>
+                    <!--end::Container-->
+                </div>
+            </div>
+            <app-footer></app-footer>
+
+        </div>
+    </div>
+</div>
