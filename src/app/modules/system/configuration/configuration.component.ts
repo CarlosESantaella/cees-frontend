@@ -8,11 +8,14 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { CrudService } from '../../../shared/services/crud.service';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ToastService } from '../../../shared/services/toast.service';
+import { ImageCroppedEvent, ImageTransform } from 'ngx-image-cropper';
+import { ImageCropperModule } from 'ngx-image-cropper';
+
 
 @Component({
   selector: 'app-configuration',
   standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent, ReactiveFormsModule, CommonModule],
+  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent, ReactiveFormsModule, CommonModule, ImageCropperModule],
   templateUrl: './configuration.component.html',
   styleUrl: './configuration.component.css'
 })
@@ -25,6 +28,14 @@ export class ConfigurationComponent {
   form_receptions!: FormGroup;
   configuration_id: any = '';
   logo_data: any = null;
+
+  //image logo 
+  imgChangeEvt: any = '';
+  cropImgPreview: any = '';
+  scale = 1;
+  transform: ImageTransform = {
+    translateUnit: 'px'
+  };
 
   constructor(
     public fb: FormBuilder,
@@ -105,45 +116,37 @@ export class ConfigurationComponent {
 
 
 
-  handleFileInput(event: any) {
-    const target = event.target as HTMLInputElement;
-
-    const files = target.files as FileList;
-
-    const file = files[0];
-
-    if(files.length > 0){
-      let validate_file = this.validateImageType(file);
-      if(validate_file){
-        this.logo_data = file;
-        if (file) this.readFile(file);
-
-      }else{
-        event.target.value = null;
-      }
-    }
+  onFileChange(event: any): void {
+    this.imgChangeEvt = event;
   }
-  readFile(file: File) {
-    const reader = new FileReader();
+  cropImg(e: any) {
+      this.cropImgPreview = e.blob;
+      console.log(e, 'listo 64');
+      this.logo_data = e.blob;
+  }
+  imgLoad() {
+      // display cropper tool
+  } 
+  initCropper() {
+      // init cropper
+  }
 
-    reader.onloadend = () => {
-
-      let preview = reader.result as string;
-      let input = document.querySelector('#logo') as HTMLInputElement;
-      input.src = preview;
+  imgFailed() {
+      // error msg
+  }
+  zoomOut() {
+    this.scale -= .1;
+    this.transform = {
+      ...this.transform,
+      scale: this.scale
     };
-    reader.readAsDataURL(file);
   }
-  validateSrcImg(){
-    if(this.logo_data && typeof this.logo_data === 'string'){
-      return true;
-    }else{
-      return false;
-    }
-    // return '/assets/media/receptions/placeholder.png';
-  }
-  validateImageType(file: File): boolean {
-    const tipoPermitido = ['image/jpeg', 'image/png', 'image/gif']; // Ajusta según tus necesidades
-    return tipoPermitido.includes(file.type);
+
+  zoomIn() {
+    this.scale += .1;
+    this.transform = {
+      ...this.transform,
+      scale: this.scale
+    };
   }
 }

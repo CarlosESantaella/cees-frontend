@@ -11,6 +11,7 @@ import { ToastService } from './toast.service';
 export class CrudService {
   api_path_list: string = '';
   api_path_show: string = '';
+  api_path_patch: string = '';
   api_path_create: string = '';
   api_path_update: string = '';
   api_path_update_patch: string = '';
@@ -27,8 +28,6 @@ export class CrudService {
       Authorization: `Bearer ${this.auth_token}`,
     });
     let full_url = environment.api_domain + url;
-
-    console.log(full_url, 'url');
     
     return this.http
       .get(full_url, {
@@ -53,6 +52,98 @@ export class CrudService {
         })
       );
   }
+
+  patch(url: string, data: any){
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.auth_token}`,
+    });
+    let URL = environment.api_domain + url;
+
+    return this.http
+      .patch(URL, data, {
+        headers: headers,
+      })
+      .pipe(
+        catchError((error: any) => {
+          if(error.status == 401){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
+              this.authService.logout();
+            }
+          }
+          let errors = error.error?.errors;
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
+          return of(error);
+        })
+      );
+  }
+
+  put(url: string, data: any){
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.auth_token}`,
+    });
+    let URL = environment.api_domain + url;
+
+    return this.http
+      .put(URL, data, {
+        headers: headers,
+      })
+      .pipe(
+        catchError((error: any) => {
+          if(error.status == 401){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
+              this.authService.logout();
+            }
+          }
+          let errors = error.error?.errors;
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
+          return of(error);
+        })
+      );
+  }
+
+  post(url: string, data: any){
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.auth_token}`,
+    });
+    let URL = environment.api_domain + url;
+
+    return this.http
+      .post(URL, data, {
+        headers: headers,
+      })
+      .pipe(
+        catchError((error: any) => {
+          if(error.status == 401){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
+              this.authService.logout();
+            }
+          }
+          let errors = error.error?.errors;
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
+          return of(error);
+        })
+      );
+  }
+
+
 
   list(search?: any, state?: any) {
     let headers = new HttpHeaders({
@@ -251,6 +342,36 @@ export class CrudService {
       Authorization: `Bearer ${this.auth_token}`,
     });
     let URL = environment.api_domain + this.api_path_delete + id;
+
+    return this.http
+      .delete(URL, {
+        headers: headers,
+      })
+      .pipe(
+        catchError((error: any) => {
+          if(error.status == 401){
+            if(error.error?.error == 'Token inválido' || error.error?.error == 'Token expirado'){
+              this.authService.logout();
+            }
+          }
+          let errors = error.error?.errors;
+          if(errors && errors.length > 0){
+            const keys = Object.keys(errors);
+            keys.forEach(key => {
+              let value = errors[key];
+              this.toastService.show({ message: errors[key], classname: 'bg-danger text-light'});
+            });
+          }
+          return of(error);
+        })
+      );
+  }
+
+  deleteApi(url: string) {
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.auth_token}`,
+    });
+    let URL = environment.api_domain + url;
 
     return this.http
       .delete(URL, {

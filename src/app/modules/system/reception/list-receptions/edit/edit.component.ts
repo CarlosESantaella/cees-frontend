@@ -366,8 +366,6 @@ export class EditComponent {
       // }
     });
 
-    console.log(form_data, 'last form data');
-
     this.editEvent.emit(form_data);
     this.modal.dismiss();
   }

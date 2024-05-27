@@ -8,7 +8,7 @@ import { ListReceptionsComponent } from './list-receptions/list-receptions.compo
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '../home',
+    redirectTo: 'list',
     pathMatch: 'full'
   },
   {
