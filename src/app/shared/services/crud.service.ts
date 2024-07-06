@@ -272,6 +272,8 @@ export class CrudService {
       );
   }
 
+
+
   updatePatch(data: any, id: string | number) {
     let headers = new HttpHeaders({
       Authorization: `Bearer ${this.auth_token}`

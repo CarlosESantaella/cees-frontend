@@ -1,42 +1,26 @@
-import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  QueryList,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormArray,
-} from '@angular/forms';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../../shared/services/auth.service';
 import { CrudService } from '../../../../../shared/services/crud.service';
-import { TableComponent } from '../../../../../shared/components/table/table.component';
+import { CommonModule } from '@angular/common';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
-  selector: 'app-create',
+  selector: 'app-edit',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, InputSwitchModule],
-  templateUrl: './create.component.html',
-  styleUrl: './create.component.css'
+  templateUrl: './edit.component.html',
+  styleUrl: './edit.component.css'
 })
-export class CreateComponent {
+export class EditComponent {
 
-  @Input('receptionId') receptionId!: any;
-  @Output() createEvent: EventEmitter<any> = new EventEmitter();
-  
   receptions: any[] = [];
   form!: FormGroup;
-  
+
+  @Input() data: any = {};
+  @Output() editEvent: EventEmitter<any> = new EventEmitter();
+
   @ViewChildren('file_input') file_inputs!: QueryList<ElementRef>;
 
   constructor(
@@ -47,25 +31,22 @@ export class CreateComponent {
   ) {}
 
   ngOnInit() {
+    console.log('this.data', this.data);
     this.crudService.api_path_list = '/receptions';
     this.crudService.auth_token = this.authService.token;
 
     this.form = this.fb.group({
-      reception_id: [this.receptionId ?? '', Validators.required],
-      description: ['', Validators.required],
-      observations: ['', Validators.required],
-      status: [false, Validators.required],
+      reception_id: [this.data.reception_id ?? '', Validators.required],
+      description: [this.data.description ?? '', Validators.required],
+      observations: [this.data.observations ?? '', Validators.required],
+      status: [(this.data.status == 1)? true : false, Validators.required],
     });
 
     this.crudService.list().subscribe((resp: any) => {
       // this.tableService.DATA = resp;
-      console.log(resp);
-      if(resp.length > 0){
-        this.receptions = resp.filter((reception: any) => reception.id == this.receptionId);
-      }else{
-        this.receptions = [];
-      }
-      this.reception_id?.setValue(this.receptions[0]?.id);
+      console.log('resp', resp);
+      this.receptions = resp ?? [];
+      // this.reception_id?.setValue(this.receptions[0]?.id);
     });
 
   }
@@ -93,17 +74,21 @@ export class CreateComponent {
     let  status: any = this.status?.value;
 
     status = (status)? 1 : 0;
-
+    form_data.append('id', this.data.id);
     form_data.append('reception_id', reception_id);
     form_data.append('description', description);
     form_data.append('observations', observations);
     form_data.append('status', status);
 
+    let data = {
+      id: this.data.id,
+      reception_id: reception_id,
+      description: description,
+      observations: observations,
+      status: status
+    };
 
-    console.log(form_data, 'form dataaas');
-
-    this.createEvent.emit(form_data);
+    this.editEvent.emit(data);
     this.modal.dismiss();
   }
-
 }

@@ -231,8 +231,8 @@ export class EditComponent {
     }else{
       return false;
     }
-    // return '/assets/media/receptions/placeholder.png';
   }
+
   validateImageType(file: File): boolean {
     const tipoPermitido = ['image/jpeg', 'image/png', 'image/gif']; // Ajusta según tus necesidades
     return tipoPermitido.includes(file.type);
@@ -326,14 +326,6 @@ export class EditComponent {
   onSubmit() {
     this.form.addControl('id', this.fb.control(this.data.id));
     const form_data = new FormData();
-    // const id: any = this.data.id;
-    // const client_id: any = this.client_id?.value;
-    // const equipment_type: any = this.equipment_type?.value;
-    // const brand: any = this.brand?.value;
-    // const model: any = this.model?.value;
-    // const serie: any = this.serie?.value;
-    // const capability: any = this.capability?.value;
-    // const comments: any = this.comments?.value;
 
     form_data.append('id', this.data.id);
     form_data.append('client_id', this.client_id?.value);
