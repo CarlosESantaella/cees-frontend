@@ -1,0 +1,365 @@
+<div class="d-flex flex-column flex-root">
+  <div class="page d-flex flex-row flex-column-fluid">
+    <app-sidebar></app-sidebar>
+    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+      <app-header></app-header>
+
+
+
+      <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+
+          <!--begin::Container-->
+          <div id="kt_content_container" class="container-xxl">
+            <div id="kt_content_container" class="container-xxl">
+              <!--begin::Row-->
+              <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
+                <ng-container *ngFor="let rol of all_rols; let i = index">
+                  <!--begin::Col-->
+                  <div class="col-md-4">
+                    <!--begin::Card-->
+                    <div class="card card-flush h-md-100">
+                      <!--begin::Card header-->
+                      <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                          <h2>{{ rol.name }}</h2>
+                        </div>
+                        <!--end::Card title-->
+                      </div>
+                      <!--end::Card header-->
+                      <!--begin::Card body-->
+                      <div class="card-body pt-1">
+                        <!--begin::Permissions-->
+                        <div class="d-flex flex-column text-gray-600">
+                          <ng-container *ngFor="let permission of rol.permissions | keyvalue">
+                            
+                            <div class="d-flex align-items-center py-2">
+                              <span class="bullet bg-primary me-3"></span>
+                              @if(permission.key == 'MANAGE USERS'){
+                                Usuarios
+                              }
+                              @if(permission.key == 'MANAGE PROFILES'){
+                                Roles
+                              }
+                              @if(permission.key == 'MANAGE CLIENTS'){
+                                Clientes
+                              }
+                              @if(permission.key == 'MANAGE RECEPCIONS'){
+                                Recepciones
+                              }
+                              @if(permission.key == 'MANAGE ITEMS'){
+                                Items
+                              }
+                              @if(permission.key == 'MANAGE RATES'){
+                                Tarifas
+                              }
+                            </div>
+                          </ng-container>
+                          <!-- <div class='d-flex align-items-center py-2'>
+                            <span class='bullet bg-primary me-3'></span>
+                            <em>and 7 more...</em>
+                          </div> -->
+                        </div>
+                        <!--end::Permissions-->
+                      </div>
+                      <!--end::Card body-->
+                      <!--begin::Card footer-->
+                      <div class="card-footer flex-wrap pt-0">
+                        <button type="button" class="btn btn-light btn-active-light-primary my-1" data-bs-toggle="modal"
+                          data-bs-target="#kt_modal_update_role" (click)="open(editRol, 'edit', rol.id)">Editar Rol</button>
+                      </div>
+                      <!--end::Card footer-->
+                    </div>
+                    <!--end::Card-->
+                  </div>
+                  <!--end::Col-->
+                </ng-container>
+                <!--begin::Add new card-->
+                <div class="col-md-4" *ngIf="all_rols.length <= 2">
+                  <!--begin::Card-->
+                  <div class="card h-md-100">
+                    <!--begin::Card body-->
+                    <div class="card-body d-flex flex-center">
+                      <!--begin::Button-->
+                      <button type="button" class="btn btn-clear d-flex flex-column flex-center" data-bs-toggle="modal"
+                        data-bs-target="#kt_modal_add_role">
+                        <!--begin::Illustration-->
+                        <img src="assets/media/illustrations/sketchy-1/4.png" alt="" class="mw-100 mh-150px mb-7" />
+                        <!--end::Illustration-->
+                        <!--begin::Label-->
+                        <div class="fw-bolder fs-3 text-gray-600 text-hover-primary" (click)="open(addNewRol, 'create')">Agregar
+                          Nuevo Rol</div>
+                        <!--end::Label-->
+                      </button>
+                      <!--begin::Button-->
+                    </div>
+                    <!--begin::Card body-->
+                  </div>
+                  <!--begin::Card-->
+                </div>
+                <!--begin::Add new card-->
+              </div>
+              <!--end::Row-->
+              <!--begin::Modals-->
+              <!--begin::Modal - Add role-->
+              <ng-template class="modal fade" id="kt_modal_add_role" tabindex="-1" #addNewRol let-modalAddNewRol
+                aria-hidden="true">
+
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                  <!--begin::Modal title-->
+                  <h2 class="fw-bolder">Agregar Nuevo Rol</h2>
+                  <!--end::Modal title-->
+                  <!--begin::Close-->
+                  <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-roles-modal-action="close"
+                    (click)="modalAddNewRol.dismiss('Cross click')">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                          transform="rotate(-45 6 17.3137)" fill="black" />
+                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                          fill="black" />
+                      </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                  </div>
+                  <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body scroll-y mx-lg-5 my-7">
+                  <!--begin::Form-->
+                  <form [formGroup]="form_create" (ngSubmit)="onSubmitCreate()" class="form">
+                    <!--begin::Scroll-->
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_role_scroll"
+                      data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                      data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_role_header"
+                      data-kt-scroll-wrappers="#kt_modal_add_role_scroll" data-kt-scroll-offset="300px">
+                      <!--begin::Input group-->
+                      <div class="fv-row mb-10">
+                        <!--begin::Label-->
+                        <label class="fs-5 fw-bolder form-label mb-2">
+                          <span class="required">Nombre del rol</span>
+                        </label>
+                        <input class="form-control form-control-solid" placeholder="Enter a role name"
+                          formControlName="name_create" />
+                        <div *ngIf="name_create?.invalid && (name_create?.dirty || name_create?.touched)">
+                          <p class="text-danger" *ngIf="name_create?.errors?.['required']">
+                            Campo requerido
+                          </p>
+                          <p class="text-danger" *ngIf="name_create?.errors?.['minlength']">
+                            Debes introducir un mínimo de {{ name_create?.errors?.['minlength'].requiredLength }} caracteres
+                          </p>
+                        </div>
+                      </div>
+                      <!--end::Input group-->
+                      <!--begin::Permissions-->
+                      <div class="fv-row">
+                        <!--begin::Label-->
+                        <label class="fs-5 fw-bolder form-label mb-2">Permisos del rol</label>
+                        <!--end::Label-->
+                        <!--begin::Table wrapper-->
+                        <div class="table-responsive">
+                          <!--begin::Table-->
+                          <table class="table align-middle table-row-dashed fs-6 gy-5">
+                            <!--begin::Table body-->
+                            <tbody class="text-gray-600 fw-bold" formArrayName="permissions_create">
+                              <!--begin::Table row-->
+                              <!-- <tr >
+                                <td class="text-gray-800">Acceso Total
+                                  <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                    title="Allows a full access to the system"></i>
+                                </td>
+                                <td>
+                                  <label class="form-check form-check-custom form-check-solid me-9">
+                                    <input class="form-check-input" type="checkbox" value="" id="kt_roles_select_all" />
+                                    <span class="form-check-label" for="kt_roles_select_all">Seleccionar Todo</span>
+                                  </label>
+                                </td>
+                              </tr> -->
+                              <!--end::Table row-->
+                              <!--begin::Table row-->
+                              <tr *ngFor="let permission of permissionsCreateFormArray.controls; let i = index">
+                                <!--begin::Label-->
+                                <td class="text-gray-800">{{all_permissions[i]['text']}}</td>
+                                <td>
+                                  <div class="d-flex">
+                                    <label
+                                      class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
+                                      <input class="form-check-input" type="checkbox" [formControlName]="i" />
+                                      <span class="form-check-label"></span>
+                                    </label>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            *ngIf="form_create.get('permissions_create')?.touched && form_create.get('permissions_create')?.invalid">
+                            <p class="text-danger"
+                              *ngIf="form_create.get('permissions_create')?.hasError('minSelectedCheckboxes')">
+                              Debes seleccionar al menos una opción
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-center pt-15">
+                      <!-- <button type="reset" class="btn btn-light me-3"
+                            data-kt-roles-modal-action="cancel">Discard</button> -->
+                      <button type="submit" class="btn btn-primary" data-kt-roles-modal-action="submit"
+                        [disabled]="!form_create.valid">
+                        <span class="indicator-label">Agregar</span>
+                        <span class="indicator-progress">Por favor, espera...
+                          <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                      </button>
+                    </div>
+                    <!--end::Actions-->
+                  </form>
+                  <!--end::Form-->
+                </div>
+                <!--end::Modal body-->
+
+              </ng-template>
+              <!--end::Modal - Add role-->
+              <!--begin::Modal - Update role-->
+              <ng-template class="modal fade" id="kt_modal_update_role" tabindex="-1" aria-hidden="true" #editRol
+                let-modalEditRol>
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                  <!--begin::Modal title-->
+                  <h2 class="fw-bolder">Editar Rol</h2>
+                  <!--end::Modal title-->
+                  <!--begin::Close-->
+                  <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-roles-modal-action="close"
+                    (click)="modalEditRol.dismiss('Cross click')">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                          transform="rotate(-45 6 17.3137)" fill="black" />
+                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                          fill="black" />
+                      </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                  </div>
+                  <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body scroll-y mx-5 my-7">
+                  <!--begin::Form-->
+                  <form [formGroup]="form_edit" (ngSubmit)="onSubmitEdit()" class="form">
+                    <!--begin::Scroll-->
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_update_role_scroll"
+                      data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                      data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_update_role_header"
+                      data-kt-scroll-wrappers="#kt_modal_update_role_scroll" data-kt-scroll-offset="300px">
+                      <!--begin::Input group-->
+                      <div class="fv-row mb-10">
+                        <!--begin::Label-->
+                        <label class="fs-5 fw-bolder form-label mb-2">
+                          <span class="required">Nombre del rol</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input class="form-control form-control-solid" placeholder="Enter a role name"
+                          formControlName="name_edit" />
+                          <div *ngIf="name_edit?.invalid && (name_edit?.dirty || name_edit?.touched)">
+                            <p class="text-danger" *ngIf="name_edit?.errors?.['required']">
+                              Campo requerido
+                            </p>
+                            <p class="text-danger" *ngIf="name_edit?.errors?.['minlength']">
+                              Debes introducir un mínimo de {{ name_edit?.errors?.['minlength'].requiredLength }} caracteres
+                            </p>
+                          </div>
+                        <!--end::Input-->
+                      </div>
+                      <!--end::Input group-->
+                      <!--begin::Permissions-->
+                      <div class="fv-row">
+                        <!--begin::Label-->
+                        <label class="fs-5 fw-bolder form-label mb-2">Permisos del rol</label>
+                        <!--end::Label-->
+                        <!--begin::Table wrapper-->
+                        <div class="table-responsive">
+                          <!--begin::Table-->
+                          <table class="table align-middle table-row-dashed fs-6 gy-5">
+                            <!--begin::Table body-->
+                            <tbody class="text-gray-600 fw-bold" formArrayName="permissions_edit">
+                              <!--begin::Table row-->
+                              <!-- <tr >
+                                <td class="text-gray-800">Acceso Total
+                                  <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                    title="Allows a full access to the system"></i>
+                                </td>
+                                <td>
+                                  <label class="form-check form-check-custom form-check-solid me-9">
+                                    <input class="form-check-input" type="checkbox" value="" id="kt_roles_select_all" />
+                                    <span class="form-check-label" for="kt_roles_select_all">Seleccionar Todo</span>
+                                  </label>
+                                </td>
+                              </tr> -->
+                              <!--end::Table row-->
+                              <!--begin::Table row-->
+                              <tr *ngFor="let permission of permissionsEditFormArray.controls; let i = index">
+                                <!--begin::Label-->
+                                <td class="text-gray-800">{{all_permissions[i]['text']}}</td>
+                                <td>
+                                  <div class="d-flex">
+                                    <label
+                                      class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
+                                      <input class="form-check-input" type="checkbox" [formControlName]="i" />
+                                      <span class="form-check-label"></span>
+                                    </label>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            *ngIf="form_edit.get('permissions_edit')?.touched && form_edit.get('permissions_edit')?.invalid">
+                            <p class="text-danger"
+                              *ngIf="form_edit.get('permissions_edit')?.hasError('minSelectedCheckboxesEdit')">
+                              Debes seleccionar al menos una opción
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <!--end::Permissions-->
+                    </div>
+                    <!--end::Scroll-->
+                    <!--begin::Actions-->
+                    <div class="text-center pt-15">
+                      <button type="reset" class="btn btn-light me-3"
+                        data-kt-roles-modal-action="cancel">Discard</button>
+                      <button type="submit" class="btn btn-primary" data-kt-roles-modal-action="submit"
+                        [disabled]="!form_edit.valid">
+                        <span class="indicator-label">Submit</span>
+                        <span class="indicator-progress">Please wait...
+                          <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                      </button>
+                    </div>
+                    <!--end::Actions-->
+                  </form>
+                  <!--end::Form-->
+                </div>
+
+                <!--end::Modal dialog-->
+              </ng-template>
+              <!--end::Modal - Update role-->
+              <!--end::Modals-->
+            </div>
+          </div>
+          <!--end::Container-->
+        </div>
+      </div>
+      <app-footer></app-footer>
+
+    </div>
+  </div>
+</div>
+<ngbd-table *ngIf="false" [columns]="tableColumns" [data]="allData" [actions]="[]"></ngbd-table>

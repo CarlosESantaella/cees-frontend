@@ -1,0 +1,17 @@
+.hover-scroll-overlay-y{
+  height: 90vh;
+}
+.menu-sub{
+  transition: all .3s ease 0s;
+  max-height: 0px;
+  overflow: hidden;
+}
+.drawer-overlay{
+  z-index: 109;
+  display: none;
+  /* opacity: 0; */
+  transition: all .3s ease 0s;
+}
+.drawer{
+  width: 250px !important;
+}

@@ -1,0 +1,105 @@
+<div class="d-flex flex-column flex-root">
+  <div class="page d-flex flex-row flex-column-fluid">
+    <app-sidebar></app-sidebar>
+    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+      <app-header></app-header>
+      <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <div class="post d-flex flex-column-fluid" id="kt_post">
+
+          <!--begin::Container-->
+          <div id="kt_content_container" class="container-xxl">
+            @if(existsReception){
+            <div class="card mb-4">
+              <div class="card-header p-6 pb-0">
+                <div class="card-title">
+                  <h3>Recepción: {{ reception.serie }} </h3>
+                </div>
+                <div class="card-toolbar">
+                  <p-button [raised]="true" class="" (click)="showDialogSearchReception()" label="Buscar recepción" />
+                </div>
+              </div>
+              <div class="card-body">
+                <p-fieldset legend="Datos de recepción" styleClass="mx-auto d-block" [style]="{ maxWidth: '700px' }">
+                  <p class="mb-3 pb-3 d-flex justify-content-between border-bottom">
+                    <span class="fw-bolder fs-4 d-block me-2">Serie:</span>
+                    <span class="fs-4" style="max-width: 250px;">{{ reception.serie }} </span>
+                  </p>
+                  <p class="mb-3 pb-3 d-flex justify-content-between border-bottom ">
+                    <span class="fw-bolder fs-4 d-block me-2">Modelo:</span>
+                    <span class="fs-4" style="max-width: 250px;">{{ reception.model }} </span>
+                  </p>
+                  <p class="mb-3 pb-3 d-flex justify-content-between border-bottom ">
+                    <span class="fw-bolder fs-4 d-block me-2">Tipo de equipo:</span>
+                    <span class="fs-4" style="max-width: 250px;">{{ reception.equipment_type }} </span>
+                  </p>
+                  <p class="mb-3 pb-3 d-flex justify-content-between border-bottom ">
+                    <span class="fw-bolder fs-4 d-block me-2">Estado:</span>
+                    <span class="fs-4" style="max-width: 250px;">{{ reception.state }} </span>
+                  </p>
+                  <p class="mb-3 pb-3 d-flex justify-content-between border-bottom ">
+                    <span class="fw-bolder fs-4 d-block me-2">Dueño del equipo:</span>
+                    <span class="fs-4" style="max-width: 250px;">{{ reception.equipment_owner }} </span>
+                  </p>
+                  <p class="mb-3 pb-3 d-flex justify-content-between ">
+                    <span class="fw-bolder fs-4 d-block me-2">Comentarios:</span>
+                    <span class="fs-4" style="max-width: 250px;">{{ reception.comments }} </span>
+                  </p>
+                </p-fieldset>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header p-6 pb-0">
+                <div class="card-title">
+                  <h3>Diagnóstico</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <ngbd-table [columns]="tableColumns" [data]="allData" [actions]="actions" (createEvent)="create($event)"
+                  (editEvent)="edit($event)" (deleteEvent)="delete($event)"
+                  [aditionalData]="aditionalData"></ngbd-table>
+              </div>
+            </div>
+            }@else {
+
+            <div class="card">
+              <div class="card-header p-6 pb-0">
+                <div class="card-title">
+                  <h3>Buscador de recepciones</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <section class="text-center">
+                  <p-button [raised]="true" class="fs-3" (click)="showDialogSearchReception()" label="Buscar recepción"
+                    size="large" />
+                </section>
+              </div>
+            </div>
+            }
+
+            <p-dialog header="Buscar recepción" [modal]="true" [draggable]="false"
+              [(visible)]="isVisibleSearchReception" [style]="{ width: '95%', maxWidth: '450px', minWidth: '250px' }">
+              <div class=" gap-3 mb-3 w-100">
+                <label for="search" class="font-semibold w-6rem">Código de recepción</label>
+                <input pInputText class="d-block w-100" id="search" type="text" [(ngModel)]="textToSearch"
+                  placeholder="Ingrese aquí..." autocomplete="off" />
+                <p class="text-danger" [ngClass]="{'d-none': textToSearch.trim() != ''}">campo requerido (*)</p>
+              </div>
+              <div class="d-flex justify-content-end gap-2">
+                <p-button label="Buscar" [loading]="isSearching" (click)="onClickSearchReception()"
+                  [disabled]="textToSearch.trim() == ''" />
+              </div>
+            </p-dialog>
+
+            <!-- <ngbd-table [columns]="tableColumns" [data]="allData" [actions]="actions" (createEvent)="create($event)"
+                (editEvent)="edit($event)" (deleteEvent)="delete($event)"></ngbd-table> -->
+
+          </div>
+          <!--end::Container-->
+        </div>
+      </div>
+
+      <app-footer></app-footer>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,229 @@
+<div class="modal-content">
+  <div class="modal-header" id="kt_modal_add_user_header">
+    <h2 class="fw-bolder">Editar Recepción </h2>
+
+    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close"
+      (click)="modal.dismiss()">
+      <span class="svg-icon svg-icon-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+            fill="currentColor" />
+          <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <div class="row mb-5">
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Cliente</label>
+          <select formControlName="client_id" class="form-select">
+            <option *ngFor="let client of clients" [ngValue]="client.id">
+              {{ client.full_name }}
+            </option>
+          </select>
+          <div *ngIf="client_id?.invalid && (client_id?.dirty || client_id?.touched)">
+            <p class="text-danger" *ngIf="client_id?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-12 fv-row fv-plugins-icon-container mb-3">
+          <div class="w-100 fv-row fv-plugins-icon-container mb-2">
+            <ng-container *ngIf="photos">
+              <div class="d-flex h-100 align-items-center">
+                <div class="ms-auto row  buttons-photos rounded">
+                  <div class="col-6 text-center">
+                    <div
+                      class="container-controls-btns-photos mx-auto d-flex justify-content-center align-items-center py-2">
+                      <button type="button" (click)="removePhoto()">-</button>
+                      <span class="">{{ photos.length }}</span>
+                      <button type="button" (click)="addPhoto()">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="photos">
+            <div class="row" formArrayName="photos">
+              <ng-container *ngFor="
+                  let photo of photos.controls;
+                  let i = index
+                ">
+
+                <div class="col-md-6 mb-2" [formGroupName]="i">
+                  <label class="required fs-5 fw-bold d-block">Foto nº {{ i + 1 }}</label>
+                  <!-- <label [for]="'fullname' + i">Identificación CI/Pasaporte</label> -->
+                  <input class="form-control d-none img_input" accept="image/*" #file_input type="file" [id]="'foto_' + i"
+                    formControlName="photo" (change)="handleFileInput($event, i)" />
+                  <label class="d-block text-center" [for]="'foto_'+i">
+                    @if(validateSrcImg(i)){
+                    <img class="img-thumbnail img-reception" [id]="'img-file-'+i" [src]="photos_data[i]" alt="" />
+
+                    }@else{
+                    <img class="img-thumbnail img-reception" [id]="'img-file-'+i"
+                      src="/assets/media/receptions/placeholder.png" alt="" />
+                    }
+
+                    <!-- <img 
+                      class="img-thumbnail img-reception" 
+                      [id]="'img-file-'+i"
+                      src="{{ (i < photos_data.length && typeof photos_data[i] === 'string')? photos_data[i] : 'error' }}" 
+                      alt=""
+                    /> -->
+                  </label>
+                  <div
+                    *ngIf="photo?.get('photo')?.invalid && (photo?.get('photo')?.dirty || photo?.get('photo')?.touched)">
+                    <p class="text-danger" *ngIf="photo?.get('photo')?.errors?.['required']">
+                      Campo requerido
+                    </p>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Fecha de recepción</label>
+          <input type="date" class="form-control form-control-solid" formControlName="created_at" placeholder="">
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Clase de equipo</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="equipment_type">
+          <div *ngIf="equipment_type?.invalid && (equipment_type?.dirty || equipment_type?.touched)">
+            <p class="text-danger" *ngIf="equipment_type?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Capacidad</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="capability">
+          <div *ngIf="capability?.invalid && (capability?.dirty || capability?.touched)">
+            <p class="text-danger" *ngIf="capability?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Marca</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="brand">
+          <div *ngIf="brand?.invalid && (brand?.dirty || brand?.touched)">
+            <p class="text-danger" *ngIf="brand?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Modelo</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="model">
+          <div *ngIf="model?.invalid && (model?.dirty || model?.touched)">
+            <p class="text-danger" *ngIf="model?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Número de serie</label>
+          <input type="text" class="form-control form-control-solid" (blur)="validateSerie($event)" placeholder="" formControlName="serie">
+          <div *ngIf="serie?.invalid && (serie?.dirty || serie?.touched)">
+            <p class="text-danger" *ngIf="serie?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Ubicación</label>
+          <input type="text" class="form-control form-control-solid" (blur)="validateUbications($event)" placeholder="" formControlName="location">
+          <div *ngIf="location?.invalid && (location?.dirty || location?.touched)">
+            <p class="text-danger" *ngIf="location?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Ubicación específica</label>
+          <input type="text" class="form-control form-control-solid" (blur)="validateUbications($event)" placeholder="" formControlName="specific_location">
+          <div *ngIf="specific_location?.invalid && (specific_location?.dirty || specific_location?.touched)">
+            <p class="text-danger" *ngIf="specific_location?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Tipo de trabajo</label>
+          <!-- <input type="text" class="form-control form-control-solid" placeholder="" formControlName="type_of_job"> -->
+          <select formControlName="type_of_job" class="form-select">
+            <option value="">
+              Seleccione una opción
+            </option>
+            <option value="Nuevo">
+              Nuevo
+            </option>
+            <option value="Garantia">
+              Garantía
+            </option>
+          </select>
+          <div *ngIf="type_of_job?.invalid && (type_of_job?.dirty || type_of_job?.touched)">
+            <p class="text-danger" *ngIf="type_of_job?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Persona que entrega</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="equipment_owner">
+          <div *ngIf="equipment_owner?.invalid && (equipment_owner?.dirty || equipment_owner?.touched)">
+            <p class="text-danger" *ngIf="equipment_owner?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Inventario del cliente</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" (blur)="validateCustomerInventory($event)" formControlName="customer_inventory">
+          <div *ngIf="customer_inventory?.invalid && (customer_inventory?.dirty || customer_inventory?.touched)">
+            <p class="text-danger" *ngIf="customer_inventory?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-12 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Observaciones</label>
+          <textarea type="text" class="form-control form-control-solid" placeholder=""
+            formControlName="comments"></textarea>
+          <div *ngIf="comments?.invalid && (comments?.dirty || comments?.touched)">
+            <p class="text-danger" *ngIf="comments?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-6 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Estado</label>
+          <input type="text" class="form-control form-control-solid" placeholder="" formControlName="state">
+          <div *ngIf="state?.invalid && (state?.dirty || state?.touched)">
+            <p class="text-danger" *ngIf="state?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div> -->
+      <!-- <div class="col-12 fv-row fv-plugins-icon-container">
+          <label class="required fs-5 fw-bold mb-3">Observaciones</label>
+          <textarea type="text" class="form-control form-control-solid" placeholder="" formControlName="comments"></textarea>
+          <div *ngIf="comments?.invalid && (comments?.dirty || comments?.touched)">
+            <p class="text-danger" *ngIf="comments?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div> -->
+
+
+      <div class="fv-row mb-7 text-center">
+        <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Editar</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="modal-content">
+  <div class="modal-header" id="kt_modal_add_user_header">
+    <h2 class="fw-bolder">Editar Item</h2>
+
+    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close"
+      (click)="modal.dismiss()">
+      <span class="svg-icon svg-icon-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+            fill="currentColor" />
+          <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form" >
+      <div class="row">
+
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Descripción</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Descripción..."
+          formControlName="description" />
+          <div *ngIf="description?.invalid && (description?.dirty || description?.touched)">
+            <p class="text-danger" *ngIf="description?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Unidad de medida</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Descripción..."
+          formControlName="unit_of_measurement" />
+          <div *ngIf="unit_of_measurement?.invalid && (unit_of_measurement?.dirty || unit_of_measurement?.touched)">
+            <p class="text-danger" *ngIf="unit_of_measurement?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Costo bruto ({{ currency }})</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" (input)="totalCostCalculate()" placeholder="Descripción..."
+          formControlName="gross_cost" />
+          <div *ngIf="gross_cost?.invalid && (gross_cost?.dirty || gross_cost?.touched)">
+            <p class="text-danger" *ngIf="gross_cost?.errors?.['required']">
+              Campo requerido
+            </p>
+            <p class="text-danger" *ngIf="gross_cost?.errors?.['pattern']">
+              Solo se permiten números
+            </p>
+          </div>
+
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Costo indirecto ({{ currency }})</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" (input)="totalCostCalculate()" placeholder="Costo indirecto..."
+          formControlName="indirect_cost" />
+          <div *ngIf="indirect_cost?.invalid && (indirect_cost?.dirty || indirect_cost?.touched)">
+            <p class="text-danger" *ngIf="indirect_cost?.errors?.['required']">
+              Campo requerido
+            </p>
+            <p class="text-danger" *ngIf="indirect_cost?.errors?.['pattern']">
+              Solo se permiten números
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Utilidad ({{ currency }})</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" (input)="totalCostCalculate()" placeholder="Utilidad..."
+          formControlName="utility" />
+          <div *ngIf="utility?.invalid && (utility?.dirty || utility?.touched)">
+            <p class="text-danger" *ngIf="utility?.errors?.['required']">
+              Campo requerido
+            </p>
+            <p class="text-danger" *ngIf="utility?.errors?.['pattern']">
+              Solo se permiten números
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Costo total ({{ currency }})</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" readonly placeholder="Costo total..."
+          formControlName="total_cost" />
+          <div *ngIf="total_cost?.invalid && (total_cost?.dirty || total_cost?.touched)">
+            <p class="text-danger" *ngIf="total_cost?.errors?.['required']">
+              Campo requerido
+            </p>
+            <p class="text-danger" *ngIf="total_cost?.errors?.['pattern']">
+              Solo se permiten números
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Descripción inicial</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Descripción inicial..."
+          formControlName="initial_description" />
+          <div *ngIf="initial_description?.invalid && (initial_description?.dirty || initial_description?.touched)">
+            <p class="text-danger" *ngIf="initial_description?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row mb-7" >
+          <label class="required fw-bold fs-6 mb-2">Descripción final</label>
+          <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Descripción final..."
+          formControlName="final_description" />
+          <div *ngIf="final_description?.invalid && (final_description?.dirty || final_description?.touched)">
+            <p class="text-danger" *ngIf="final_description?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 fv-row fv-plugins-icon-container mb-3">
+          <label class="required fs-5 fw-bold">Tarifa</label>
+          <select formControlName="rate_id" class="form-select">
+            <option value="">Seleccione una opción</option>
+            <option *ngFor="let rate of rates" [ngValue]="rate.id">
+              {{ rate.id }}
+            </option>
+          </select>
+          <div *ngIf="rate_id?.invalid && (rate_id?.dirty || rate_id?.touched)">
+            <p class="text-danger" *ngIf="rate_id?.errors?.['required']">
+              Campo requerido
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Email</label>
+        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Email de usuario..."
+          formControlName="email" />
+        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+          <p class="text-danger" *ngIf="email?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="email?.errors?.['email']">
+            Debe ingresar un formato de email correcto
+          </p>
+        </div>
+      </div> -->
+      
+   
+      <div class="fv-row mb-7 text-center">
+        <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Editar</button>
+      </div>
+    </form>
+  </div>
+</div>

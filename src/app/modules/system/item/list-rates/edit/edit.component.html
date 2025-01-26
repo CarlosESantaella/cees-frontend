@@ -1,0 +1,52 @@
+<div class="modal-content">
+  <div class="modal-header" id="kt_modal_add_user_header">
+    <h2 class="fw-bolder">Crear Tarifa</h2>
+
+    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close"
+      (click)="modal.dismiss()">
+      <span class="svg-icon svg-icon-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+            fill="currentColor" />
+          <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <div class="fv-row" style="margin-bottom: 300px;">
+        <!--begin::Label-->
+        <label class="required fw-bold fs-6 mb-2">Clientes</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <p-multiSelect class="w-100 d-block" [options]="clients" formControlName="selectedClients"
+          optionLabel="full_name" placeholder="Select Cities"></p-multiSelect>
+        <div *ngIf="selectedClients?.invalid && (selectedClients?.dirty || selectedClients?.touched)">
+          <p class="text-danger" *ngIf="selectedClients?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+        <!--end::Input-->
+      </div>
+      <!-- <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Email</label>
+        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Email de usuario..."
+          formControlName="email" />
+        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+          <p class="text-danger" *ngIf="email?.errors?.['required']">
+            Campo requerido
+          </p>
+          <p class="text-danger" *ngIf="email?.errors?.['email']">
+            Debe ingresar un formato de email correcto
+          </p>
+        </div>
+      </div> -->
+
+
+      <div class="fv-row mb-7 text-center">
+        <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>

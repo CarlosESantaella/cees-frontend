@@ -1,0 +1,113 @@
+<div class="modal-content">
+  <div class="modal-header" id="kt_modal_add_user_header">
+    <h2 class="fw-bolder">Crear Cliente </h2>
+
+    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close"
+      (click)="modal.dismiss()">
+      <span class="svg-icon svg-icon-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+            fill="currentColor" />
+          <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Nombre Completo</label>
+        <input type="text" formControlName="full_name" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Nombre completo..." value="" />
+        <div *ngIf="full_name?.invalid && (full_name?.dirty || full_name?.touched)">
+          <p class="text-danger" *ngIf="full_name?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Teléfono</label>
+        <input type="text" formControlName="cellphone" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Teléfono..." value="" />
+        <div *ngIf="cellphone?.invalid && (cellphone?.dirty || cellphone?.touched)">
+          <p class="text-danger" *ngIf="cellphone?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Dirección</label>
+        <input type="text" formControlName="address" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Dirección..." value="" />
+        <div *ngIf="address?.invalid && (address?.dirty || address?.touched)">
+          <p class="text-danger" *ngIf="address?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">NIT/Identificación</label>
+        <input type="text" formControlName="identification" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="NIT/Identificación..." value="" />
+        <div *ngIf="identification?.invalid && (identification?.dirty || identification?.touched)">
+          <p class="text-danger" *ngIf="identification?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Contacto</label>
+        <input type="text" formControlName="contact" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Contacto..." value="" />
+        <div *ngIf="contact?.invalid && (contact?.dirty || contact?.touched)">
+          <p class="text-danger" *ngIf="contact?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Teléfono movil</label>
+        <input type="text" formControlName="cell" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Teléfono movil..." value="" />
+        <div *ngIf="cell?.invalid && (cell?.dirty || cell?.touched)">
+          <p class="text-danger" *ngIf="cell?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Ciudad</label>
+        <input type="text" formControlName="city" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Ciudad..." value="" />
+        <div *ngIf="city?.invalid && (city?.dirty || city?.touched)">
+          <p class="text-danger" *ngIf="city?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">E-mail</label>
+        <input type="text" formControlName="email" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="E-mail..." value="" />
+        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+          <p class="text-danger" *ngIf="email?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7">
+        <label class="required fw-bold fs-6 mb-2">Observaciones</label>
+        <textarea formControlName="comments" class="form-control form-control-solid mb-3 mb-lg-0"
+          placeholder="Observaciones..." value="" ></textarea>
+        <div *ngIf="comments?.invalid && (comments?.dirty || comments?.touched)">
+          <p class="text-danger" *ngIf="comments?.errors?.['required']">
+            Campo requerido
+          </p>
+        </div>
+      </div>
+      <div class="fv-row mb-7 text-center">
+        <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>
