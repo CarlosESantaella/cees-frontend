@@ -85,6 +85,8 @@ import { ToastService } from '../../services/toast.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { es } from 'date-fns/locale';
+import { DiagnosisFilesModalComponent } from './modals/diagnosis-files-modal/diagnosis-files-modal.component';
+import { FailureModeModalComponent } from './modals/failure-mode-modal/failure-mode-modal.component';
 
 @Component({
   selector: 'ngbd-table',
@@ -117,6 +119,8 @@ import { es } from 'date-fns/locale';
     SafeHtmlPipe,
     DialogModule,
     TableModule,
+    DiagnosisFilesModalComponent,
+    FailureModeModalComponent,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
@@ -147,6 +151,8 @@ export class TableComponent {
   number_reception!: ElementRef;
   @ViewChildren('file_input_diagnostic_photo')
   file_inputs_diagnostic_photos!: QueryList<ElementRef>;
+  @ViewChild(DiagnosisFilesModalComponent) diagnosisFilesModal!: DiagnosisFilesModalComponent;
+  @ViewChild(FailureModeModalComponent) failureModeModal!: FailureModeModalComponent;
 
   n_actions: number = 0;
   crudService!: any;
@@ -164,9 +170,8 @@ export class TableComponent {
   //modals
   selectedReceptionId: number | null = null;
   visibleDiagnosisFiles: boolean = false;
-  diagnosis_id_selected: number = 0;
   diagnosis_files_selected: any = {};
-  diagnosis_file: any = null;
+  diagnosis_id_selected: number = 0;
 
   visibleFailureMode: boolean = false;
   failure_mode_selected: number | string = '';
@@ -740,98 +745,6 @@ export class TableComponent {
       });
   }
 
-  handleDiagnosisFile(event: any) {
-    const target = event.target as HTMLInputElement;
-
-    const files = target.files as FileList;
-
-    if (files.length > 0) {
-      const file = files[0];
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      this.crudService
-        .post(`/diagnoses/${this.diagnosis_id_selected}/upload-file`, formData)
-        .subscribe((response: any) => {
-          console.log('response', response);
-          this.diagnosis_files_selected.push(response);
-          target.value = '';
-        });
-    }
-  }
-
-  updateFileDianosis(event: any, file_id: number) {
-    const target = event.target as HTMLInputElement;
-
-    const files = target.files as FileList;
-
-    if (files.length > 0) {
-      const file = files[0];
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      this.crudService
-        .deleteApi(`/diagnoses/${this.diagnosis_id_selected}/files/${file_id}`)
-        .subscribe((response_delete_file: any) => {
-          console.log('response delete', response_delete_file);
-
-          console.log(
-            'this.diagnosis_files_selected',
-            this.diagnosis_files_selected
-          );
-          console.log('file_id', file_id);
-
-          this.diagnosis_files_selected = this.diagnosis_files_selected.filter(
-            (diagnosis_file: any) => {
-              return diagnosis_file.id != file_id;
-            }
-          );
-          this.crudService
-            .post(
-              `/diagnoses/${this.diagnosis_id_selected}/upload-file`,
-              formData
-            )
-            .subscribe((response: any) => {
-              console.log('response', response);
-              this.diagnosis_files_selected.push(response);
-              target.value = '';
-            });
-        });
-    }
-  }
-
-  handleFileToUpdate(file_id: number) {
-    console.log('file_id', file_id);
-  }
-
-  deleteFileDianosis(file_id: number) {
-    this.crudService
-      .deleteApi(`/diagnoses/${this.diagnosis_id_selected}/files/${file_id}`)
-      .subscribe((response_delete_file: any) => {
-        console.log('response delete', response_delete_file);
-
-        this.diagnosis_files_selected = this.diagnosis_files_selected.filter(
-          (diagnosis_file: any) => {
-            return diagnosis_file.id != file_id;
-          }
-        );
-      });
-  }
-
-  showDialogFilesDianoses(diagnosis_id: number) {
-    this.diagnosis_id_selected = diagnosis_id;
-    this.visibleDiagnosisFiles = true;
-
-    this.crudService
-      .get(`/diagnoses/${this.diagnosis_id_selected}`)
-      .subscribe((response: any) => {
-        console.log('response', response);
-        this.diagnosis_files_selected = response.files;
-      });
-  }
-
   updateFailureMode() {
     let data = {
       failure_modes: [this.failure_mode_selected],
@@ -862,18 +775,6 @@ export class TableComponent {
           message: 'Modo de falla actualizado con exito',
           classname: 'bg-success text-dark',
         });
-      });
-  }
-
-  showDialogFailureMode(diagnosis_id: number) {
-    this.diagnosis_id_selected = diagnosis_id;
-    this.visibleFailureMode = true;
-
-    this.crudService
-      .get(`/diagnoses/${this.diagnosis_id_selected}`)
-      .subscribe((response: any) => {
-        console.log('response', response);
-        this.diagnosis_files_selected = response.files;
       });
   }
 

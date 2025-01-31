@@ -1,0 +1,15 @@
+<p-dialog header="Seleccione modo de falla" [modal]="true" [(visible)]="visibleFailureMode"
+  [style]="{ width: '95%', maxWidth: '600px' }" [draggable]="false">
+  <div class="mb-4">
+    <label class="">Modo de falla</label>
+    <select name="failure_mode_selected" [(ngModel)]="failure_mode_selected" class="form-select fs-5" id="">
+      <ng-container *ngFor="let failure_mode of all_failure_modes; let i = index">
+        <option [value]="failure_mode.id" [attr.selected]="i == 0" class="">{{ failure_mode.failure_mode }}</option>
+      </ng-container>
+    </select>
+  </div>
+  <div class="d-flex justify-content-end gap-2">
+    <p-button label="Cerrar" severity="secondary" (click)="closeDialog()" />
+    <p-button label="Actualizar modo de falla" (click)="updateFailureMode()" />
+  </div>
+</p-dialog>
