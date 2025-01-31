@@ -33,10 +33,7 @@ export class FailureModeModalComponent {
       .get(`/diagnoses/${this.diagnosis_id_selected}`)
       .subscribe((response: any) => {
         console.log('response', response);
-        this.all_failure_modes = response.failure_modes;
-        if (this.all_failure_modes.length > 0) {
-          this.failure_mode_selected = this.all_failure_modes[0].id;
-        }
+        this.diagnosis_files_selected = response.files;
       });
   }
 
