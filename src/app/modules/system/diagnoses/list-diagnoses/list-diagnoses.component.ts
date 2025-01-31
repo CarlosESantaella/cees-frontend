@@ -167,7 +167,7 @@ export class ListDiagnosesComponent {
         if(this.reception.diagnosis){
           this.existsDiagnosis = true;
           this.actions[0].actions.create = false;
-          console.log(this.reception.diagnosis);
+          console.log('this.reception.diagnosis', this.reception.diagnosis);
           setTimeout(() => {
             this.tableComponent.initTable([this.reception.diagnosis]);
           }, 1000);

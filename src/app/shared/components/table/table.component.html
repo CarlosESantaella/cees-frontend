@@ -3,7 +3,7 @@
 </app-diagnosis-files-modal>
 
 <!-- ...existing code... -->
-<app-failure-mode-modal [diagnosis_id_selected]="diagnosis_id_selected" [actions]="actions"></app-failure-mode-modal>
+<app-failure-mode-modal [diagnosis_id_selected]="diagnosis_id_selected" [actions]="actions" [data]="data" (initTable)="initTable($event)"></app-failure-mode-modal>
 <!-- ...existing code... -->
 
 <!-- modal diagnoses items -->
@@ -281,6 +281,7 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'failure_modes'" class="d-flex justify-content-center">
                         <div class="d-flex flex-column justify-content-center">
+                          {{ record | json}}
                           <ng-container *ngIf="record.failure_modes && record.failure_modes.length > 0">
                             <p>{{ record.failure_modes[0]?.failure_mode?.failure_mode ?? '' }}</p>
                           </ng-container>

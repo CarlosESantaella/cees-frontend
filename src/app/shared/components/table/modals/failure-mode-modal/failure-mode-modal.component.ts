@@ -17,8 +17,10 @@ import { ButtonModule } from 'primeng/button';
 export class FailureModeModalComponent {
   visibleFailureMode: boolean = false;
   @Input() diagnosis_id_selected: number = 0;
+  @Input() data: any[] = [];
   @Input() actions: any[] = [];
   @Output() visibleFailureModeChange = new EventEmitter<boolean>();
+  @Output() initTable = new EventEmitter<any[]>();
 
   failure_mode_selected: number | string = '';
   all_failure_modes: any = [];
@@ -63,6 +65,25 @@ export class FailureModeModalComponent {
     this.crudService
       .put(`/diagnoses/${this.diagnosis_id_selected}/failure-modes`, data)
       .subscribe((resp: any) => {
+        this.data = this.data.map((response_data: any) => {
+          if (this.diagnosis_id_selected == response_data.id) {
+            if (
+              response_data.failure_modes &&
+              response_data.failure_modes.length > 0
+            ) {
+              response_data.failure_modes.splice(
+                0,
+                response_data.failure_modes.length
+              );
+            } else {
+              response_data.failure_modes = [];
+            }
+            response_data.failure_modes.push(resp[0]);
+          }
+          return response_data;
+        });
+        this.initTable.emit(this.data);
+        this.visibleFailureMode = false;
         this.toastService.show({
           message: 'Modo de falla actualizado con exito',
           classname: 'bg-success text-dark',
