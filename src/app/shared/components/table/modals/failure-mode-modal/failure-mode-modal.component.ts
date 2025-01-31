@@ -17,6 +17,7 @@ import { ButtonModule } from 'primeng/button';
 export class FailureModeModalComponent {
   visibleFailureMode: boolean = false;
   @Input() diagnosis_id_selected: number = 0;
+  @Input() actions: any[] = [];
   @Output() visibleFailureModeChange = new EventEmitter<boolean>();
 
   failure_mode_selected: number | string = '';
@@ -24,6 +25,22 @@ export class FailureModeModalComponent {
 
   private crudService = inject(CrudService);
   private toastService = inject(ToastService);
+
+  ngOnInit() {
+    console.log('actions', this.actions);
+    if (this.actions[0].name == 'Diagnostico') {
+      this.crudService.api_path_list = '/failure-modes';
+
+      this.crudService.get(`/failure-modes`).subscribe((resp: any) => {
+        // this.tableService.DATA = resp;
+        this.all_failure_modes = resp;
+        if (this.all_failure_modes.length > 0) {
+          this.failure_mode_selected = this.all_failure_modes[0].id;
+        }
+        console.log('failure modes', resp);
+      });
+    }
+  }
 
   showDialogFailureMode(diagnosis_id: number) {
     this.diagnosis_id_selected = diagnosis_id;
@@ -33,8 +50,10 @@ export class FailureModeModalComponent {
       .get(`/diagnoses/${this.diagnosis_id_selected}`)
       .subscribe((response: any) => {
         console.log('response', response);
-        this.diagnosis_files_selected = response.files;
+        // this.diagnosis_files_selected = response.files;
       });
+
+
   }
 
   updateFailureMode() {
