@@ -19,6 +19,7 @@ export class FailureModeModalComponent {
   @Input() diagnosis_id_selected: number = 0;
   @Input() data: any[] = [];
   @Input() actions: any[] = [];
+  @Input() diagnosis_files_selected: any[] = [];
   @Output() visibleFailureModeChange = new EventEmitter<boolean>();
   @Output() initTable = new EventEmitter<any[]>();
 
@@ -52,7 +53,7 @@ export class FailureModeModalComponent {
       .get(`/diagnoses/${this.diagnosis_id_selected}`)
       .subscribe((response: any) => {
         console.log('response', response);
-        // this.diagnosis_files_selected = response.files;
+        this.diagnosis_files_selected = response.files;
       });
 
 
