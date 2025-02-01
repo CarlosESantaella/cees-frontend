@@ -30,7 +30,6 @@ export class FailureModeModalComponent {
   private toastService = inject(ToastService);
 
   ngOnInit() {
-    console.log('actions', this.actions);
     if (this.actions[0].name == 'Diagnostico') {
       this.crudService.api_path_list = '/failure-modes';
 

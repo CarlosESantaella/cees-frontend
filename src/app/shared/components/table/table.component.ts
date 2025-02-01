@@ -236,28 +236,6 @@ export class TableComponent {
       });
     }
 
-    if (this.actions[0].name == 'Diagnostico') {
-      this.crudService.api_path_list = '/failure-modes';
-
-      this.crudService.get(`/failure-modes`).subscribe((resp: any) => {
-        // this.tableService.DATA = resp;
-        this.all_failure_modes = resp;
-        if (this.all_failure_modes.length > 0) {
-          this.failure_mode_selected = this.all_failure_modes[0].id;
-        }
-        console.log('failure modes', resp);
-      });
-
-      this.crudService.get(`/items`).subscribe((resp: any) => {
-        // this.tableService.DATA = resp;
-        this.all_items = resp;
-        this.all_items.forEach((item: any) => {
-          this.diagnostic_items['item_id_' + item.id] = 0;
-        });
-        console.log('all items', this.all_items);
-        console.log('this.diagnostic_items', this.diagnostic_items);
-      });
-    }
     if (this.aditionalData?.receptionId) {
       this.selectedReceptionId = this.aditionalData?.receptionId;
     }
@@ -747,10 +725,6 @@ export class TableComponent {
           this.data[0].initial_date = response.initial_date;
         }
       });
-  }
-
-  showDialogDiagnosesItems(diagnosis_id: number) {
-    this.diagnosesItemsModal.showDialogDiagnosesItems(diagnosis_id);
   }
 
   updateDiagnosticItemPhotos() {

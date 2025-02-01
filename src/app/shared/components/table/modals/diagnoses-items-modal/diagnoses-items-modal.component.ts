@@ -19,7 +19,6 @@ import { InputTextModule } from 'primeng/inputtext';
 export class DiagnosesItemsModalComponent {
   @Input() diagnosis_id_selected: number = 0;
   @Input() dt!: any;
-  @Output() visibleDiagnosticItemsChange = new EventEmitter<boolean>();
 
   visibleDiagnosticItems: boolean = false;
   all_items: any = [];
@@ -28,6 +27,17 @@ export class DiagnosesItemsModalComponent {
 
   private crudService = inject(CrudService);
   private toastService = inject(ToastService);
+
+  ngOnInit() {
+    console.log('hola mundo');
+    this.crudService.get(`/items`).subscribe((resp: any) => {
+      this.all_items = resp;
+      console.log('items: ', this.all_items);
+      this.all_items.forEach((item: any) => {
+        this.diagnostic_items['item_id_' + item.id] = 0;
+      });
+    });
+  }
 
   showDialogDiagnosesItems(diagnosis_id: number) {
     this.diagnosis_id_selected = diagnosis_id;
@@ -112,6 +122,5 @@ export class DiagnosesItemsModalComponent {
 
   closeDialog() {
     this.visibleDiagnosticItems = false;
-    this.visibleDiagnosticItemsChange.emit(this.visibleDiagnosticItems);
   }
 }
