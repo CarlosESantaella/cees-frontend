@@ -87,6 +87,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { es } from 'date-fns/locale';
 import { DiagnosisFilesModalComponent } from './modals/diagnosis-files-modal/diagnosis-files-modal.component';
 import { FailureModeModalComponent } from './modals/failure-mode-modal/failure-mode-modal.component';
+import { DiagnosesItemsModalComponent } from './modals/diagnoses-items-modal/diagnoses-items-modal.component';
 
 @Component({
   selector: 'ngbd-table',
@@ -121,6 +122,7 @@ import { FailureModeModalComponent } from './modals/failure-mode-modal/failure-m
     TableModule,
     DiagnosisFilesModalComponent,
     FailureModeModalComponent,
+    DiagnosesItemsModalComponent,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
@@ -153,6 +155,7 @@ export class TableComponent {
   file_inputs_diagnostic_photos!: QueryList<ElementRef>;
   @ViewChild(DiagnosisFilesModalComponent) diagnosisFilesModal!: DiagnosisFilesModalComponent;
   @ViewChild(FailureModeModalComponent) failureModeModal!: FailureModeModalComponent;
+  @ViewChild(DiagnosesItemsModalComponent) diagnosesItemsModal!: DiagnosesItemsModalComponent;
 
   n_actions: number = 0;
   crudService!: any;
@@ -746,79 +749,8 @@ export class TableComponent {
       });
   }
 
-  onClickAddItem(item: any) {
-    let hasItem = this.items_to_send.find(
-      (itemToFind: any) => itemToFind.id == item.id
-    );
-    if (!hasItem) {
-      this.items_to_send.push(item);
-      this.diagnostic_items['item_id_' + item.id] = 0;
-    }
-    console.log(this.items_to_send);
-
-    console.log('resultado items: ', this.diagnostic_items);
-  }
-
-  onClickRemoveItem(item: any) {
-    this.items_to_send = this.items_to_send.filter((itemToFilter: any) => {
-      return itemToFilter.id != item.id;
-    });
-    let keyToDelete = 'item_id_' + item.id;
-    if (keyToDelete in this.diagnostic_items) {
-      delete this.diagnostic_items[keyToDelete];
-      console.log('resultado items: ', this.diagnostic_items);
-    }
-  }
-
-  updateDiagnosticItems() {
-    let items_to_upload: any = {
-      items: [],
-    };
-
-    for (let key in this.diagnostic_items) {
-      if (this.diagnostic_items.hasOwnProperty(key)) {
-        if (this.diagnostic_items[key] > 0) {
-          let item_array: any = key.split('_');
-          items_to_upload.items.push({
-            diagnoses_id: this.diagnosis_id_selected,
-            item_id: item_array[2],
-            quantity: this.diagnostic_items[key],
-          });
-        }
-      }
-    }
-
-    this.crudService
-      .put(`/diagnoses/${this.diagnosis_id_selected}/items`, items_to_upload)
-      .subscribe((response: any) => {
-        this.visibleDiagnosticItems = false;
-        this.toastService.show({
-          message: 'Items asociados al diagnostico actualizados con exito',
-          classname: 'bg-success text-white',
-        });
-      });
-  }
-
   showDialogDiagnosesItems(diagnosis_id: number) {
-    this.diagnosis_id_selected = diagnosis_id;
-    this.visibleDiagnosticItems = true;
-    this.crudService
-      .get(`/diagnoses/${this.diagnosis_id_selected}/items`)
-      .subscribe((response: any) => {
-        this.items_to_send = [];
-
-        let response_items = response;
-        for (let key in this.diagnostic_items) {
-          if (this.diagnostic_items.hasOwnProperty(key)) {
-            this.diagnostic_items[key] = 0;
-          }
-        }
-        response_items.forEach((response_item: any) => {
-          this.diagnostic_items['item_id_' + response_item.item_id] =
-            response_item.quantity;
-          this.items_to_send.push(response_item.item);
-        });
-      });
+    this.diagnosesItemsModal.showDialogDiagnosesItems(diagnosis_id);
   }
 
   updateDiagnosticItemPhotos() {

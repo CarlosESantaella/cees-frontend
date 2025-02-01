@@ -1,76 +1,14 @@
-<!-- modal diagnosis files -->
+<!-- diagnosis files modal -->
 <app-diagnosis-files-modal [diagnosis_id_selected]="diagnosis_id_selected">
 </app-diagnosis-files-modal>
 
-<!-- ...existing code... -->
-<app-failure-mode-modal [diagnosis_id_selected]="diagnosis_id_selected" [actions]="actions" [data]="data" (initTable)="initTable($event)" [diagnosis_files_selected]="diagnosis_files_selected"></app-failure-mode-modal>
-<!-- ...existing code... -->
+<!-- failure mode modal -->
+<app-failure-mode-modal [diagnosis_id_selected]="diagnosis_id_selected" [actions]="actions" [data]="data"
+  (initTable)="initTable($event)" [diagnosis_files_selected]="diagnosis_files_selected"></app-failure-mode-modal>
 
-<!-- modal diagnoses items -->
-<p-dialog header="Items del diagnóstico" [modal]="true" [(visible)]="visibleDiagnosticItems"
-  [style]="{ width: '95%', maxWidth: '900px' }" [draggable]="false">
-  <section class="mb-4">
-    <div>
 
-    </div>
-    <div>
-      <p-table #dt [value]="all_items" [tableStyle]="{ 'width': '100%' }" dataKey="id" styleClass="p-datatable-striped"
-        [rows]="10" [paginator]="true" [globalFilterFields]="['description',]" styleClass="mb-4">
-        <ng-template pTemplate="caption">
-          <div class="flex">
-            <input pInputText type="text" (input)="onInputSearchItems($event)" placeholder="Buscar item..." />
+<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected" [dt]="dt"></app-diagnoses-items-modal>
 
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Descripción</th>
-            <th>Unidad de medida</th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item let-i="rowIndex">
-          <tr>
-            <td>{{ item.description }}</td>
-            <td>{{ item.unit_of_measurement }}</td>
-            <td>
-              <button class="btn btn-primary btn-sm" (click)="onClickAddItem(item)">Agregar</button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-
-      <p-table [value]="items_to_send" [tableStyle]="{ 'width': '100%' }" styleClass="p-datatable-striped"
-        [scrollable]="true" scrollHeight="500px" styleClass="mb-4">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Descripción</th>
-            <th>Unidad de medida</th>
-            <th>Cantidad</th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item let-i="rowIndex">
-          <tr>
-            <td>{{ item.description }}</td>
-            <td>{{ item.unit_of_measurement }}</td>
-            <td>
-              <input class="form-control input-quantity-items" type="number"
-                [(ngModel)]="diagnostic_items['item_id_'+item.id]" [name]="'item_quantity_'+item.id" id="" min="0">
-            </td>
-            <td>
-              <button class="btn btn-primary btn-sm" (click)="onClickRemoveItem(item)">Eliminar</button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  </section>
-  <div class="d-flex justify-content-end gap-2">
-    <p-button label="Cerrar" severity="secondary" (click)="visibleDiagnosticItems = false" />
-    <p-button label="Actualizar items del diagnóstico" (click)="updateDiagnosticItems()" />
-  </div>
-</p-dialog>
 
 <!-- modal diagnoses item photos -->
 <p-dialog header="Fotos de items asociados" [modal]="true" [(visible)]="visibleDiagnosticItemPhotos"
@@ -281,7 +219,6 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'failure_modes'" class="d-flex justify-content-center">
                         <div class="d-flex flex-column justify-content-center">
-                          {{ record | json}}
                           <ng-container *ngIf="record.failure_modes && record.failure_modes.length > 0">
                             <p>{{ record.failure_modes[0]?.failure_mode?.failure_mode ?? '' }}</p>
                           </ng-container>
