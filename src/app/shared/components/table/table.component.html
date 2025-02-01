@@ -23,7 +23,7 @@
         <app-table-toolbar [actions]="actions" [clients_all]="clients_all" [date]="date" (dateChange)="date=$event"
           [client_selected]="client_selected" (client_selectedChange)="client_selected=$event"
           [number_reception_disabled]="number_reception_disabled" [data]="data" (initTable)="initTable($event)" [indexReception]="indexReception"
-          (actionModalEvent)="actionModal($event.event, $event.action)">
+          (actionModalEvent)="tableToolbar.actionModal($event.event, $event.action)">
         </app-table-toolbar>
         <!--end::Toolbar-->
         <!--begin::Group actions-->
@@ -122,25 +122,9 @@
                   </ng-template>
                 </ng-container>
                 <td>
-                  <!-- actions section -->
-                  @if(n_actions != 0){
-                  <div ngbDropdown>
-                    <button type="button" class="btn btn-light btn-active-light-primary btn-sm"
-                      ngbDropdownToggle>Acciones</button>
-                    <div ngbDropdownMenu>
-                      <a *ngIf="actions[0].actions.hasOwnProperty('edit')"
-                        (click)="actionModal($event, 'edit', record.id)" ngbDropdownItem>Editar</a>
-                      <a *ngIf="actions[0].actions.hasOwnProperty('delete')"
-                        (click)="actionModal($event, 'delete', record.id)" ngbDropdownItem>Eliminar</a>
-                      <a *ngIf="actions[0].actions.hasOwnProperty('pdf')"
-                        (click)="actionModal($event, 'pdf', record.id)" class="text-center" ngbDropdownItem>
-                        <i class="fa-regular fa-file-pdf fs-1 text-danger"></i></a>
-                      <a *ngIf="actions[0].actions.hasOwnProperty('mail')"
-                        (click)="actionModal($event, 'mail', record.id)" class="text-center" ngbDropdownItem>
-                        <i class="fa-solid fa-envelope fs-1 text-primary"></i></a>
-                    </div>
-                  </div>
-                  }
+                  <app-table-actions [actions]="actions" [record]="record" (createEvent)="createEvent.emit($event)"
+                    (editEvent)="editEvent.emit($event)" (deleteEvent)="deleteEvent.emit($event)" [selectedReceptionId]="selectedReceptionId" [data]="data" (sendMailEvent)="sendMailEvent.emit($event)">
+                  </app-table-actions>
                 </td>
               </tr>
               } @empty {

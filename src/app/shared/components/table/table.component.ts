@@ -2,7 +2,6 @@ import {
   AsyncPipe,
   CommonModule,
   DecimalPipe,
-  formatDate,
 } from '@angular/common';
 import {
   Component,
@@ -33,29 +32,8 @@ import {
 } from '../../directives/table-sortable.directive';
 import { TableService } from '../../services/table.service';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-// Create something
-import { CreateComponent as CreateUserComponent } from '../../../modules/system/access/list-users/create/create.component';
-import { CreateComponent as CreateClientComponent } from '../../../modules/system/reception/list-clients/create/create.component';
-import { CreateComponent as CreateRolComponent } from '../../../modules/system/access/list-rols/create/create.component';
-import { CreateComponent as CreateAdminComponent } from '../../../modules/system/admin/create/create.component';
-import { CreateComponent as CreateReceptionComponent } from '../../../modules/system/reception/list-receptions/create/create.component';
-import { CreateComponent as CreateRateComponent } from '../../../modules/system/item/list-rates/create/create.component';
-import { CreateComponent as CreateItemComponent } from '../../../modules/system/item/list-items/create/create.component';
-import { CreateComponent as CreateDiagnosesComponent } from '../../../modules/system/diagnoses/list-diagnoses/create/create.component';
-import { CreateComponent as CreateFeilureModeComponent } from '../../../modules/system/diagnoses/list-failure-modes/create/create.component';
-// Edit something
-import { EditComponent as EditUserComponent } from '../../../modules/system/access/list-users/edit/edit.component';
-import { EditComponent as EditClientComponent } from '../../../modules/system/reception/list-clients/edit/edit.component';
-import { EditComponent as EditRolComponent } from '../../../modules/system/access/list-rols/edit/edit.component';
-import { EditComponent as EditAdminComponent } from '../../../modules/system/admin/edit/edit.component';
-import { EditComponent as EditReceptionComponent } from '../../../modules/system/reception/list-receptions/edit/edit.component';
-import { EditComponent as EditRateComponent } from '../../../modules/system/item/list-rates/edit/edit.component';
-import { EditComponent as EditItemComponent } from '../../../modules/system/item/list-items/edit/edit.component';
-import { EditComponent as EditDiagnosesComponent } from '../../../modules/system/diagnoses/list-diagnoses/edit/edit.component';
-import { EditComponent as EditFailureModeComponent } from '../../../modules/system/diagnoses/list-failure-modes/edit/edit.component';
 
 //others
-import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog.component';
 import { CalendarModule } from 'primeng/calendar';
 import { FieldsetModule } from 'primeng/fieldset';
 import { DialogModule } from 'primeng/dialog';
@@ -78,7 +56,7 @@ import { FailureModeModalComponent } from './modals/failure-mode-modal/failure-m
 import { DiagnosesItemsModalComponent } from './modals/diagnoses-items-modal/diagnoses-items-modal.component';
 import { DiagnosesItemPhotosModalComponent } from './modals/diagnoses-item-photos-modal/diagnoses-item-photos-modal.component';
 import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
-
+import { TableActionsComponent } from './table-actions/table-actions.component';
 
 @Component({
   selector: 'ngbd-table',
@@ -96,14 +74,6 @@ import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    CreateUserComponent,
-    CreateClientComponent,
-    CreateRolComponent,
-    CreateAdminComponent,
-    EditUserComponent,
-    EditClientComponent,
-    EditRolComponent,
-    EditAdminComponent,
     MatButtonModule,
     CalendarModule,
     FieldsetModule,
@@ -116,14 +86,13 @@ import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
     DiagnosesItemsModalComponent,
     DiagnosesItemPhotosModalComponent,
     TableToolbarComponent,
+    TableActionsComponent
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
   providers: [TableService, DecimalPipe, SafeHtmlPipe],
 })
 export class TableComponent {
-  data$: Observable<any[]> = new BehaviorSubject<any[]>([]);
-  total$: Observable<number> = new BehaviorSubject<number>(0);
 
   @Input() columns: any[] = [];
   @Input() data: any[] = [];
@@ -134,7 +103,7 @@ export class TableComponent {
   @Output() editEvent = new EventEmitter<any>();
   @Output() sendMailEvent = new EventEmitter<any>();
   @Output() createEvent = new EventEmitter<any>();
-
+  @Output() actionModalEvent = new EventEmitter<{ event: Event, action: string, id: any }>();
 
   @ViewChildren(TableSortableDirective)
   headers!: QueryList<TableSortableDirective>;
@@ -145,6 +114,10 @@ export class TableComponent {
   @ViewChild(FailureModeModalComponent) failureModeModal!: FailureModeModalComponent;
   @ViewChild(DiagnosesItemsModalComponent) diagnosesItemsModal!: DiagnosesItemsModalComponent;
   @ViewChild(DiagnosesItemPhotosModalComponent) diagnosesItemPhotosModal!: DiagnosesItemPhotosModalComponent;
+  @ViewChild(TableToolbarComponent) tableToolbar!: TableToolbarComponent;
+
+  data$: Observable<any[]> = new BehaviorSubject<any[]>([]);
+  total$: Observable<number> = new BehaviorSubject<number>(0);
 
   n_actions: number = 0;
   crudService!: any;
@@ -289,325 +262,6 @@ export class TableComponent {
     this.n_actions = Object.keys(this.actions[0].actions).length;
   }
 
-  actionModal($event: Event, action: string, id?: any) {
-    $event.preventDefault();
-    switch (action) {
-      case 'create':
-        this.openCreateModal(this.actions[0].name);
-        break;
-      case 'edit':
-        this.openEditModal(this.actions[0].name, id);
-        break;
-      case 'delete':
-        this.openDeleteModal(this.actions[0].name, id);
-        break;
-      case 'pdf':
-        this.exportPdf(this.actions[0].name, id);
-        break;
-      case 'mail':
-        this.sendMail(this.actions[0].name, id);
-        break;
-    }
-  }
-
-  openCreateModal(name: string) {
-    switch (name) {
-      case 'Administrador':
-        const modalRefAdmin = this.ngbModal.open(CreateAdminComponent, {
-          centered: true,
-          size: 'md',
-        });
-        modalRefAdmin.componentInstance.createEvent.subscribe((resp: any) => {
-          this.createEvent.emit(resp);
-        });
-        break;
-      case 'Cliente':
-        const modalRefClient = this.ngbModal.open(CreateClientComponent, {
-          centered: true,
-          size: 'md',
-        });
-        modalRefClient.componentInstance.createEvent.subscribe((resp: any) => {
-          this.createEvent.emit(resp);
-        });
-
-        break;
-      case 'Rol':
-        const modalRefRol = this.ngbModal.open(CreateRolComponent, {
-          centered: true,
-          size: 'md',
-        });
-        modalRefRol.componentInstance.createEvent.subscribe((resp: any) => {
-          this.createEvent.emit(resp);
-        });
-        break;
-      case 'Usuario':
-        const modalRefUser = this.ngbModal.open(CreateUserComponent, {
-          centered: true,
-          size: 'md',
-        });
-        // modalRefUser.componentInstance.name = this.actions[0].name;
-        modalRefUser.componentInstance.createEvent.subscribe((resp: any) => {
-          this.createEvent.emit(resp);
-        });
-        break;
-      case 'Recepcion':
-        const modalRefReception = this.ngbModal.open(CreateReceptionComponent, {
-          centered: true,
-          size: 'lg',
-        });
-
-        modalRefReception.componentInstance.createEvent.subscribe(
-          (resp: any) => {
-            this.createEvent.emit(resp);
-          }
-        );
-        break;
-      case 'Tarifa':
-        console.log('hola mundo bs');
-        const modalRefRate = this.ngbModal.open(CreateRateComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        // modalRefRate.componentInstance.name = this.actions[0].name;
-        modalRefRate.componentInstance.createEvent.subscribe((resp: any) => {
-          this.createEvent.emit(resp);
-        });
-        break;
-      case 'Item':
-        console.log('hola mundo bs');
-        const modalRefItem = this.ngbModal.open(CreateItemComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        // modalRefItem.componentInstance.name = this.actions[0].name;
-        modalRefItem.componentInstance.createEvent.subscribe((resp: any) => {
-          this.createEvent.emit(resp);
-        });
-        break;
-      case 'Diagnostico':
-        const modalRefDiagnoses = this.ngbModal.open(CreateDiagnosesComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        // modalRefItem.componentInstance.name = this.actions[0].name;
-        modalRefDiagnoses.componentInstance.receptionId =
-          this.selectedReceptionId;
-        console.log('selected reception id', this.selectedReceptionId);
-        modalRefDiagnoses.componentInstance.createEvent.subscribe(
-          (resp: any) => {
-            this.createEvent.emit(resp);
-          }
-        );
-        break;
-      case 'Modo de falla':
-        const modalRefFeilureMode = this.ngbModal.open(
-          CreateFeilureModeComponent,
-          {
-            centered: true,
-            size: 'lg',
-          }
-        );
-        // modalRefItem.componentInstance.name = this.actions[0].name;
-        modalRefFeilureMode.componentInstance.createEvent.subscribe(
-          (resp: any) => {
-            this.createEvent.emit(resp);
-          }
-        );
-        break;
-    }
-  }
-
-  openEditModal(name: string, id: any) {
-    switch (name) {
-      case 'Administrador':
-        const modalRefAdmin = this.ngbModal.open(EditAdminComponent, {
-          centered: true,
-          size: 'md',
-        });
-        console.log(this.data, '1');
-
-        modalRefAdmin.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefAdmin.componentInstance.editEvent.subscribe((resp: any) => {
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Cliente':
-        const modalRefClient = this.ngbModal.open(EditClientComponent, {
-          centered: true,
-          size: 'md',
-        });
-        modalRefClient.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        console.log(this.data.filter((row) => row.id == id)[0]);
-        modalRefClient.componentInstance.editEvent.subscribe((resp: any) => {
-          console.log(resp);
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Rol':
-        const modalRefRol = this.ngbModal.open(EditRolComponent, {
-          centered: true,
-          size: 'md',
-        });
-        modalRefRol.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefRol.componentInstance.editEvent.subscribe((resp: any) => {
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Usuario':
-        const modalRefUser = this.ngbModal.open(EditUserComponent, {
-          centered: true,
-          size: 'md',
-        });
-        modalRefUser.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefUser.componentInstance.editEvent.subscribe((resp: any) => {
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Recepcion':
-        const modalRefReception = this.ngbModal.open(EditReceptionComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        // console.log(id, 'id');
-        // console.log(this.data.filter((row) => row.id == id)[0], 'data');
-        modalRefReception.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefReception.componentInstance.editEvent.subscribe((resp: any) => {
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Tarifa':
-        const modalRefRate = this.ngbModal.open(EditRateComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        // console.log(id, 'id');
-        // console.log(this.data.filter((row) => row.id == id)[0], 'data');
-        modalRefRate.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefRate.componentInstance.editEvent.subscribe((resp: any) => {
-          console.log('cerro');
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Item':
-        const modalRefItem = this.ngbModal.open(EditItemComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        // console.log(id, 'id');
-        // console.log(this.data.filter((row) => row.id == id)[0], 'data');
-        modalRefItem.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefItem.componentInstance.editEvent.subscribe((resp: any) => {
-          console.log('cerro');
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Diagnostico':
-        const modalRefDiagnoses = this.ngbModal.open(EditDiagnosesComponent, {
-          centered: true,
-          size: 'lg',
-        });
-        modalRefDiagnoses.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefDiagnoses.componentInstance.editEvent.subscribe((resp: any) => {
-          this.editEvent.emit(resp);
-        });
-        break;
-      case 'Modo de falla':
-        const modalRefFailureMode = this.ngbModal.open(
-          EditFailureModeComponent,
-          {
-            centered: true,
-            size: 'lg',
-          }
-        );
-        // console.log(id, 'id');
-        // console.log(this.data.filter((row) => row.id == id)[0], 'data');
-        modalRefFailureMode.componentInstance.data = this.data.filter(
-          (row) => row.id == id
-        )[0];
-        modalRefFailureMode.componentInstance.editEvent.subscribe(
-          (resp: any) => {
-            this.editEvent.emit(resp);
-          }
-        );
-        break;
-    }
-  }
-
-  openDeleteModal(name: string, id: any) {
-    this.dialog
-      .open(ConfirmationDialog, {
-        data: {
-          title: 'Eliminar',
-          message: '¿Seguro deseas eliminar este ' + name.toLowerCase() + '?',
-        },
-      })
-      .afterClosed()
-      .subscribe((confirmado: boolean) => {
-        if (confirmado) {
-          this.emitDeleteEvent(id);
-        }
-      });
-  }
-
-  exportPdf(name: string, id: any) {
-    switch (name) {
-      case 'Recepcion':
-        const token = this.authService.token;
-
-        window.open(
-          `${environment.api_web}/receptions/${id}/pdf?token=${token}`
-        );
-        break;
-    }
-  }
-
-  sendMail(name: string, id: any) {
-    switch (name) {
-      case 'Recepcion':
-        const token = this.authService.token;
-        this.dialog
-          .open(ConfirmationDialog, {
-            data: {
-              title: 'Enviar Email',
-              message:
-                '¿Seguro deseas enviar reporte al cliente de esta recepción?',
-            },
-          })
-          .afterClosed()
-          .subscribe((confirmado: boolean) => {
-            if (confirmado) {
-              this.sendMailEvent.emit(id);
-            }
-          });
-        break;
-    }
-  }
-
-  emitDeleteEvent(id: any) {
-    this.deleteEvent.emit(id);
-  }
-
-  readActions() {
-    // for(property in this.actions[0].actions)
-    // switch(this.actions[0].actions)
-  }
-
   changeStatusSwitch(status_switch: boolean | number, diagnosis_id: number) {
     status_switch = status_switch ? 1 : 0;
     this.crudService
@@ -676,6 +330,7 @@ export class TableComponent {
       return value;
     }
   }
+  
   getFormattedValueHTML(
     record: any,
     field: string,
