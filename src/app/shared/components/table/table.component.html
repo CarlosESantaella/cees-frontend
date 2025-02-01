@@ -22,8 +22,8 @@
         <!--begin::Toolbar-->
         <app-table-toolbar [actions]="actions" [clients_all]="clients_all" [date]="date" (dateChange)="date=$event"
           [client_selected]="client_selected" (client_selectedChange)="client_selected=$event"
-          [number_reception_disabled]="number_reception_disabled" [data]="data" (initTable)="initTable($event)" [indexReception]="indexReception"
-          (actionModalEvent)="tableToolbar.actionModal($event.event, $event.action)">
+          [number_reception_disabled]="number_reception_disabled" [data]="data" (initTable)="initTable($event)" [indexReception]="indexReception" [selectedReceptionId]="selectedReceptionId"
+          >
         </app-table-toolbar>
         <!--end::Toolbar-->
         <!--begin::Group actions-->
@@ -122,7 +122,7 @@
                   </ng-template>
                 </ng-container>
                 <td>
-                  <app-table-actions [actions]="actions" [record]="record" (createEvent)="createEvent.emit($event)"
+                  <app-table-actions [actions]="actions" [record]="record" (createEvent)="createAction($event)"
                     (editEvent)="editEvent.emit($event)" (deleteEvent)="deleteEvent.emit($event)" [selectedReceptionId]="selectedReceptionId" [data]="data" (sendMailEvent)="sendMailEvent.emit($event)">
                   </app-table-actions>
                 </td>

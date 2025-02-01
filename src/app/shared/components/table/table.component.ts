@@ -167,6 +167,7 @@ export class TableComponent {
   }
 
   ngOnInit() {
+    console.log('this.actions', this.actions);
     if (this.actions[0].name == 'Recepcion') {
       this.crudService.api_path_show = '/configurations';
 
@@ -212,6 +213,11 @@ export class TableComponent {
         });
       });
     }
+  }
+
+  createAction(event: any){
+    console.log('createAction', event);
+    this.createEvent.emit(event);
   }
 
   validateImgFile(index: number): boolean {

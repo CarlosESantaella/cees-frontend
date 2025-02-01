@@ -66,6 +66,7 @@ export class ListClientsComponent {
   ngOnInit() {}
 
   create(data: any) {
+    console.log('create client3', data);
     this.crudService.create(data).subscribe((resp) => {
       console.log(resp);
       if(!resp?.error){

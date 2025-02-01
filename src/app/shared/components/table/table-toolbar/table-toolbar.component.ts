@@ -8,11 +8,13 @@ import { TableService } from '../../../services/table.service';
 import { AuthService } from '../../../services/auth.service';
 import { environment } from '../../../../../environments/environment.development';
 import { CrudService } from '../../../services/crud.service';
+import { TableActionsComponent } from '../table-actions/table-actions.component';
+import { ActionsTableService } from '../table-actions/services/actions-table.service';
 
 @Component({
   selector: 'app-table-toolbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, CalendarModule, ButtonModule, NgbDropdownModule],
+  imports: [CommonModule, FormsModule, CalendarModule, ButtonModule, NgbDropdownModule, TableActionsComponent],
   templateUrl: './table-toolbar.component.html',
   styleUrl: './table-toolbar.component.css'
 })
@@ -24,6 +26,7 @@ export class TableToolbarComponent {
   @Input() clients_all: any[] = [];
   @Input() date: any;
   @Input() data: any;
+  @Input() selectedReceptionId: any;
 
   @Input() client_selected: any;
   @Input() indexReception!: number;
@@ -34,15 +37,19 @@ export class TableToolbarComponent {
   @Output() searchByDateAndClientEvent = new EventEmitter<any>();
   @Output() validateNumbersEvent = new EventEmitter<any>();
   @Output() submitIndexReceptionEvent = new EventEmitter<void>();
-  @Output() actionModalEvent = new EventEmitter<{ event: Event, action: string }>();
   @Output() initTable = new EventEmitter<any>();
   @Output() setIndexReceptionsEvent = new EventEmitter<any>();
   crudService!: any;
 
-  constructor(public service: TableService, private authService: AuthService) {
+  constructor(
+    public service: TableService, 
+    private authService: AuthService,
+    private actionTableService: ActionsTableService
+  ) {
     this.crudService = inject(CrudService);
   }
   ngOnInit() {
+    console.log('actions toolbar', this.actions);
     this.number_reception.nativeElement.value = this.indexReception;
   }
 
@@ -138,8 +145,7 @@ export class TableToolbarComponent {
       this.number_reception_disabled = true;
     }
   }
-
-  actionModal(event: Event, action: string) {
-    this.actionModalEvent.emit({ event, action });
+  actionModal(event: any, action: any) {
+    this.actionTableService.notifyAction({event, action});
   }
 }

@@ -62,6 +62,7 @@ export class CreateComponent {
   }
 
   onSubmit(){
+    console.log('this.form.value', this.form.value);
     this.createEvent.emit(this.form.value);
     this.modal.dismiss();
   }

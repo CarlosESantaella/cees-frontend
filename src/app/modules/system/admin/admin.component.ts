@@ -68,6 +68,8 @@ export class AdminComponent {
   }
 
   create(data: any){
+
+    
     this.crudService.create(data)
     .subscribe(
       (resp) => {

@@ -10,6 +10,7 @@ import { CreateComponent as CreateUserComponent } from '../../../../modules/syst
 import { CreateComponent as CreateClientComponent } from '../../../../modules/system/reception/list-clients/create/create.component';
 import { CreateComponent as CreateRolComponent } from '../../../../modules/system/access/list-rols/create/create.component';
 import { CreateComponent as CreateAdminComponent } from '../../../../modules/system/admin/create/create.component';
+
 //edit components
 import { EditComponent as EditReceptionComponent } from '../../../../modules/system/reception/list-receptions/edit/edit.component';
 import { EditComponent as EditRateComponent } from '../../../../modules/system/item/list-rates/edit/edit.component';
@@ -31,26 +32,22 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../../services/auth.service';
 import { environment } from '../../../../../environments/environment.development';
+import { Subscription } from 'rxjs';
+import { ActionsTableService } from './services/actions-table.service';
 @Component({
   selector: 'app-table-actions',
   standalone: true,
   imports: [
     CommonModule,
-    NgbDropdownModule,
-    CreateUserComponent,
-    CreateClientComponent,
-    CreateRolComponent,
-    CreateAdminComponent,
-    EditUserComponent,
-    EditClientComponent,
-    EditRolComponent,
-    EditAdminComponent,
+    NgbDropdownModule
   ],
   templateUrl: './table-actions.component.html',
   styleUrl: './table-actions.component.css'
 })
 export class TableActionsComponent {
+  private subscription: Subscription;
   @Input() actions: any[] = [];
+  @Input() visible: boolean = true;
   @Input() record: any;
   @Input() selectedReceptionId: number | null = null;
   @Input() data: any;
@@ -63,31 +60,41 @@ export class TableActionsComponent {
     private ngbModal: NgbModal,
     public dialog: MatDialog,
     public authService: AuthService,
+    private actionTableService: ActionsTableService
+  ) { 
+    this.subscription = this.actionTableService.action$.subscribe((res) => {
+      this.actionModal(res.event, res.action);
+    });
+  }
 
-  ) { }
+  ngOnInit() {
+    console.log('actions', this.actions);
+  }
 
   actionModal($event: Event, action: string, id?: any) {
+    console.log('actions from actions component', this.actions);
     $event.preventDefault();
     switch (action) {
       case 'create':
-        this.openCreateModal(this.actions[0].name);
+        this.openCreateModal(this.actions[0]?.name);
         break;
       case 'edit':
-        this.openEditModal(this.actions[0].name, id);
+        this.openEditModal(this.actions[0]?.name, id);
         break;
       case 'delete':
-        this.openDeleteModal(this.actions[0].name, id);
+        this.openDeleteModal(this.actions[0]?.name, id);
         break;
       case 'pdf':
-        this.exportPdf(this.actions[0].name, id);
+        this.exportPdf(this.actions[0]?.name, id);
         break;
       case 'mail':
-        this.sendMail(this.actions[0].name, id);
+        this.sendMail(this.actions[0]?.name, id);
         break;
     }
   }
 
   openCreateModal(name: string) {
+    console.log('name from openCreateModal', name);
     switch (name) {
       case 'Administrador':
         const modalRefAdmin = this.ngbModal.open(CreateAdminComponent, {
@@ -99,11 +106,13 @@ export class TableActionsComponent {
         });
         break;
       case 'Cliente':
+        console.log('hola mundo bs');
         const modalRefClient = this.ngbModal.open(CreateClientComponent, {
           centered: true,
           size: 'md',
         });
         modalRefClient.componentInstance.createEvent.subscribe((resp: any) => {
+          console.log('create client', resp);
           this.createEvent.emit(resp);
         });
 
@@ -193,6 +202,8 @@ export class TableActionsComponent {
         break;
     }
   }
+
+  
 
   openEditModal(name: string, id: any) {
     switch (name) {

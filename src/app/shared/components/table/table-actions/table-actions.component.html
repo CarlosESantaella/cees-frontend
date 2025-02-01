@@ -1,14 +1,14 @@
-<div ngbDropdown>
+<div ngbDropdown *ngIf="visible">
   <button type="button" class="btn btn-light btn-active-light-primary btn-sm" ngbDropdownToggle>Acciones</button>
   <div ngbDropdownMenu>
-    <a *ngIf="actions[0].actions.hasOwnProperty('edit')"
+    <a *ngIf="actions[0]?.actions?.hasOwnProperty('edit')"
       (click)="actionModal($event, 'edit', record.id)" ngbDropdownItem>Editar</a>
-    <a *ngIf="actions[0].actions.hasOwnProperty('delete')"
+    <a *ngIf="actions[0]?.actions?.hasOwnProperty('delete')"
       (click)="actionModal($event, 'delete', record.id)" ngbDropdownItem>Eliminar</a>
-    <a *ngIf="actions[0].actions.hasOwnProperty('pdf')"
+    <a *ngIf="actions[0]?.actions?.hasOwnProperty('pdf')"
       (click)="actionModal($event, 'pdf', record.id)" class="text-center" ngbDropdownItem>
       <i class="fa-regular fa-file-pdf fs-1 text-danger"></i></a>
-    <a *ngIf="actions[0].actions.hasOwnProperty('mail')"
+    <a *ngIf="actions[0]?.actions?.hasOwnProperty('mail')"
       (click)="actionModal($event, 'mail', record.id)" class="text-center" ngbDropdownItem>
       <i class="fa-solid fa-envelope fs-1 text-primary"></i></a>
   </div>
