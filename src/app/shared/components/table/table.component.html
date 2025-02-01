@@ -7,44 +7,10 @@
   (initTable)="initTable($event)" [diagnosis_files_selected]="diagnosis_files_selected"></app-failure-mode-modal>
 
 <!-- diagnoses items modal -->
-<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected" [dt]="dt"></app-diagnoses-items-modal>
+<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected"></app-diagnoses-items-modal>
 
-
-<!-- modal diagnoses item photos -->
-<p-dialog header="Fotos de items asociados" [modal]="true" [(visible)]="visibleDiagnosticItemPhotos"
-  [style]="{ width: '95%', maxWidth: '1100px' }" [draggable]="false">
-  <section class="d-flex justify-content-center gap-4 mb-4">
-    <ng-container *ngFor="let photo of diagnostic_photos_to_items ; let i = index">
-
-      <div>
-        <input class="form-control d-none img_input" accept="image/*" #file_input_diagnostic_photo type="file"
-          [id]="'photo_' + i" (change)="handleFileInputImg($event, i)" />
-        <label class="d-block text-center" [for]="'photo_'+i">
-          @if(validateImgFile(i)){
-          <img class="img-thumbnail img-diagnosis-item" [id]="'img-file-'+i" [src]="photo" alt="" />
-
-          }@else{
-          <img class="img-thumbnail img-diagnosis-item" [id]="'img-file-'+i"
-            src="/assets/media/receptions/placeholder.png" alt="" />
-          }
-
-          <!-- <img 
-            class="img-thumbnail img-reception" 
-            [id]="'img-file-'+i"
-            src="{{ (i < photos_data.length && typeof photos_data[i] === 'string')? photos_data[i] : 'error' }}" 
-            alt=""
-          /> -->
-        </label>
-        <p class="text-center">{{ all_diagnostic_photos_items[i].item.initial_description }}</p>
-      </div>
-    </ng-container>
-  </section>
-  <div class="d-flex justify-content-end gap-2">
-    <p-button label="Cerrar" severity="secondary" (click)="visibleDiagnosticItemPhotos = false" />
-    <p-button label="Actualizar fotos de items" (click)="updateDiagnosticItemPhotos()" />
-  </div>
-</p-dialog>
-
+<!-- diagnoses item photos modal -->
+<app-diagnoses-item-photos-modal [diagnosis_id_selected]="diagnosis_id_selected"></app-diagnoses-item-photos-modal>
 
 <form>
   <div class="card">
@@ -54,110 +20,13 @@
 
       <div class="card-toolbar flex-column pb-0 text-end" style="padding: 0rem .8rem;">
         <!--begin::Toolbar-->
-        <div class="d-flex justify-content-between align-items-center" *ngIf="actions[0].name == 'Recepcion'">
-          <button class="btn btn-success d-flex align-items-center justify-content-between" (click)="exportExcel()">
-            <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil007.svg-->
-            <span class="svg-icon svg-icon-muted svg-icon-1"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                height="24" viewBox="0 0 24 24" fill="none">
-                <path opacity="0.3"
-                  d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM13.4 14L15.5 11.9C15.9 11.5 15.9 10.9 15.5 10.5C15.1 10.1 14.5 10.1 14.1 10.5L12 12.6L9.89999 10.5C9.49999 10.1 8.9 10.1 8.5 10.5C8.1 10.9 8.1 11.5 8.5 11.9L10.6 14L8.5 16.1C8.1 16.5 8.1 17.1 8.5 17.5C8.7 17.7 9.00001 17.8 9.20001 17.8C9.40001 17.8 9.69999 17.7 9.89999 17.5L12 15.4L14.1 17.5C14.3 17.7 14.6 17.8 14.8 17.8C15 17.8 15.3 17.7 15.5 17.5C15.9 17.1 15.9 16.5 15.5 16.1L13.4 14Z"
-                  fill="black" />
-                <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black" />
-              </svg></span>
-            <!--end::Svg Icon-->
-            Exportar Excel
-          </button>
-          <fieldset class="d-inline-block mb-3">
-            <legend>Busqueda por rango de fechas y cliente</legend>
-            <div class="d-flex flex-wrap justify-content-end gap-2 align-items-center">
-              <div>
-                <p-calendar [(ngModel)]="date" [showIcon]="true" [readonlyInput]="true" selectionMode="range"
-                  [ngModelOptions]="{standalone: true}"></p-calendar>
-
-              </div>
-              <div>
-                <select class="form-select" [(ngModel)]="client_selected" id="" [ngModelOptions]="{standalone: true}">
-                  <option value="">
-                    Elija un cliente
-                  </option>
-                  <option *ngFor="let client of clients_all" [ngValue]="client.id">
-                    {{ client.full_name }}
-                  </option>
-                </select>
-
-              </div>
-              <div>
-                <button class="btn btn-primary" (click)="searchByDateAndClient($event)">Buscar</button>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-        <div class="d-flex flex-wrap justify-content-between w-100 mt-2" data-kt-user-table-toolbar="base">
-          <div class="d-flex flex-wrap align-items-center position-relative my-1">
-
-            <div class="mb-3 row">
-              <div class="col-xs-3 col-sm-auto">
-                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                <span class="svg-icon svg-icon-1 position-absolute ms-4 mt-3" style="left: 0;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                      transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
-                    <path
-                      d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                      fill="black"></path>
-                  </svg>
-                </span>
-                <!--end::Svg Icon-->
-                <input id="table-complete-search" type="text" class="form-control form-control-solid w-250px ps-14"
-                  data-kt-user-table-filter="search" name="searchTerm" placeholder="Buscador"
-                  [(ngModel)]="service.searchTerm" />
-              </div>
-              @if (service.loading$ | async) {
-              <span class="col col-form-label">Cargando...</span>
-              }
-            </div>
-          </div>
-          <div class="d-flex flex-wrap justify-content-end my-1 align-items-center gap-1">
-
-            <ng-container *ngIf="actions[0].name == 'Recepcion'">
-              <div class="d-none d-lg-flex">
-                <div class="d-flex">
-                  <!-- <label for="">Correlativo inicial</label> -->
-                  <input type="text" class="form-control me-1" #number_reception [disabled]="number_reception_disabled"
-                    (input)="validateNumbers($event)" style="min-width: 220px;"
-                    placeholder="Ingresar correlativo inicial..." name="number_reception">
-                  <button class="btn btn-primary btn-sm me-3" [disabled]="number_reception_disabled"
-                    (click)="submitIndexReception()">Enviar</button>
-                </div>
-              </div>
-            </ng-container>
-            <!--begin::Add -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user"
-              (click)="actionModal($event, 'create')"
-              *ngIf="actions[0].actions.hasOwnProperty('create') && actions[0].actions.create == true">
-              <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-              <span class="svg-icon svg-icon-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
-                    transform="rotate(-90 11.364 20.364)" fill="black"></rect>
-                  <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
-                </svg>
-              </span>
-              <!--end::Svg Icon-->
-              Agregar
-              <div class="switch-add-button" [ngSwitch]="actions[0].name">
-                <div style="display: inline;" *ngSwitchCase="'Diagnostico'">
-                  Diagnóstico
-                </div>
-                <div *ngSwitchDefault>
-                  {{ actions[0].name }}
-                </div>
-              </div>
-
-            </button>
-            <!--end::Add-->
-          </div>
-        </div>
+        <app-table-toolbar [actions]="actions" [clients_all]="clients_all" [date]="date" (dateChange)="date=$event"
+          [client_selected]="client_selected" (client_selectedChange)="client_selected=$event"
+          [number_reception_disabled]="number_reception_disabled" (exportExcelEvent)="exportExcel()"
+          (searchByDateAndClientEvent)="searchByDateAndClient($event)" (validateNumbersEvent)="validateNumbers($event)"
+          (submitIndexReceptionEvent)="submitIndexReception()"
+          (actionModalEvent)="actionModal($event.event, $event.action)">
+        </app-table-toolbar>
         <!--end::Toolbar-->
         <!--begin::Group actions-->
         <div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
@@ -228,7 +97,8 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'diagnoses_items'" class="d-flex justify-content-center">
                         <div class="d-flex flex-column justify-content-center">
-                          <p-button size="small" (click)="diagnosesItemsModal.showDialogDiagnosesItems(record['id'])" label="Ver items" />
+                          <p-button size="small" (click)="diagnosesItemsModal.showDialogDiagnosesItems(record['id'])"
+                            label="Ver items" />
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'diagnoses_item_photos'" class="d-flex justify-content-center">

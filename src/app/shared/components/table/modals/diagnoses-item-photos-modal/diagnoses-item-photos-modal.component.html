@@ -1,1 +1,33 @@
-<p>diagnoses-item-photos-modal works!</p>
+<p-dialog header="Fotos de items asociados" [modal]="true" [(visible)]="visibleDiagnosticItemPhotos"
+  [style]="{ width: '95%', maxWidth: '1100px' }" [draggable]="false">
+  <section class="d-flex justify-content-center gap-4 mb-4">
+    <ng-container *ngFor="let photo of diagnostic_photos_to_items ; let i = index">
+
+      <div>
+        <input class="form-control d-none img_input" accept="image/*" #file_input_diagnostic_photo type="file"
+          [id]="'photo_' + i" (change)="handleFileInputImg($event, i)" />
+        <label class="d-block text-center" [for]="'photo_'+i">
+          @if(validateImgFile(i)){
+          <img class="img-thumbnail img-diagnosis-item" [id]="'img-file-'+i" [src]="photo" alt="" />
+
+          }@else{
+          <img class="img-thumbnail img-diagnosis-item" [id]="'img-file-'+i"
+            src="/assets/media/receptions/placeholder.png" alt="" />
+          }
+
+          <!-- <img 
+            class="img-thumbnail img-reception" 
+            [id]="'img-file-'+i"
+            src="{{ (i < photos_data.length && typeof photos_data[i] === 'string')? photos_data[i] : 'error' }}" 
+            alt=""
+          /> -->
+        </label>
+        <p class="text-center">{{ all_diagnostic_photos_items[i].item.initial_description }}</p>
+      </div>
+    </ng-container>
+  </section>
+  <div class="d-flex justify-content-end gap-2">
+    <p-button label="Cerrar" severity="secondary" (click)="closeDialog()" />
+    <p-button label="Actualizar fotos de items" (click)="updateDiagnosticItemPhotos()" />
+  </div>
+</p-dialog>

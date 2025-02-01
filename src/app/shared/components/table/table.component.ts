@@ -11,19 +11,14 @@ import {
   Output,
   QueryList,
   ViewChildren,
-  Inject,
   ViewChild,
   ElementRef,
   inject,
 } from '@angular/core';
 import { format, parse, parseISO } from 'date-fns';
-import { toZonedTime } from 'date-fns-tz';
 import {
-  FormArray,
   FormBuilder,
-  FormGroup,
   FormsModule,
-  Validators,
 } from '@angular/forms';
 import {
   NgbDropdownModule,
@@ -68,15 +63,8 @@ import { TableModule } from 'primeng/table';
 
 import {
   MatDialog,
-  MatDialogRef,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogTitle,
-  MatDialogContent,
-  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { consumerPollProducersForChange } from '@angular/core/primitives/signals';
 import { CrudService } from '../../services/crud.service';
 import { environment } from '../../../../environments/environment.development';
 import { AuthService } from '../../services/auth.service';
@@ -88,6 +76,9 @@ import { es } from 'date-fns/locale';
 import { DiagnosisFilesModalComponent } from './modals/diagnosis-files-modal/diagnosis-files-modal.component';
 import { FailureModeModalComponent } from './modals/failure-mode-modal/failure-mode-modal.component';
 import { DiagnosesItemsModalComponent } from './modals/diagnoses-items-modal/diagnoses-items-modal.component';
+import { DiagnosesItemPhotosModalComponent } from './modals/diagnoses-item-photos-modal/diagnoses-item-photos-modal.component';
+import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
+
 
 @Component({
   selector: 'ngbd-table',
@@ -123,16 +114,14 @@ import { DiagnosesItemsModalComponent } from './modals/diagnoses-items-modal/dia
     DiagnosisFilesModalComponent,
     FailureModeModalComponent,
     DiagnosesItemsModalComponent,
+    DiagnosesItemPhotosModalComponent,
+    TableToolbarComponent,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
   providers: [TableService, DecimalPipe, SafeHtmlPipe],
 })
 export class TableComponent {
-  @ViewChild('dt') dt: any;
-
-  // data$: Observable<any[]>;
-  // total$: Observable<number>;
   data$: Observable<any[]> = new BehaviorSubject<any[]>([]);
   total$: Observable<number> = new BehaviorSubject<number>(0);
 
@@ -156,6 +145,7 @@ export class TableComponent {
   @ViewChild(DiagnosisFilesModalComponent) diagnosisFilesModal!: DiagnosisFilesModalComponent;
   @ViewChild(FailureModeModalComponent) failureModeModal!: FailureModeModalComponent;
   @ViewChild(DiagnosesItemsModalComponent) diagnosesItemsModal!: DiagnosesItemsModalComponent;
+  @ViewChild(DiagnosesItemPhotosModalComponent) diagnosesItemPhotosModal!: DiagnosesItemPhotosModalComponent;
 
   n_actions: number = 0;
   crudService!: any;
@@ -250,11 +240,6 @@ export class TableComponent {
         });
       });
     }
-  }
-
-  onInputSearchItems(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    this.dt.filterGlobal(inputElement.value, 'contains');
   }
 
   validateImgFile(index: number): boolean {
@@ -727,79 +712,8 @@ export class TableComponent {
       });
   }
 
-  updateDiagnosticItemPhotos() {
-    let form_data: any = new FormData();
-    this.file_inputs_diagnostic_photos.forEach((item, i) => {
-      var file: any = item.nativeElement as HTMLInputElement;
-
-      if (file.files && file.files.length > 0) {
-        console.log('hola mund 1');
-        let file_aux: any = file?.files[0];
-        form_data.append(`photo_` + i, file_aux);
-      } else {
-        form_data.append(
-          `photo_` + i,
-          this.diagnostic_photos_to_items[i] ?? false
-        );
-      }
-    });
-
-    for (let pair of form_data.entries()) {
-      console.log('formData', pair[0] + ':', pair[1]);
-    }
-
-    this.diagnostic_items_to_photos.forEach((diagnostic_item_to_photo: any) => {
-      form_data.append(`items[]`, diagnostic_item_to_photo);
-    });
-
-    this.crudService
-      .post(`/diagnoses/${this.diagnosis_id_selected}/items/photos`, form_data)
-      .subscribe((response: any) => {
-        console.log('response photos', response);
-        this.visibleDiagnosticItemPhotos = false;
-        this.toastService.show({
-          message:
-            'Fotos de items asociados al diagnostico actualizados con exito',
-          classname: 'bg-success text-dark',
-        });
-      });
-  }
-
   showDialogDiagnosesItemPhotos(diagnosis_id: number) {
-    this.diagnosis_id_selected = diagnosis_id;
-    this.visibleDiagnosticItemPhotos = true;
-    this.diagnostic_items_to_photos = [];
-    this.diagnostic_photos_to_items = [];
-
-    this.crudService
-      .get(`/diagnoses/${this.diagnosis_id_selected}/items`)
-      .subscribe((items_response: any) => {
-        this.all_diagnostic_photos_items = items_response;
-        items_response.forEach((item_response: any) => {
-          this.diagnostic_items_to_photos.push(item_response.item_id);
-        });
-        this.crudService
-          .get(`/diagnoses/${this.diagnosis_id_selected}/items/photos`)
-          .subscribe((items_photos_response: any) => {
-            this.diagnostic_items_to_photos.forEach(
-              (diagnostic_item_to_photo: any) => {
-                let photo = items_photos_response.find(
-                  (item_photo_response: any) => {
-                    return (
-                      item_photo_response.item_id == diagnostic_item_to_photo
-                    );
-                  }
-                );
-
-                if (photo) {
-                  this.diagnostic_photos_to_items.push(photo.photo);
-                } else {
-                  this.diagnostic_photos_to_items.push(null);
-                }
-              }
-            );
-          });
-      });
+    this.diagnosesItemPhotosModal.showDialogDiagnosesItemPhotos(diagnosis_id);
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -849,7 +763,7 @@ export class TableComponent {
       }
       if (pipe == 'datetime') {
         // const timeZone = 'America/Bogota';
-        if(value){
+        if (value) {
           const craeted_at_date = parse(value, 'yyyy-MM-dd HH:mm:ss', new Date());
           return format(craeted_at_date, 'dd-MM-yyyy hh:mm a', { locale: es });
         }

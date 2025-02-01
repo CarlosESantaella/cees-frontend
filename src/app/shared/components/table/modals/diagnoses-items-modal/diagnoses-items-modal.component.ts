@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CrudService } from '../../../../services/crud.service';
 import { ToastService } from '../../../../services/toast.service';
 import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
@@ -16,9 +16,9 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './diagnoses-items-modal.component.html',
   styleUrl: './diagnoses-items-modal.component.css'
 })
-export class DiagnosesItemsModalComponent {
+export class DiagnosesItemsModalComponent implements AfterViewInit {
   @Input() diagnosis_id_selected: number = 0;
-  @Input() dt!: any;
+  @ViewChild('dt') dt!: Table;
 
   visibleDiagnosticItems: boolean = false;
   all_items: any = [];
@@ -27,6 +27,8 @@ export class DiagnosesItemsModalComponent {
 
   private crudService = inject(CrudService);
   private toastService = inject(ToastService);
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     console.log('hola mundo');
@@ -37,6 +39,13 @@ export class DiagnosesItemsModalComponent {
         this.diagnostic_items['item_id_' + item.id] = 0;
       });
     });
+  }
+
+  ngAfterViewInit() {
+    // Ensure dt reference is available
+    if (!this.dt) {
+      console.error('Table reference (dt) is not available.');
+    }
   }
 
   showDialogDiagnosesItems(diagnosis_id: number) {
@@ -58,6 +67,7 @@ export class DiagnosesItemsModalComponent {
             response_item.quantity;
           this.items_to_send.push(response_item.item);
         });
+        this.cdr.detectChanges();
       });
   }
 
@@ -116,8 +126,13 @@ export class DiagnosesItemsModalComponent {
 
   onInputSearchItems(event: any) {
     const inputElement = event.target as HTMLInputElement;
-    // Assuming dt is a reference to the PrimeNG table
-    this.dt.filterGlobal(inputElement.value, 'contains');
+    setTimeout(() => {
+      if (this.dt && this.dt.filterGlobal) {
+        this.dt.filterGlobal(inputElement.value, 'contains');
+      } else {
+        console.error('Table reference (dt) is not available or filterGlobal is not a function.');
+      }
+    }, 0);
   }
 
   closeDialog() {
