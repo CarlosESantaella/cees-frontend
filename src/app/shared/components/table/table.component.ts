@@ -134,12 +134,11 @@ export class TableComponent {
   @Output() editEvent = new EventEmitter<any>();
   @Output() sendMailEvent = new EventEmitter<any>();
   @Output() createEvent = new EventEmitter<any>();
-  @Output() setIndexReceptionsEvent = new EventEmitter<any>();
+
 
   @ViewChildren(TableSortableDirective)
   headers!: QueryList<TableSortableDirective>;
-  @ViewChild('number_reception')
-  number_reception!: ElementRef;
+
   @ViewChildren('file_input_diagnostic_photo')
   file_inputs_diagnostic_photos!: QueryList<ElementRef>;
   @ViewChild(DiagnosisFilesModalComponent) diagnosisFilesModal!: DiagnosisFilesModalComponent;
@@ -149,6 +148,7 @@ export class TableComponent {
 
   n_actions: number = 0;
   crudService!: any;
+  indexReception: number = 0;
   toastService!: any;
   number_reception_disabled: boolean = false;
   names_clients: string = '';
@@ -203,7 +203,7 @@ export class TableComponent {
 
         if (resp.index_reception != null) {
           this.number_reception_disabled = true;
-          this.number_reception.nativeElement.value = resp.index_reception;
+          this.indexReception = resp.index_reception;
         } else {
           this.number_reception_disabled = false;
         }
@@ -230,7 +230,6 @@ export class TableComponent {
       this.selectedReceptionId = this.aditionalData?.receptionId;
     }
     this.initTable(this.data);
-    console.log('this.data', this.data);
 
     if (this.actions[0].name == 'Diagnostico') {
       this.data$.subscribe((data: any) => {
@@ -279,23 +278,6 @@ export class TableComponent {
   validateImageType(file: File): boolean {
     const tipoPermitido = ['image/jpeg', 'image/png', 'image/gif']; // Ajusta según tus necesidades
     return tipoPermitido.includes(file.type);
-  }
-
-  validateNumbers($event: any) {
-    const input = $event.target;
-    const valor = input.value;
-    const regex = /^[0-9]+$/;
-    if (!regex.test(valor)) {
-      this.number_reception.nativeElement.value = '';
-    }
-  }
-  submitIndexReception() {
-    if (this.number_reception.nativeElement.value != '') {
-      this.setIndexReceptionsEvent.emit(
-        this.number_reception.nativeElement.value
-      );
-      this.number_reception_disabled = true;
-    }
   }
 
   public initTable(data: any) {
@@ -595,41 +577,6 @@ export class TableComponent {
     }
   }
 
-  exportExcel() {
-    switch (this.actions[0].name) {
-      case 'Recepcion':
-        const token = this.authService.token;
-        let query_params = '?token=' + token;
-        let start_date = '';
-        let end_date = '';
-        let counter = 0;
-        if (this.date?.length == 2) {
-          this.date.forEach((item: any, index: number) => {
-            let date_aux = new Date(item);
-            let date_formated: any = formatDate(date_aux, 'yyyy-MM-dd', 'en');
-            if (index == 0) {
-              start_date = date_formated;
-            } else {
-              end_date = date_formated;
-            }
-          });
-          query_params += '&start_date=' + start_date + '&end_date=' + end_date;
-        }
-        if (this.client_selected != '') {
-          query_params += '&client_id=' + this.client_selected;
-        }
-        if (this.service.searchTerm.trim() != '') {
-          query_params += '&search=' + this.service.searchTerm;
-        }
-
-        window.open(
-          `${environment.api_web}/receptions/excel${query_params}`,
-          '_blank'
-        );
-        break;
-    }
-  }
-
   sendMail(name: string, id: any) {
     switch (name) {
       case 'Recepcion':
@@ -661,46 +608,6 @@ export class TableComponent {
     // switch(this.actions[0].actions)
   }
 
-  searchByDateAndClient(event: any) {
-    let data_to_send: any = new Object();
-    let query_params = '';
-
-    if (this.date?.length == 2) {
-      this.date.forEach((item: any, index: number) => {
-        let date_aux = new Date(item);
-        let date_formated: any = formatDate(date_aux, 'yyyy-MM-dd', 'en');
-        if (index == 0) {
-          data_to_send.start_date = date_formated;
-        } else {
-          data_to_send.end_date = date_formated;
-        }
-      });
-      query_params +=
-        '?start_date=' +
-        data_to_send.start_date +
-        '&end_date=' +
-        data_to_send.end_date;
-    }
-
-    if (this.client_selected != '') {
-      data_to_send.client_id = this.client_selected;
-      if (this.date?.length == 2) {
-        query_params += '&client_id=' + this.client_selected;
-      } else {
-        query_params += '?client_id=' + this.client_selected;
-      }
-    }
-
-    this.crudService.api_path_list = '/receptions' + query_params;
-
-    this.crudService.list().subscribe((resp: any) => {
-      // this.tableService.DATA = resp;
-      console.log(resp);
-      this.data = resp ?? [];
-      this.initTable(this.data);
-    });
-  }
-
   changeStatusSwitch(status_switch: boolean | number, diagnosis_id: number) {
     status_switch = status_switch ? 1 : 0;
     this.crudService
@@ -710,10 +617,6 @@ export class TableComponent {
           this.data[0].initial_date = response.initial_date;
         }
       });
-  }
-
-  showDialogDiagnosesItemPhotos(diagnosis_id: number) {
-    this.diagnosesItemPhotosModal.showDialogDiagnosesItemPhotos(diagnosis_id);
   }
 
   onSort({ column, direction }: SortEvent) {

@@ -22,9 +22,7 @@
         <!--begin::Toolbar-->
         <app-table-toolbar [actions]="actions" [clients_all]="clients_all" [date]="date" (dateChange)="date=$event"
           [client_selected]="client_selected" (client_selectedChange)="client_selected=$event"
-          [number_reception_disabled]="number_reception_disabled" (exportExcelEvent)="exportExcel()"
-          (searchByDateAndClientEvent)="searchByDateAndClient($event)" (validateNumbersEvent)="validateNumbers($event)"
-          (submitIndexReceptionEvent)="submitIndexReception()"
+          [number_reception_disabled]="number_reception_disabled" [data]="data" (initTable)="initTable($event)" [indexReception]="indexReception"
           (actionModalEvent)="actionModal($event.event, $event.action)">
         </app-table-toolbar>
         <!--end::Toolbar-->
@@ -103,7 +101,7 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'diagnoses_item_photos'" class="d-flex justify-content-center">
                         <div class="d-flex flex-column justify-content-center">
-                          <p-button size="small" (click)="showDialogDiagnosesItemPhotos(record['id'])"
+                          <p-button size="small" (click)="diagnosesItemPhotosModal.showDialogDiagnosesItemPhotos(record['id'])"
                             label="Ver fotos de items" />
                         </div>
                       </ng-container>
@@ -124,6 +122,7 @@
                   </ng-template>
                 </ng-container>
                 <td>
+                  <!-- actions section -->
                   @if(n_actions != 0){
                   <div ngbDropdown>
                     <button type="button" class="btn btn-light btn-active-light-primary btn-sm"
