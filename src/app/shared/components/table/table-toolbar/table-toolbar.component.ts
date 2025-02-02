@@ -3,13 +3,24 @@ import { CommonModule, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableService } from '../../../services/table.service';
 import { AuthService } from '../../../services/auth.service';
 import { environment } from '../../../../../environments/environment.development';
 import { CrudService } from '../../../services/crud.service';
 import { TableActionsComponent } from '../table-actions/table-actions.component';
 import { ActionsTableService } from '../table-actions/services/actions-table.service';
+import { MatDialog } from '@angular/material/dialog';
+//create components
+import { CreateComponent as CreateReceptionComponent } from '../../../../modules/system/reception/list-receptions/create/create.component';
+import { CreateComponent as CreateRateComponent } from '../../../../modules/system/item/list-rates/create/create.component';
+import { CreateComponent as CreateItemComponent } from '../../../../modules/system/item/list-items/create/create.component';
+import { CreateComponent as CreateDiagnosesComponent } from '../../../../modules/system/diagnoses/list-diagnoses/create/create.component';
+import { CreateComponent as CreateFeilureModeComponent } from '../../../../modules/system/diagnoses/list-failure-modes/create/create.component';
+import { CreateComponent as CreateUserComponent } from '../../../../modules/system/access/list-users/create/create.component';
+import { CreateComponent as CreateClientComponent } from '../../../../modules/system/reception/list-clients/create/create.component';
+import { CreateComponent as CreateRolComponent } from '../../../../modules/system/access/list-rols/create/create.component';
+import { CreateComponent as CreateAdminComponent } from '../../../../modules/system/admin/create/create.component';
 
 @Component({
   selector: 'app-table-toolbar',
@@ -39,19 +50,29 @@ export class TableToolbarComponent {
   @Output() submitIndexReceptionEvent = new EventEmitter<void>();
   @Output() initTable = new EventEmitter<any>();
   @Output() setIndexReceptionsEvent = new EventEmitter<any>();
+  @Output() createEvent = new EventEmitter<any>();
+
   crudService!: any;
+  isProcessing: boolean = false;
 
   constructor(
-    public service: TableService, 
+    public service: TableService,
+    private ngbModal: NgbModal,
+    public dialog: MatDialog,
     private authService: AuthService,
     private actionTableService: ActionsTableService
   ) {
     this.crudService = inject(CrudService);
   }
+ 
   ngOnInit() {
     console.log('actions toolbar', this.actions);
-    this.number_reception.nativeElement.value = this.indexReception;
+    if (this.actions.length > 0 && this.actions[0].name == 'Recepcion') {
+      this.number_reception.nativeElement.value = this.indexReception;
+    }
   }
+
+
 
   exportExcel() {
     switch (this.actions[0].name) {
@@ -145,7 +166,127 @@ export class TableToolbarComponent {
       this.number_reception_disabled = true;
     }
   }
-  actionModal(event: any, action: any) {
-    this.actionTableService.notifyAction({event, action});
+  actionModal($event: Event, action: string, id?: any) {
+    // $event.stopImmediatePropagation();
+
+
+    switch (action) {
+      case 'create':
+        this.openCreateModal(this.actions[0]?.name);
+        break;
+    }
+
+  }
+
+  openCreateModal(name: string) {
+
+    switch (name) {
+      case 'Administrador':
+        const modalRefAdmin = this.ngbModal.open(CreateAdminComponent, {
+          centered: true,
+          size: 'md',
+        });
+        modalRefAdmin.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
+      case 'Cliente':
+        console.log('hola mundo bs');
+        const modalRefClient = this.ngbModal.open(CreateClientComponent, {
+          centered: true,
+          size: 'md',
+        });
+        modalRefClient.componentInstance.createEvent.subscribe((resp: any) => {
+          console.log('create client', resp);
+          this.createEvent.emit(resp);
+        });
+
+        break;
+      case 'Rol':
+        const modalRefRol = this.ngbModal.open(CreateRolComponent, {
+          centered: true,
+          size: 'md',
+        });
+        modalRefRol.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
+      case 'Usuario':
+        const modalRefUser = this.ngbModal.open(CreateUserComponent, {
+          centered: true,
+          size: 'md',
+        });
+        // modalRefUser.componentInstance.name = this.actions[0].name;
+        modalRefUser.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
+      case 'Recepcion':
+        console.log('name from openCreateModal', name);
+
+        const modalRefReception = this.ngbModal.open(CreateReceptionComponent, {
+          centered: true,
+          size: 'lg',
+        });
+
+        modalRefReception.componentInstance.createEvent.subscribe(
+          (resp: any) => {
+            this.createEvent.emit(resp);
+          }
+        );
+        break;
+      case 'Tarifa':
+        console.log('hola mundo bs');
+        const modalRefRate = this.ngbModal.open(CreateRateComponent, {
+          centered: true,
+          size: 'lg',
+        });
+        // modalRefRate.componentInstance.name = this.actions[0].name;
+        modalRefRate.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
+      case 'Item':
+        console.log('hola mundo bs');
+        const modalRefItem = this.ngbModal.open(CreateItemComponent, {
+          centered: true,
+          size: 'lg',
+        });
+        // modalRefItem.componentInstance.name = this.actions[0].name;
+        modalRefItem.componentInstance.createEvent.subscribe((resp: any) => {
+          this.createEvent.emit(resp);
+        });
+        break;
+      case 'Diagnostico':
+        const modalRefDiagnoses = this.ngbModal.open(CreateDiagnosesComponent, {
+          centered: true,
+          size: 'lg',
+        });
+        // modalRefItem.componentInstance.name = this.actions[0].name;
+        modalRefDiagnoses.componentInstance.receptionId =
+          this.selectedReceptionId;
+        console.log('selected reception id', this.selectedReceptionId);
+        modalRefDiagnoses.componentInstance.createEvent.subscribe(
+          (resp: any) => {
+            this.createEvent.emit(resp);
+          }
+        );
+        break;
+      case 'Modo de falla':
+        const modalRefFeilureMode = this.ngbModal.open(
+          CreateFeilureModeComponent,
+          {
+            centered: true,
+            size: 'lg',
+          }
+        );
+        // modalRefItem.componentInstance.name = this.actions[0].name;
+        modalRefFeilureMode.componentInstance.createEvent.subscribe(
+          (resp: any) => {
+            this.createEvent.emit(resp);
+          }
+        );
+        break;
+    }
   }
 }

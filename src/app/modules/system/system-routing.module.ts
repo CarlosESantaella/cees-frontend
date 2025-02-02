@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { guestGuard } from '../../shared/guards/guest.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
+import { MainMenuComponent } from '../../shared/components/main-menu/main-menu.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,14 @@ const routes: Routes = [
       import('./access/access.module').then((m) => m.AccessModule),
   },
   {
+    path: 'main-menu',
+    component: MainMenuComponent,
+  },
+  {
+    path: 'main-menu/:menuPath',
+    component: MainMenuComponent,
+  },
+  {
     path: 'admins',
     title: 'gestionar administradores',
     data: {
@@ -77,4 +86,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SystemRoutingModule {}
+export class SystemRoutingModule { }

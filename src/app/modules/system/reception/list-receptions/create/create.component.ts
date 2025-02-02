@@ -64,8 +64,6 @@ export class CreateComponent {
     });
 
     this.crudService.list().subscribe((resp) => {
-      // this.tableService.DATA = resp;
-      console.log(resp);
       this.clients = resp ?? [];
       this.client_id?.setValue(this.clients[0]?.id);
     });

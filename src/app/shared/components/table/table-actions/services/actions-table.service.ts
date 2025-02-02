@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, debounceTime, Subject, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActionsTableService {
-  private accionSubject = new Subject<any>();
-  action$ = this.accionSubject.asObservable();
+  private actionSubject = new BehaviorSubject<any>(null);
+  action$ = this.actionSubject.asObservable();
   constructor() { }
 
   notifyAction(action: any) {
-    this.accionSubject.next(action);
+    this.actionSubject.next(action);
   }
 }

@@ -1,0 +1,9 @@
+<div class="menu-container">
+    <button *ngIf="menuStack.length > 1" (click)="goBack()">Atrás</button>
+    <ul>
+        <li *ngFor="let item of currentMenu" (click)="navigateTo(item)">
+            <span>{{ item.label }}</span>
+            <span *ngIf="item.children">></span> <!-- Indicador de submenú -->
+        </li>
+    </ul>
+</div>

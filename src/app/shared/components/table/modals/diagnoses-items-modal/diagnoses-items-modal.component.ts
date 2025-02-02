@@ -18,6 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 })
 export class DiagnosesItemsModalComponent implements AfterViewInit {
   @Input() diagnosis_id_selected: number = 0;
+  @Input() actions: any[] = [];
   @ViewChild('dt') dt!: Table;
 
   visibleDiagnosticItems: boolean = false;
@@ -31,14 +32,16 @@ export class DiagnosesItemsModalComponent implements AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    console.log('hola mundo');
-    this.crudService.get(`/items`).subscribe((resp: any) => {
-      this.all_items = resp;
-      console.log('items: ', this.all_items);
-      this.all_items.forEach((item: any) => {
-        this.diagnostic_items['item_id_' + item.id] = 0;
+    console.log('hola mundo', this.actions[0].name);
+    if(this.actions[0].name == 'Diagnostico'){
+      this.crudService.get(`/items`).subscribe((resp: any) => {
+        this.all_items = resp;
+        console.log('items: ', this.all_items);
+        this.all_items.forEach((item: any) => {
+          this.diagnostic_items['item_id_' + item.id] = 0;
+        });
       });
-    });
+    }
   }
 
   ngAfterViewInit() {

@@ -7,7 +7,7 @@
   (initTable)="initTable($event)" [diagnosis_files_selected]="diagnosis_files_selected"></app-failure-mode-modal>
 
 <!-- diagnoses items modal -->
-<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected"></app-diagnoses-items-modal>
+<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected" [actions]="actions"></app-diagnoses-items-modal>
 
 <!-- diagnoses item photos modal -->
 <app-diagnoses-item-photos-modal [diagnosis_id_selected]="diagnosis_id_selected"></app-diagnoses-item-photos-modal>
@@ -22,7 +22,7 @@
         <!--begin::Toolbar-->
         <app-table-toolbar [actions]="actions" [clients_all]="clients_all" [date]="date" (dateChange)="date=$event"
           [client_selected]="client_selected" (client_selectedChange)="client_selected=$event"
-          [number_reception_disabled]="number_reception_disabled" [data]="data" (initTable)="initTable($event)" [indexReception]="indexReception" [selectedReceptionId]="selectedReceptionId"
+          [number_reception_disabled]="number_reception_disabled" [data]="data" (initTable)="initTable($event)" [indexReception]="indexReception" [selectedReceptionId]="selectedReceptionId" (createEvent)="createAction($event)"
           >
         </app-table-toolbar>
         <!--end::Toolbar-->
