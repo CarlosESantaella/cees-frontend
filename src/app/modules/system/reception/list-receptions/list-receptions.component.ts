@@ -18,7 +18,7 @@ export class ListReceptionsComponent {
   // 'equipment_type', 'brand', 'model', 'serie', 'capability', 'client_id'
   // : (tipo producto, marca, modelo, número de serie, observaciones, fotos, estado)
   tableColumns: any[] = [
-    { label: 'ID', field: 'custom_id' },
+    { label: 'Nro de recepción', field: 'custom_id' },
     // { label: 'Cliente', field: 'full_name_client' },
     { label: 'Tipo de producto', field: 'equipment_type' },
     { label: 'Marca', field: 'brand' },

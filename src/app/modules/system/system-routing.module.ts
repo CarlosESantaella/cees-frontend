@@ -12,7 +12,7 @@ import { MainMenuComponent } from '../../shared/components/main-menu/main-menu.c
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth/login',
+    redirectTo: '/system/main-menu',
     pathMatch: 'full',
   },
   {
@@ -50,7 +50,11 @@ const routes: Routes = [
     component: MainMenuComponent,
   },
   {
-    path: 'main-menu/:menuPath',
+    path: 'main-menu/:firstLevel',
+    component: MainMenuComponent,
+  },
+  {
+    path: 'main-menu/:firstLevel/:secondLevel',
     component: MainMenuComponent,
   },
   {

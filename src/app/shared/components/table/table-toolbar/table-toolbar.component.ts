@@ -72,8 +72,6 @@ export class TableToolbarComponent {
     }
   }
 
-
-
   exportExcel() {
     switch (this.actions[0].name) {
       case 'Recepcion':
@@ -149,33 +147,12 @@ export class TableToolbarComponent {
     });
   }
 
-  validateNumbers($event: any) {
-    const input = $event.target;
-    const valor = input.value;
-    const regex = /^[0-9]+$/;
-    if (!regex.test(valor)) {
-      this.number_reception.nativeElement.value = '';
-    }
-  }
-
-  submitIndexReception() {
-    if (this.number_reception.nativeElement.value != '') {
-      this.setIndexReceptionsEvent.emit(
-        this.number_reception.nativeElement.value
-      );
-      this.number_reception_disabled = true;
-    }
-  }
   actionModal($event: Event, action: string, id?: any) {
-    // $event.stopImmediatePropagation();
-
-
     switch (action) {
       case 'create':
         this.openCreateModal(this.actions[0]?.name);
         break;
     }
-
   }
 
   openCreateModal(name: string) {

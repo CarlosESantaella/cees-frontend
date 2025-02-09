@@ -1,9 +1,28 @@
-<div class="menu-container">
-    <button *ngIf="menuStack.length > 1" (click)="goBack()">Atrás</button>
-    <ul>
-        <li *ngFor="let item of currentMenu" (click)="navigateTo(item)">
-            <span>{{ item.label }}</span>
-            <span *ngIf="item.children">></span> <!-- Indicador de submenú -->
-        </li>
-    </ul>
+<app-animated-background></app-animated-background>
+
+<div class="main-container">
+    <button *ngIf="menuStack.length > 0" class="back-button"
+        (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="option-icon-back" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M15 19l-7-7 7-7" />
+        </svg>
+        Volver
+    </button>
+    <div class="main-menu-container">
+        <ul class="menu-container">
+            <li *ngFor="let item of currentMenu" class="option-container">
+                <div (click)="navigateTo(item)"
+                    class="option">
+                    <span>{{ item.label }}</span>
+                    <span *ngIf="item.children && item.children.length > 0" class="ms-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="option-icon " fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>

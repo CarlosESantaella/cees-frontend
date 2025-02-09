@@ -17,7 +17,7 @@
             <legend>Busqueda por rango de fechas y cliente</legend>
             <div class="d-flex flex-wrap justify-content-end gap-2 align-items-center">
                 <div>
-                    <p-calendar [(ngModel)]="date" (ngModelChange)="dateChange.emit($event)" [showIcon]="true"
+                    <p-calendar [(ngModel)]="date" (ngModelChange)="dateChange.emit($event)" [showClear]="true" [showIcon]="true"
                         [readonlyInput]="true" selectionMode="range" [ngModelOptions]="{standalone: true}"></p-calendar>
                 </div>
                 <div>
@@ -62,25 +62,10 @@
                 }
             </div>
         </div>
-        <div class="d-flex flex-wrap justify-content-end my-1 align-items-center gap-1">
-            <ng-container *ngIf="actions[0].name == 'Recepcion'">
-                <div class="d-none d-lg-flex">
-                    <div class="d-flex">
-                        <!-- <label for="">Correlativo inicial</label> -->
-                        <input type="text" class="form-control me-1" #number_reception
-                            [disabled]="number_reception_disabled" (input)="validateNumbers($event)"
-                            style="min-width: 220px;" placeholder="Ingresar correlativo inicial..."
-                            name="number_reception">
-                        <button class="btn btn-primary btn-sm me-3" [disabled]="number_reception_disabled"
-                            (click)="submitIndexReception()">Enviar</button>
-                    </div>
-                </div>
-            </ng-container>
-            <!--begin::Add -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user"
+        <div class="d-flex justify-content-end my-1 align-items-center gap-1">
+            <button type="button" class="btn btn-primary d-flex" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user"
                 (click)="actionModal($event, 'create')"
                 *ngIf="actions[0].actions.hasOwnProperty('create') && actions[0].actions.create == true">
-                <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                 <span class="svg-icon svg-icon-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
@@ -88,9 +73,9 @@
                         <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
                     </svg>
                 </span>
-                <!--end::Svg Icon-->
-                Agregar
-                <div class="switch-add-button" [ngSwitch]="actions[0].name">
+                <div class="switch-add-button d-flex" [ngSwitch]="actions[0].name">
+                    <div class="me-1">Agregar</div>
+
                     <div style="display: inline;" *ngSwitchCase="'Diagnostico'">
                         Diagnóstico
                     </div>
@@ -99,7 +84,6 @@
                     </div>
                 </div>
             </button>
-            <!--end::Add-->
         </div>
     </div>
     <!--end::Toolbar-->

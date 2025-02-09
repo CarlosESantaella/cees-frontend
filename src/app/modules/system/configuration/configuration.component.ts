@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { FooterComponent } from '../partials/footer/footer.component';
 import { HeaderComponent } from '../partials/header/header.component';
@@ -22,12 +22,15 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 export class ConfigurationComponent {
 
   @ViewChildren('file_input') file_inputs!: ElementRef;
+  @ViewChild('number_reception') number_reception!: ElementRef;
 
   data: any = {};
+  form_general!: FormGroup;
   form_items!: FormGroup;
   form_receptions!: FormGroup;
   configuration_id: any = '';
   logo_data: any = null;
+  number_reception_disabled: boolean = false;
 
   //image logo 
   imgChangeEvt: any = '';
@@ -42,12 +45,15 @@ export class ConfigurationComponent {
     public authService: AuthService,
     public crudService: CrudService,
     public toastService: ToastService,
-  ){
+  ) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
     //init forms
     this.form_items = this.fb.group({
+      currency: [this.data.currency ?? '', [Validators.required, Validators.maxLength(3)]],
+    });
+    this.form_general = this.fb.group({
       currency: [this.data.currency ?? '', [Validators.required, Validators.maxLength(3)]],
     });
     this.form_receptions = this.fb.group({
@@ -63,8 +69,14 @@ export class ConfigurationComponent {
       console.log(resp, 'hola mundo');
       this.configuration_id = resp.id;
       this.currency?.setValue(resp.currency);
-      if(resp.logo_path){
+      if (resp.logo_path) {
         this.logo_data = resp.logo_path;
+      }
+      if (resp.index_reception != null) {
+        this.number_reception.nativeElement.value = resp.index_reception;
+        this.number_reception_disabled = true;
+      } else {
+        this.number_reception_disabled = false;
       }
     });
   }
@@ -78,7 +90,7 @@ export class ConfigurationComponent {
 
   }
 
-  onSubmitItems(){
+  onSubmitItems() {
     this.crudService.api_path_update_post = '/configurations';
     // let data = new FormData();
     // data.append('currency', this.currency?.value);
@@ -86,7 +98,7 @@ export class ConfigurationComponent {
       "currency": this.currency?.value
     };
     this.crudService.updatePost(data, '').subscribe((resp) => {
-      if(!resp?.error){
+      if (!resp?.error) {
         this.toastService.show({
           message: 'Signo monetario de items editado con exito',
           classname: 'bg-success text-dark',
@@ -95,16 +107,16 @@ export class ConfigurationComponent {
     });
   }
 
-  onSubmitReceptions(){
+  onSubmitGeneral() {
     this.crudService.api_path_update_post = '/configurations';
 
     let form_data = new FormData();
-    if(this.logo_data){
+    if (this.logo_data) {
       form_data.append('logo', this.logo_data);
     }
 
     this.crudService.updatePost(form_data, '').subscribe((resp) => {
-      if(!resp?.error){
+      if (!resp?.error) {
         console.log(resp);
         this.toastService.show({
           message: 'Logo actualizado correctamente',
@@ -114,25 +126,35 @@ export class ConfigurationComponent {
     });
   }
 
-
+  onSubmitIndexReception() {
+    if (this.number_reception.nativeElement.value != '') {
+      this.crudService.post('/configurations', { index_reception: this.number_reception.nativeElement.value }).subscribe((resp) => {
+        this.toastService.show({
+          message: 'Numero de recepcion editado con exito',
+          classname: 'bg-success text-dark',
+        });
+      });
+      this.number_reception_disabled = true;
+    }
+  }
 
   onFileChange(event: any): void {
     this.imgChangeEvt = event;
   }
   cropImg(e: any) {
-      this.cropImgPreview = e.blob;
-      console.log(e, 'listo 64');
-      this.logo_data = e.blob;
+    this.cropImgPreview = e.blob;
+    console.log(e, 'listo 64');
+    this.logo_data = e.blob;
   }
   imgLoad() {
-      // display cropper tool
-  } 
+    // display cropper tool
+  }
   initCropper() {
-      // init cropper
+    // init cropper
   }
 
   imgFailed() {
-      // error msg
+    // error msg
   }
   zoomOut() {
     this.scale -= .1;
@@ -140,6 +162,15 @@ export class ConfigurationComponent {
       ...this.transform,
       scale: this.scale
     };
+  }
+
+  validateNumbers($event: any) {
+    const input = $event.target;
+    const valor = input.value;
+    const regex = /^[0-9]+$/;
+    if (!regex.test(valor)) {
+      this.number_reception.nativeElement.value = '';
+    }
   }
 
   zoomIn() {

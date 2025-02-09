@@ -143,8 +143,6 @@ export class CrudService {
       );
   }
 
-
-
   list(search?: any, state?: any) {
     let headers = new HttpHeaders({
       Authorization: `Bearer ${this.auth_token}`,
@@ -272,8 +270,6 @@ export class CrudService {
       );
   }
 
-
-
   updatePatch(data: any, id: string | number) {
     let headers = new HttpHeaders({
       Authorization: `Bearer ${this.auth_token}`
@@ -399,6 +395,4 @@ export class CrudService {
       );
   }
 
-
-  
 }

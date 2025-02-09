@@ -172,15 +172,8 @@ export class TableComponent {
       this.crudService.api_path_show = '/configurations';
 
       this.crudService.show('').subscribe((resp: any) => {
-        // this.tableService.DATA = resp;
         this.custom_currency = resp.currency;
 
-        if (resp.index_reception != null) {
-          this.number_reception_disabled = true;
-          this.indexReception = resp.index_reception;
-        } else {
-          this.number_reception_disabled = false;
-        }
       });
       this.crudService.api_path_list = '/clients';
 

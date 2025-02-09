@@ -9,9 +9,6 @@ export const guestGuard: CanActivateFn = (route, state) => {
   if(authService.token == '' || authService.token == null || authService.token == undefined){
     return true;
   }else{
-    router.navigate(['/system/home']);
-    return false;
+    return router.createUrlTree(['/system/home']);
   }
-  
-  return true;
 };

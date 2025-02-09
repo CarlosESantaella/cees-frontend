@@ -3,9 +3,6 @@
     <app-sidebar></app-sidebar>
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
       <app-header></app-header>
-
-
-
       <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <div class="post d-flex flex-column-fluid" id="kt_post">
 
@@ -19,36 +16,30 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <form [formGroup]="form_receptions" (ngSubmit)="onSubmitReceptions()">
+                  <form [formGroup]="form_general" (ngSubmit)="onSubmitGeneral()">
                     <div class="row">
-                      <div class="col-12 mb-2" >
+                      <div class="col-12 mb-2">
                         <label class="required fs-5 fw-bold d-block">Cabecera reportes</label>
                         <!-- <label [for]="'fullname' + i">Identificación CI/Pasaporte</label> -->
                         <div class="d-flex flex-wrap align-items-center gap-3">
 
-                          <input type="file" class="form-control" style="max-width: 400px;" (change)="onFileChange($event)" />
+                          <input type="file" class="form-control" style="max-width: 400px;"
+                            (change)="onFileChange($event)" />
                           <div class="d-flex gap-1">
-                            <button (click)="zoomOut()" type="button" class="badge badge-primary border border-0 text-nowrap" style="line-height: .1;">Zoom <span class="fs-1">-</span></button> 
-                            <button (click)="zoomIn()" type="button" class="badge badge-primary border border-0 text-nowrap">Zoom <span class="fs-4">+</span></button>
+                            <button (click)="zoomOut()" type="button"
+                              class="badge badge-primary border border-0 text-nowrap" style="line-height: .1;">Zoom
+                              <span class="fs-1">-</span></button>
+                            <button (click)="zoomIn()" type="button"
+                              class="badge badge-primary border border-0 text-nowrap">Zoom <span
+                                class="fs-4">+</span></button>
                           </div>
                         </div>
-                        
-                        <image-cropper 
-                          [imageChangedEvent]="imgChangeEvt" 
-                          [maintainAspectRatio]="true" 
-                          [aspectRatio]="16 / 4"
-                          [cropperMinWidth]="328"
-                          [allowMoveImage]="true"
-                          [resizeToWidth]="900" 
-                          [(transform)]="transform"
-                          [alignImage]="'center'"
-                          [imageQuality]="100"
-                          [cropperMinWidth]="300"
-                          format="webp" 
-                          (imageCropped)="cropImg($event)" 
-                          (imageLoaded)="imgLoad()"
-                          (cropperReady)="initCropper()" 
-                          (loadImageFailed)="imgFailed()">
+
+                        <image-cropper [imageChangedEvent]="imgChangeEvt" [maintainAspectRatio]="true"
+                          [aspectRatio]="16 / 4" [cropperMinWidth]="328" [allowMoveImage]="true" [resizeToWidth]="900"
+                          [(transform)]="transform" [alignImage]="'center'" [imageQuality]="100" [cropperMinWidth]="300"
+                          format="webp" (imageCropped)="cropImg($event)" (imageLoaded)="imgLoad()"
+                          (cropperReady)="initCropper()" (loadImageFailed)="imgFailed()">
                         </image-cropper>
                         <div class="">
                           <img [src]="cropImgPreview" style="max-height: 700px;" />
@@ -61,13 +52,14 @@
                         </div> -->
                       </div>
                       <div class="fv-row mb-7 text-center">
-                        <button type="submit" [disabled]="!form_receptions.valid" class="btn btn-primary">Actualizar</button>
+                        <button type="submit" [disabled]="!form_receptions.valid"
+                          class="btn btn-primary">Actualizar</button>
                       </div>
                     </div>
                   </form>
                 </div>
               </div>
-              <div class="card">
+              <div class="card mb-4">
                 <div class="card-header">
                   <div class="card-title">
                     <h3>Items</h3>
@@ -88,6 +80,34 @@
                             Solo se permite un máximo de 3 caracteres en el signo monetario
                           </p>
                         </div>
+                      </div>
+                      <div class="fv-row mb-7 text-center">
+                        <button type="submit" [disabled]="!form_items.valid" class="btn btn-primary">Actualizar</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">
+                    <h3>Recepciones</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="form_receptions">
+                    <div class="row">
+                      <div class="col-md-6 fv-row mb-7">
+                        <div class="d-flex">
+                          <!-- <label for="">Correlativo inicial</label> -->
+                          <input type="text" class="form-control me-1" #number_reception
+                            [disabled]="number_reception_disabled" (input)="validateNumbers($event)"
+                            style="min-width: 220px;" placeholder="Ingresar correlativo inicial..."
+                            name="number_reception">
+                          <button class="btn btn-primary btn-sm me-3" type="submit" [disabled]="number_reception_disabled"
+                            (click)="onSubmitIndexReception()">Enviar</button>
+                        </div>
+                        <p class="text-danger" *ngIf="!number_reception_disabled">revise el nro antes de actualizarlo ya que es una acción irreversible.</p>
                       </div>
                       <div class="fv-row mb-7 text-center">
                         <button type="submit" [disabled]="!form_items.valid" class="btn btn-primary">Actualizar</button>
