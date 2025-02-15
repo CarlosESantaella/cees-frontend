@@ -15,7 +15,7 @@ const routes: Routes = [
     path: 'list',
     title: 'gestionar diagnósticos del sistema',
     data: {
-      permission: 'MANAGE DIAGNOSES AND QUOTE'
+      permission: 'MANAGE DIAGNOSES'
     },
     component: ListDiagnosesComponent,
     canActivate: [authGuard]

@@ -19,7 +19,7 @@ import { CreateComponent as CreateDiagnosesComponent } from '../../../../modules
 import { CreateComponent as CreateFeilureModeComponent } from '../../../../modules/system/diagnoses/list-failure-modes/create/create.component';
 import { CreateComponent as CreateUserComponent } from '../../../../modules/system/access/list-users/create/create.component';
 import { CreateComponent as CreateClientComponent } from '../../../../modules/system/reception/list-clients/create/create.component';
-import { CreateComponent as CreateRolComponent } from '../../../../modules/system/access/list-rols/create/create.component';
+import { CreateComponent as CreateRolComponent } from '../../../../modules/system/access/list-rols-v2/create/create.component';
 import { CreateComponent as CreateAdminComponent } from '../../../../modules/system/admin/create/create.component';
 
 @Component({

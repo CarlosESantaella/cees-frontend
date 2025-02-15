@@ -13,14 +13,14 @@ export const menuData: MenuItem[] = [
         label: 'GESTIÓN DE SERVICIOS',
         icon: 'services',
         route: 'service-management',
-        permissions: [],
+        permissions: ['MANAGE CLIENTS', 'MANAGE RATES', 'MANAGE ITEMS'],
         children: [
             {
                 id: 'service-management/customers',
                 label: 'CLIENTES',
                 icon: 'customers',
                 route: '/system/receptions/clients',
-                permissions: [],
+                permissions: ['MANAGE CLIENTS'],
                 children: []
             },
             {
@@ -28,21 +28,21 @@ export const menuData: MenuItem[] = [
                 label: 'ITEMS DE SERVICIOS',
                 icon: 'service-items',
                 route: 'service-items',
-                permissions: [],
+                permissions: ['MANAGE RATES', 'MANAGE ITEMS'],
                 children: [
                     {
                         id: 'service-management/service-items/rates',
                         label: 'TARIFAS',
                         icon: 'rates',
                         route: '/system/items/rates',
-                        permissions: []
+                        permissions: ['MANAGE RATES']
                     },
                     {
                         id: 'service-management/service-items/creation-of-items',
                         label: 'CREACIÓN DE ITEMS',
                         icon: 'items',
                         route: '/system/items/list',
-                        permissions: []
+                        permissions: ['MANAGE ITEMS']
                     },
                 ]
             },
@@ -69,14 +69,14 @@ export const menuData: MenuItem[] = [
         label: 'OPERACIONES',
         icon: 'operations',
         route: 'operations',
-        permissions: [],
+        permissions: ['MANAGE RECEPTIONS', 'MANAGE DIAGNOSES', 'MANAGE FAILURE MODES'],
         children: [
             {
                 id: 'operations/receptions',
                 label: 'RECEPCIONES',
                 icon: 'receptions',
                 route: '/system/receptions/list',
-                permissions: [],
+                permissions: ['MANAGE RECEPTIONS'],
                 children: []
             },
             {
@@ -84,14 +84,14 @@ export const menuData: MenuItem[] = [
                 label: 'DIAGNÓSTICOS',
                 icon: 'diagnostics',
                 route: 'diagnostics',
-                permissions: [],
+                permissions: ['MANAGE DIAGNOSES', 'MANAGE FAILURE MODES'],
                 children: [
                     {
                         id: 'operations/diagnostics/generate-diagnostics',
                         label: 'GENERAR DIAGNÓSTICOS',
                         icon: 'generate-diagnostics',
                         route: '/system/diagnoses/list',
-                        permissions: [],
+                        permissions: ['MANAGE DIAGNOSES'],
                         children: []
                     },
                     {
@@ -99,7 +99,7 @@ export const menuData: MenuItem[] = [
                         label: 'MODOS DE FALLAS',
                         icon: 'failure-modes',
                         route: '/system/diagnoses/failure-modes/list',
-                        permissions: [],
+                        permissions: ['MANAGE FAILURE MODES'],
                         children: []
                     },
                 ]
@@ -119,14 +119,14 @@ export const menuData: MenuItem[] = [
         label: 'GESTIÓN DOCUMENTAL',
         icon: 'documents',
         route: 'document-management',
-        permissions: [],
+        permissions: ['MANAGE RECEPTIONS'],
         children: [
             {
                 id: 'document-management/reception-records',
                 label: 'REGISTRO DE RECEPCIONES',
                 icon: 'reception-records',
                 route: '/system/receptions/list',
-                permissions: [],
+                permissions: ['MANAGE RECEPTIONS'],
                 children: []
             },
             {
@@ -160,7 +160,23 @@ export const menuData: MenuItem[] = [
         label: 'CONFIGURACIONES',
         icon: 'configurations',
         route: '/system/configurations',
-        permissions: [],
+        permissions: ['MANAGE CONFIGURATIONS'],
         children: [],
     },
+    {
+        id: 'create-users',
+        label: 'CREAR USUARIOS',
+        icon: 'create-users',
+        route: '/system/access/users',
+        permissions: ['MANAGE USERS'],
+        children: [],
+    },
+    {
+        id: 'assign-modules',
+        label: 'ASIGNAR MÓDULOS',
+        icon: 'assign-modules',
+        route: '/system/access/rols',
+        permissions: ['MANAGE PROFILES'],
+        children: [],
+    }
 ];

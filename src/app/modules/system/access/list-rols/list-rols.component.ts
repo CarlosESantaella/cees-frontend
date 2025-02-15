@@ -86,14 +86,12 @@ export class ListRolsComponent {
     crudService.auth_token = authService.token;
     this.crudService.list().subscribe((resp) => {
       this.allData = resp;
-      console.log(this.allData);
+      console.log('all permisions', this.allData);
 
       this.all_permissions = Object.keys(resp)
         .map((key) => {
           const object_aux: any = new Object();
-
           object_aux.value = key;
-
           switch (key) {
             case 'MANAGE USERS':
               object_aux.text = 'Usuarios';
@@ -141,11 +139,7 @@ export class ListRolsComponent {
 
       this.addCheckboxCreate();
 
-      // for(let resp of all_permissions){
-      //   resp.text =
-      // }
-
-      console.log(this.all_permissions);
+      console.log('this.all_permissions2: ', this.all_permissions);
 
       this.form_edit = this.fb.group({
         name_edit: ['', [Validators.required, Validators.minLength(3)]],
@@ -157,12 +151,9 @@ export class ListRolsComponent {
 
     this.crudService.list().subscribe((resp) => {
       this.all_rols = resp ?? [];
-      console.log(resp);
+      console.log('all_rols', this.all_rols);
       console.log(resp.length);
     });
-
-
-
   }
 
   minSelectedCheckboxes(min = 1): ValidatorFn {
@@ -324,9 +315,7 @@ export class ListRolsComponent {
       (result: any, value: any, index: any) => {
         if (value) {
           result[all_permissions[index].value] = 'OWN';
-        } else {
-          return result;
-        }
+        } 
         return result;
       },
       {}

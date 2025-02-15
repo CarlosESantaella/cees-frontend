@@ -25,7 +25,7 @@ import {
   NgbModal,
   NgbPaginationModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import {
   SortEvent,
   TableSortableDirective,
@@ -132,6 +132,7 @@ export class TableComponent {
   clients_all: any = [];
 
   status_switches: any = {};
+  permission_switches: any = {};
 
   //modals
   selectedReceptionId: number | null = null;
@@ -193,9 +194,11 @@ export class TableComponent {
       });
     }
 
+
     if (this.aditionalData?.receptionId) {
       this.selectedReceptionId = this.aditionalData?.receptionId;
     }
+    console.log('this.data', this.data);
     this.initTable(this.data);
 
     if (this.actions[0].name == 'Diagnostico') {
@@ -206,9 +209,47 @@ export class TableComponent {
         });
       });
     }
+    if (this.actions[0].name == 'Rol') {
+      this.initRolTable();
+    }
   }
 
-  createAction(event: any){
+  async initRolTable() {
+    this.crudService.api_path_list = '/permissions';
+    let allPermissions: any = await firstValueFrom(this.crudService.list());
+    allPermissions = Object.keys(allPermissions);
+    this.data$.subscribe((data: any) => {
+      data.forEach((rol: any) => {
+        let rolPermissions = Object.keys(rol.permissions);
+        this.validateRolPermissions(rol, rolPermissions);
+      });
+    });
+  }
+
+  validateRolPermissions(rol: any, rolPermissions: any) {
+    if (rolPermissions.length > 0 && rolPermissions.includes('MANAGE CLIENTS') && rolPermissions.includes('MANAGE RATES') && rolPermissions.includes('MANAGE ITEMS')) {
+      this.permission_switches['id_' + rol['id'] + '_' + 'service-management'] = true;
+    } else {
+      this.permission_switches['id_' + rol['id'] + '_' + 'service-management'] = false;
+    }
+    if (rolPermissions.length > 0 && rolPermissions.includes('MANAGE RECEPTIONS') && rolPermissions.includes('MANAGE DIAGNOSES') && rolPermissions.includes('MANAGE FAILURE MODES')) {
+      this.permission_switches['id_' + rol['id'] + '_' + 'operations'] = true;
+    } else {
+      this.permission_switches['id_' + rol['id'] + '_' + 'operations'] = false;
+    }
+    if (rolPermissions.length > 0 && rolPermissions.includes('MANAGE RECEPTIONS')) {
+      this.permission_switches['id_' + rol['id'] + '_' + 'document-management'] = true;
+    } else {
+      this.permission_switches['id_' + rol['id'] + '_' + 'document-management'] = false;
+    }
+    if (rolPermissions.length > 0 && rolPermissions.includes('MANAGE CONFIGURATIONS')) {
+      this.permission_switches['id_' + rol['id'] + '_' + 'configurations'] = true;
+    } else {
+      this.permission_switches['id_' + rol['id'] + '_' + 'configurations'] = false;
+    }
+  }
+
+  createAction(event: any) {
     console.log('createAction', event);
     this.createEvent.emit(event);
   }
@@ -272,6 +313,43 @@ export class TableComponent {
       });
   }
 
+  changePermissionSwitch(rol_id: number) {
+    const data: any = new Object();
+    data.permissions = data.permissions || {};
+
+    if (this.permission_switches['id_' + rol_id + '_' + 'service-management']) {
+      Object.assign(data.permissions, {
+        'MANAGE CLIENTS': 'OWN',
+        'MANAGE RATES': 'OWN',
+        'MANAGE ITEMS': 'OWN'
+      });
+    }
+    if (this.permission_switches['id_' + rol_id + '_' + 'operations']) {
+      Object.assign(data.permissions, {
+        'MANAGE RECEPTIONS': 'OWN',
+        'MANAGE DIAGNOSES': 'OWN',
+        'MANAGE FAILURE MODES': 'OWN'
+      });
+    }
+    if (this.permission_switches['id_' + rol_id + '_' + 'document-management']) {
+      Object.assign(data.permissions, {
+        'MANAGE RECEPTIONS': 'OWN'
+      });
+    }
+    if (this.permission_switches['id_' + rol_id + '_' + 'configurations']) {
+      Object.assign(data.permissions, {
+        'MANAGE CONFIGURATIONS': 'OWN'
+      });
+    }
+    data.permissions = JSON.stringify(data.permissions);
+    console.log('data', data);
+    this.crudService
+      .patch(`/profiles/${rol_id}`, data)
+      .subscribe((response: any) => {
+      });
+
+  }
+
   onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach((header) => {
@@ -284,7 +362,6 @@ export class TableComponent {
     this.service.sortDirection = direction;
   }
 
-  // Propiedad computada para manejar la expresión con la tubería
   getFormattedValue(record: any, field: string, pipe: string | undefined): any {
     var value = record[field];
 
@@ -325,17 +402,25 @@ export class TableComponent {
         }
         return '';
       }
+      if (pipe == 'permissions') {
+        if (value) {
+          return value + 'hola';
+        }
+        return '';
+      }
     } else {
       return value;
     }
   }
-  
+
   getFormattedValueHTML(
     record: any,
     field: string,
     pipe: string | undefined
   ): any {
+
     var value = record[field];
+
 
     if (pipe) {
       if (pipe == 'status_switch') {

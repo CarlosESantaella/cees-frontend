@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule, UrlSegment } from '@angular/route
 import { menuData } from './main-menu';
 import { SharedModule } from '../../shared.module';
 import { AnimatedBackgroundComponent } from "../animated-background/animated-background.component";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -20,14 +21,22 @@ export class MainMenuComponent {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
     this.currentMenu = this.menuData;
     this.route.url.subscribe(urlSegments => {
       const fullPath = urlSegments.map(segment => segment.path).join('/');
-  
+      let user = JSON.parse(this.authService.user);
+      let userPermissions: any = user.profile_data.permissions;
+      userPermissions = Object.keys(userPermissions);
+
+      console.log('userPermissions', userPermissions);
+      this.menuData = this.filterMenuByPermissions(userPermissions, this.menuData);
+      console.log(this.menuData)
+      this.currentMenu = this.menuData;
       if (fullPath && fullPath !== 'main-menu') {
         this.updateMenuFromPath(fullPath);
       } else {
@@ -36,33 +45,46 @@ export class MainMenuComponent {
     });
   }
 
+  filterMenuByPermissions(permissions: string[], menuItems: MenuItem[]): MenuItem[] {
+    return menuItems
+      .map(menuItem => {
+        const filteredChildren = menuItem.children ? this.filterMenuByPermissions(permissions, menuItem.children) : [];
+        const hasPermission = menuItem.permissions.some(p => permissions.includes(p));
+        if (hasPermission || filteredChildren.length > 0) {
+          return { ...menuItem, children: filteredChildren };
+        }
+        return null; 
+      })
+      .filter(Boolean) as MenuItem[]; 
+  }
+
   resetMenu(): void {
     this.menuStack = [];
     this.currentMenu = this.menuData;
   }
 
   updateMenuFromPath(menuPath: string): void {
-    const pathSegments = menuPath.split('/'); // Divide la ruta en segmentos
+    const pathSegments = menuPath.split('/');
     console.log('pathSegments', pathSegments);
-    let currentLevel = this.menuData;
-  
-    this.menuStack = []; // Reinicia el stack
-  
+    let currentLevel = this.currentMenu;
+
+    this.menuStack = [];
+
     for (const segment of pathSegments) {
       const menuItem = currentLevel.find(item => item.route === segment);
       if (menuItem) {
-        this.menuStack.push(menuItem.route!); // Agrega la ruta al stack
+        this.menuStack.push(menuItem.route!);
         if (menuItem.children) {
-          currentLevel = menuItem.children; // Avanza al siguiente nivel
+          currentLevel = menuItem.children;
         }
       } else {
-        if(segment === 'main-menu') continue;
+        if (segment === 'main-menu') continue;
         console.error(`Ruta no encontrada: ${segment}`);
-        this.router.navigate(['/system/main-menu']); // Redirige al menú principal si hay un error
+        this.router.navigate(['/system/main-menu']);
         return;
       }
     }
-    this.currentMenu = Array.isArray(currentLevel) ? currentLevel : []; // Actualiza el menú actual
+    this.currentMenu = Array.isArray(currentLevel) ? currentLevel : [];
   }
 
   navigateTo(menuItem: MenuItem): void {
@@ -92,7 +114,7 @@ export class MainMenuComponent {
 
   goBack(): void {
     if (this.menuStack.length > 0) {
-      this.menuStack.pop(); 
+      this.menuStack.pop();
       this.currentMenu = this.rebuildMenuFromStack();
       const newRoute = this.buildRoute();
       this.router.navigate([newRoute || '/system/main-menu']);
@@ -100,7 +122,7 @@ export class MainMenuComponent {
   }
   rebuildMenuFromStack(): MenuItem[] {
     let currentLevel = this.menuData;
-  
+
     for (const segment of this.menuStack) {
       const menuItem = currentLevel.find(item => item.route === segment);
       if (menuItem && menuItem.children) {
@@ -111,7 +133,7 @@ export class MainMenuComponent {
         return [];
       }
     }
-  
+
     return currentLevel;
   }
 }

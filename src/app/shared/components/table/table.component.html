@@ -7,7 +7,8 @@
   (initTable)="initTable($event)" [diagnosis_files_selected]="diagnosis_files_selected"></app-failure-mode-modal>
 
 <!-- diagnoses items modal -->
-<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected" [actions]="actions"></app-diagnoses-items-modal>
+<app-diagnoses-items-modal [diagnosis_id_selected]="diagnosis_id_selected"
+  [actions]="actions"></app-diagnoses-items-modal>
 
 <!-- diagnoses item photos modal -->
 <app-diagnoses-item-photos-modal [diagnosis_id_selected]="diagnosis_id_selected"></app-diagnoses-item-photos-modal>
@@ -21,9 +22,9 @@
       <div class="card-toolbar flex-column pb-0 text-end" style="padding: 0rem .8rem;">
         <!--begin::Toolbar-->
         <app-table-toolbar [actions]="actions" [clients_all]="clients_all" [date]="date" (dateChange)="date=$event"
-          [client_selected]="client_selected" (client_selectedChange)="client_selected=$event"
-           [data]="data" (initTable)="initTable($event)" [selectedReceptionId]="selectedReceptionId" (createEvent)="createAction($event)"
-          >
+          [client_selected]="client_selected" (client_selectedChange)="client_selected=$event" [data]="data"
+          (initTable)="initTable($event)" [selectedReceptionId]="selectedReceptionId"
+          (createEvent)="createAction($event)">
         </app-table-toolbar>
         <!--end::Toolbar-->
         <!--begin::Group actions-->
@@ -70,7 +71,6 @@
 
                   <td *ngIf="column.pipe; else plainData">
                     @if(column.html){
-
                     <ng-container [ngSwitch]="column.pipe">
                       <ng-container *ngSwitchCase="'status_switch'">
 
@@ -101,9 +101,15 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'diagnoses_item_photos'" class="d-flex justify-content-center">
                         <div class="d-flex flex-column justify-content-center">
-                          <p-button size="small" (click)="diagnosesItemPhotosModal.showDialogDiagnosesItemPhotos(record['id'])"
+                          <p-button size="small"
+                            (click)="diagnosesItemPhotosModal.showDialogDiagnosesItemPhotos(record['id'])"
                             label="Ver fotos de items" />
                         </div>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'permission_switch'" class="d-flex justify-content-center">
+                        <p-inputSwitch [(ngModel)]="permission_switches['id_'+record['id']+'_'+column.field]"
+                          [name]="'id_'+record['id']+'_'+column.field"
+                          (onChange)="changePermissionSwitch(record['id'])" />
                       </ng-container>
                       <ng-container *ngSwitchDefault>
                         <div [innerHTML]="getFormattedValueHTML(record, column.field, column.pipe)"></div>
@@ -123,7 +129,9 @@
                 </ng-container>
                 <td>
                   <app-table-actions [actions]="actions" [record]="record" (createEvent)="createAction($event)"
-                    (editEvent)="editEvent.emit($event)" (deleteEvent)="deleteEvent.emit($event)" [selectedReceptionId]="selectedReceptionId" [data]="data" (sendMailEvent)="sendMailEvent.emit($event)">
+                    (editEvent)="editEvent.emit($event)" (deleteEvent)="deleteEvent.emit($event)"
+                    [selectedReceptionId]="selectedReceptionId" [data]="data"
+                    (sendMailEvent)="sendMailEvent.emit($event)">
                   </app-table-actions>
                 </td>
               </tr>

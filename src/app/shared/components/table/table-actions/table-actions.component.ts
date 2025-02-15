@@ -9,7 +9,7 @@ import { EditComponent as EditDiagnosesComponent } from '../../../../modules/sys
 import { EditComponent as EditFailureModeComponent } from '../../../../modules/system/diagnoses/list-failure-modes/edit/edit.component';
 import { EditComponent as EditUserComponent } from '../../../../modules/system/access/list-users/edit/edit.component';
 import { EditComponent as EditClientComponent } from '../../../../modules/system/reception/list-clients/edit/edit.component';
-import { EditComponent as EditRolComponent } from '../../../../modules/system/access/list-rols/edit/edit.component';
+import { EditComponent as EditRolComponent } from '../../../../modules/system/access/list-rols-v2/edit/edit.component';
 import { EditComponent as EditAdminComponent } from '../../../../modules/system/admin/edit/edit.component';
 //services
 import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialog.component';

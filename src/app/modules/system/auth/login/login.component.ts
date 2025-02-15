@@ -54,6 +54,7 @@ export class LoginComponent {
           console.log('Autenticación exitosa:', resp);
           this.authService.token = resp.access_token;
           this.authService.user = JSON.stringify(resp.user);
+          console.log('user:', resp.user);
           this.router.navigate(['/system/home']);
           this.toastService.show({
             message:

@@ -3,6 +3,7 @@ import { MenusService } from '../../../../shared/services/menus.service';
 import { ToastsContainerComponent } from '../../../../shared/components/toast/container-toast.component';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -14,11 +15,16 @@ import { AuthService } from '../../../../shared/services/auth.service';
 export class HeaderComponent {
   constructor(
     private menusService: MenusService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ){}
 
   clickBtnMenu() {
     this.menusService.emitClickBtnMenu();
+  }
+
+  onBackToMenu(){
+    this.router.navigate(['/system/main-menu']);
   }
 
   logout(){

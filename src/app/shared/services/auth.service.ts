@@ -40,7 +40,6 @@ export class AuthService {
   }
 
   private handleError(error?: any) {
-    console.error(error, 'hola mundo');
     if(error.status == 401){
       // this.logout();
     }
