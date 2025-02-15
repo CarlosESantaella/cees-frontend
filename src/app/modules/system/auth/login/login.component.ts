@@ -55,7 +55,7 @@ export class LoginComponent {
           this.authService.token = resp.access_token;
           this.authService.user = JSON.stringify(resp.user);
           console.log('user:', resp.user);
-          this.router.navigate(['/system/home']);
+          this.router.navigate(['/system/main-menu']);
           this.toastService.show({
             message:
               'Bienvenido '+resp.user.name,

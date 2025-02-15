@@ -21,7 +21,7 @@ export class ListUsersComponent {
  
   tableColumns: any[] = [
     { label: 'ID', field: 'id' },
-    { label: 'Nombre de usuario', field: 'username' },
+    { label: 'Nombre del usuario', field: 'username' },
     { label: 'Email', field: 'email' }
   ];
   allData: any[] = [];
