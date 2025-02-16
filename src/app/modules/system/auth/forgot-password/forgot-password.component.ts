@@ -52,12 +52,15 @@ export class ForgotPasswordComponent {
             message: 'Se ha enviado un correo electrónico para restablecer la contraseña.',
             classname: 'bg-success text-dark',
           });
+           this.isSubmitting = false;
+
         },
         error: (error: any) => {
           this.toastService.show({
             message: 'Error: correo electrónico no encontrado.',
             classname: 'bg-danger text-light ',
           });
+          this.isSubmitting = false;
         },
         complete: () => {
           this.isSubmitting = false;
