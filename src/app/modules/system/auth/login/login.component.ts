@@ -9,12 +9,13 @@ import {
 import { AuthService } from '../../../../shared/services/auth.service';
 import { ToastsContainerComponent } from '../../../../shared/components/toast/container-toast.component';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ToastsContainerComponent],
+  imports: [CommonModule, ReactiveFormsModule, ToastsContainerComponent, RouterModule, PasswordModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -43,9 +44,6 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    // this.toastService.show({ message: 'Error: contraseña o username incorrectos, intentelo nuevamente.', classname: 'bg-danger text-light ' });
-
-    console.log(this.form.value.username, this.form.value.password);
     this.authService
       .login(this.form.value.username, this.form.value.password)
       .subscribe(

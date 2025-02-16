@@ -77,5 +77,28 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string){
+    return this.http_client
+    .post(`${environment.api_domain}/auth/forgot-password`, {
+      email: email,
+    })
+    .pipe(
+      catchError(this.handleError),
+      finalize(() => {})
+    );
+  }
+
+  resetPassword(password: string, token: string){
+    return this.http_client
+    .post(`${environment.api_domain}/auth/reset-password`, {
+      password: password,
+      token: token,
+    })
+    .pipe(
+      catchError(this.handleError),
+      finalize(() => {})
+    );
+  }
+
 
 }

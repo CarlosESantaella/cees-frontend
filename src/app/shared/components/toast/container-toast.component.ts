@@ -11,7 +11,7 @@ import { ToastService } from '../../services/toast.service';
 			<ngb-toast
 				[class]="toast.classname"
 				[autohide]="true"
-				[delay]="toast.delay || 3000"
+				[delay]="toast.delay || 2000"
 				(hidden)="toastService.remove(toast)"
 			>
 				{{ toast.message }}
@@ -24,6 +24,6 @@ export class ToastsContainerComponent {
 	toastService = inject(ToastService);
 
 	ngOnDestroy(){
-		this.toastService.removeAll();
+		// this.toastService.removeAll();
 	}
 }

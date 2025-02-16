@@ -8,6 +8,8 @@ import { guestGuard } from '../../shared/guards/guest.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { MainMenuComponent } from '../../shared/components/main-menu/main-menu.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -24,6 +26,18 @@ const routes: Routes = [
     path: 'auth/login',
     title: 'login',
     component: LoginComponent,
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'auth/forgot-password',
+    title: 'Ingresar email para recuperación de contraseña',
+    component: ForgotPasswordComponent,
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'auth/reset-password',
+    title: 'Reiniciar contraseña',
+    component: ResetPasswordComponent,
     canActivate: [guestGuard],
   },
   {
