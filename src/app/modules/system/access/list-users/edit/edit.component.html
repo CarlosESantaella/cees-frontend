@@ -21,13 +21,13 @@
         <!--end::Label-->
         <!--begin::Input-->
         <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Nombre de usuario..."
-          formControlName="name" />
-        <div *ngIf="name?.invalid && (name?.dirty || name?.touched)">
-          <p class="text-danger" *ngIf="name?.errors?.['required']">
+          formControlName="username" />
+        <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+          <p class="text-danger" *ngIf="username?.errors?.['required']">
             Campo requerido
           </p>
-          <p class="text-danger" *ngIf="name?.errors?.['minlength']">
-            Debes introducir un mínimo de {{ name?.errors?.['minlength'].requiredLength }} caracteres
+          <p class="text-danger" *ngIf="username?.errors?.['minlength']">
+            Debes introducir un mínimo de {{ username?.errors?.['minlength'].requiredLength }} caracteres
           </p>
         </div>
         <!--end::Input-->

@@ -19,6 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { set } from 'date-fns';
 
 @Component({
   selector: 'app-list-rols-v2',
@@ -76,19 +77,24 @@ export class ListRolsV2Component {
     public toastService: ToastService,
     public fb: FormBuilder,
   ) {
-    crudService.api_path_list = '/permissions';
-    crudService.api_path_show = '/profiles/';
-    crudService.api_path_create = '/profiles';
-    crudService.api_path_update = '/profiles/';
-    crudService.api_path_delete = '/profiles/';
+
+  }
+
+  ngOnInit(){
+    this.crudService.api_path_list = '/permissions';
+    this.crudService.api_path_show = '/profiles/';
+    this.crudService.api_path_create = '/profiles';
+    this.crudService.api_path_update = '/profiles/';
+    this.crudService.api_path_delete = '/profiles/';
     
 
-    crudService.auth_token = authService.token;
+    this.crudService.auth_token = this.authService.token;
     this.crudService.list().subscribe((resp) => {
-      this.allData = resp;
+      // this.allData = resp;
+      console.log('permisions', this.allData);
 
     });
-    crudService.api_path_list = '/profiles';
+    this.crudService.api_path_list = '/profiles';
 
     this.crudService.list().subscribe((resp) => {
       this.all_rols = resp || [];
@@ -100,7 +106,6 @@ export class ListRolsV2Component {
     });
   }
 
-
   get permissionsEditFormArray() {
     return this.form_edit.controls['permissions_edit'] as FormArray;
   }
@@ -111,10 +116,12 @@ export class ListRolsV2Component {
     .subscribe(
       (resp) => {
         if(!resp?.error){
-          this.allData.push(resp);
-          console.log(this.allData, 2);
-          this.tableComponent.initTable(this.allData);
-          this.toastService.show({ message: 'Rol creado con exito', classname: 'bg-success text-dark'});
+          setTimeout(() => {
+            console.log('this.allData', this.allData);
+            this.allData = [...this.allData, resp];
+            this.tableComponent.initTable(this.allData);
+            this.toastService.show({ message: 'Rol creado con exito', classname: 'bg-success text-dark'});
+          }, 10);
         }
       }
     )

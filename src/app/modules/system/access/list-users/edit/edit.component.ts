@@ -37,7 +37,7 @@ export class EditComponent {
     console.log(this.data,'2');
     this.form = this.fb.group(
       {
-        name: [this.data.name ?? '', [Validators.required, Validators.minLength(6)]],
+        username: [this.data.username ?? '', [Validators.required, Validators.minLength(6)]],
         email: [this.data.email ?? '', [Validators.required, Validators.email]],
         password: [this.data.password ?? '', [Validators.required, Validators.minLength(6)]],
         confirm_password: ['', Validators.required],
@@ -57,8 +57,8 @@ export class EditComponent {
     });
   }
 
-  get name() {
-    return this.form.get('name');
+  get username() {
+    return this.form.get('username');
   }
   get password() {
     return this.form.get('password');
