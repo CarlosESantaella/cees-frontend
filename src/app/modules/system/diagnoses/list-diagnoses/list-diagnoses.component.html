@@ -80,7 +80,7 @@
               <div class=" gap-3 mb-3 w-100">
                 <label for="search" class="font-semibold w-6rem">Código de recepción</label>
                 <input pInputText class="d-block w-100" id="search" type="text" [(ngModel)]="textToSearch"
-                  placeholder="Ingrese aquí..." autocomplete="off" />
+                  placeholder="Ingrese aquí..." autocomplete="off" name="search" />
                 <p class="text-danger" [ngClass]="{'d-none': textToSearch.trim() != ''}">campo requerido (*)</p>
               </div>
               <div class="d-flex justify-content-end gap-2">

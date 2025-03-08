@@ -17,11 +17,11 @@
             <legend>Busqueda por rango de fechas y cliente</legend>
             <div class="d-flex flex-wrap justify-content-end gap-2 align-items-center">
                 <div>
-                    <p-calendar [(ngModel)]="date" (ngModelChange)="dateChange.emit($event)" [showClear]="true" [showIcon]="true"
+                    <p-calendar [ngModel]="date" (ngModelChange)="dateChange.emit($event)" [showClear]="true" [showIcon]="true"
                         [readonlyInput]="true" selectionMode="range" [ngModelOptions]="{standalone: true}"></p-calendar>
                 </div>
                 <div>
-                    <select class="form-select" [(ngModel)]="client_selected"
+                    <select class="form-select" [ngModel]="client_selected"
                         (ngModelChange)="client_selectedChange.emit($event)" id=""
                         [ngModelOptions]="{standalone: true}">
                         <option value="">

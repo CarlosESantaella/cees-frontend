@@ -57,6 +57,7 @@ import { DiagnosesItemsModalComponent } from './modals/diagnoses-items-modal/dia
 import { DiagnosesItemPhotosModalComponent } from './modals/diagnoses-item-photos-modal/diagnoses-item-photos-modal.component';
 import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
 import { TableActionsComponent } from './table-actions/table-actions.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'ngbd-table',
@@ -86,7 +87,8 @@ import { TableActionsComponent } from './table-actions/table-actions.component';
     DiagnosesItemsModalComponent,
     DiagnosesItemPhotosModalComponent,
     TableToolbarComponent,
-    TableActionsComponent
+    TableActionsComponent,
+    ButtonModule
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
