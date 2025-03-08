@@ -48,7 +48,6 @@ export class LoginComponent {
       .login(this.form.value.username, this.form.value.password)
       .subscribe(
         (resp: any) => {
-          // Maneja el resultado exitoso aquí
           console.log('Autenticación exitosa:', resp);
           this.authService.token = resp.access_token;
           this.authService.user = JSON.stringify(resp.user);
@@ -61,7 +60,6 @@ export class LoginComponent {
           });
         },
         (error: any) => {
-          // Maneja el error aquí
           this.toastService.show({
             message:
               'Error: contraseña o usuario incorrectos, intentelo nuevamente.',

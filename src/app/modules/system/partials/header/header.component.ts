@@ -4,6 +4,7 @@ import { ToastsContainerComponent } from '../../../../shared/components/toast/co
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { MainMenuService } from '../../../../shared/components/main-menu/services/main-menu.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,8 @@ export class HeaderComponent {
   constructor(
     private menusService: MenusService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private mainMenuService: MainMenuService
   ){}
 
   clickBtnMenu() {
@@ -24,7 +26,11 @@ export class HeaderComponent {
   }
 
   onBackToMenu(){
-    this.router.navigate(['/system/main-menu']);
+    let navigateTo: string = '/system/main-menu';
+    if(this.mainMenuService.lastMenuState.trim() !== ''){
+      navigateTo = this.mainMenuService.lastMenuState;
+    }
+    this.router.navigate([navigateTo]);
   }
 
   logout(){

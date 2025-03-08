@@ -6,6 +6,7 @@ import { menuData } from './main-menu';
 import { SharedModule } from '../../shared.module';
 import { AnimatedBackgroundComponent } from "../animated-background/animated-background.component";
 import { AuthService } from '../../services/auth.service';
+import { MainMenuService } from './services/main-menu.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -17,16 +18,17 @@ import { AuthService } from '../../services/auth.service';
 export class MainMenuComponent {
   menuStack: string[] = [];
   currentMenu: MenuItem[] = [];
-  menuData: MenuItem[] = menuData;
+
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private mainMenuService: MainMenuService
   ) { }
 
   ngOnInit(): void {
-    this.currentMenu = this.menuData;
+    this.currentMenu = this.mainMenuService.menuData;
     this.route.url.subscribe(urlSegments => {
       const fullPath = urlSegments.map(segment => segment.path).join('/');
       let user = JSON.parse(this.authService.user);
@@ -34,9 +36,9 @@ export class MainMenuComponent {
       userPermissions = Object.keys(userPermissions);
 
       console.log('userPermissions', userPermissions);
-      this.menuData = this.filterMenuByPermissions(userPermissions, this.menuData);
-      console.log(this.menuData)
-      this.currentMenu = this.menuData;
+      this.mainMenuService.menuData = this.filterMenuByPermissions(userPermissions, this.mainMenuService.menuData);
+      console.log(this.mainMenuService.menuData)
+      this.currentMenu = this.mainMenuService.menuData;
       if (fullPath && fullPath !== 'main-menu') {
         this.updateMenuFromPath(fullPath);
       } else {
@@ -53,14 +55,14 @@ export class MainMenuComponent {
         if (hasPermission || filteredChildren.length > 0) {
           return { ...menuItem, children: filteredChildren };
         }
-        return null; 
+        return null;
       })
-      .filter(Boolean) as MenuItem[]; 
+      .filter(Boolean) as MenuItem[];
   }
 
   resetMenu(): void {
     this.menuStack = [];
-    this.currentMenu = this.menuData;
+    this.currentMenu = this.mainMenuService.menuData;
   }
 
   updateMenuFromPath(menuPath: string): void {
@@ -95,11 +97,12 @@ export class MainMenuComponent {
 
       // Construye la nueva ruta dinámica
       const newRoute = this.buildRoute();
+      console.log('newRoute', newRoute);
+      this.mainMenuService.lastMenuState = newRoute;
       this.router.navigate([newRoute]);
     } else if (menuItem.route) {
       // Si no tiene hijos, navega directamente a la ruta
       this.currentMenu = [];
-      console.log('menuItem.route', menuItem.route);
       let navigateTo: string = menuItem.route;
       this.resetMenu();
       this.router.navigateByUrl(String(navigateTo));
@@ -121,7 +124,7 @@ export class MainMenuComponent {
     }
   }
   rebuildMenuFromStack(): MenuItem[] {
-    let currentLevel = this.menuData;
+    let currentLevel = this.mainMenuService.menuData;
 
     for (const segment of this.menuStack) {
       const menuItem = currentLevel.find(item => item.route === segment);
