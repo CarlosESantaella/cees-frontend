@@ -15,11 +15,10 @@ import { CommonModule } from '@angular/common';
 import { CrudService } from '../../../../../shared/services/crud.service';
 
 @Component({
-  selector: 'app-edit',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './edit.component.html',
-  styleUrl: './edit.component.css'
+    selector: 'app-edit',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './edit.component.html',
+    styleUrl: './edit.component.css'
 })
 export class EditComponent {
   @Input() data: any = {};

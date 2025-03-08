@@ -7,11 +7,10 @@ import { CommonModule } from '@angular/common';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
-  selector: 'app-edit',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, InputSwitchModule],
-  templateUrl: './edit.component.html',
-  styleUrl: './edit.component.css'
+    selector: 'app-edit',
+    imports: [ReactiveFormsModule, CommonModule, InputSwitchModule],
+    templateUrl: './edit.component.html',
+    styleUrl: './edit.component.css'
 })
 export class EditComponent {
 

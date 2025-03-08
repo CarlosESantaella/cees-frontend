@@ -25,14 +25,13 @@ import { environment } from '../../../../../environments/environment.development
 import { debounceTime, filter, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { ActionsTableService } from './services/actions-table.service';
 @Component({
-  selector: 'app-table-actions',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NgbDropdownModule
-  ],
-  templateUrl: './table-actions.component.html',
-  styleUrl: './table-actions.component.css'
+    selector: 'app-table-actions',
+    imports: [
+        CommonModule,
+        NgbDropdownModule
+    ],
+    templateUrl: './table-actions.component.html',
+    styleUrl: './table-actions.component.css'
 })
 export class TableActionsComponent {
   private isProcessing: boolean = false;

@@ -8,11 +8,10 @@ import { AuthService } from '../../../../shared/services/auth.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
-  selector: 'app-list-clients',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './list-clients.component.html',
-  styleUrl: './list-clients.component.css',
+    selector: 'app-list-clients',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './list-clients.component.html',
+    styleUrl: './list-clients.component.css'
 })
 export class ListClientsComponent {
   tableColumns: any[] = [

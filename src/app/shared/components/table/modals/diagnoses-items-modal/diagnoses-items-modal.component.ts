@@ -10,11 +10,10 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
-  selector: 'app-diagnoses-items-modal',
-  standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, TableModule, ButtonModule, InputTextModule],
-  templateUrl: './diagnoses-items-modal.component.html',
-  styleUrl: './diagnoses-items-modal.component.css'
+    selector: 'app-diagnoses-items-modal',
+    imports: [CommonModule, FormsModule, DialogModule, TableModule, ButtonModule, InputTextModule],
+    templateUrl: './diagnoses-items-modal.component.html',
+    styleUrl: './diagnoses-items-modal.component.css'
 })
 export class DiagnosesItemsModalComponent implements AfterViewInit {
   @Input() diagnosis_id_selected: number = 0;

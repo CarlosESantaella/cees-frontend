@@ -9,18 +9,17 @@ import { PasswordModule } from 'primeng/password';
 import { CrudService } from '../../../../shared/services/crud.service';
 
 @Component({
-  selector: 'app-reset-password',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    ToastsContainerComponent,
-    PasswordModule
-  ],
-  templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.css'
+    selector: 'app-reset-password',
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        ReactiveFormsModule,
+        ToastsContainerComponent,
+        PasswordModule
+    ],
+    templateUrl: './reset-password.component.html',
+    styleUrl: './reset-password.component.css'
 })
 export class ResetPasswordComponent {
   form!: FormGroup;

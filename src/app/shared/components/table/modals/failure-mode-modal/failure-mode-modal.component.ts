@@ -8,11 +8,10 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-failure-mode-modal',
-  standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonModule],
-  templateUrl: './failure-mode-modal.component.html',
-  styleUrl: './failure-mode-modal.component.css'
+    selector: 'app-failure-mode-modal',
+    imports: [CommonModule, FormsModule, DialogModule, ButtonModule],
+    templateUrl: './failure-mode-modal.component.html',
+    styleUrl: './failure-mode-modal.component.css'
 })
 export class FailureModeModalComponent {
   visibleFailureMode: boolean = false;

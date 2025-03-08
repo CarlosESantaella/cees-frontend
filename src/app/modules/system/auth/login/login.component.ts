@@ -13,11 +13,10 @@ import { Router, RouterModule } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ToastsContainerComponent, RouterModule, PasswordModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+    selector: 'app-login',
+    imports: [CommonModule, ReactiveFormsModule, ToastsContainerComponent, RouterModule, PasswordModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent {
   form!: FormGroup;

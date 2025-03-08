@@ -7,17 +7,16 @@ import { AuthService } from '../../../../shared/services/auth.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
-  selector: 'app-forgot-password',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    ToastsContainerComponent
-  ],
-  templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.css'
+    selector: 'app-forgot-password',
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        ReactiveFormsModule,
+        ToastsContainerComponent
+    ],
+    templateUrl: './forgot-password.component.html',
+    styleUrl: './forgot-password.component.css'
 })
 export class ForgotPasswordComponent {
   form!: FormGroup;

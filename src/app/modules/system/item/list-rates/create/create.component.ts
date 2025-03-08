@@ -17,15 +17,14 @@ import { MultiSelectModule } from 'primeng/multiselect';
 // }
 
 @Component({
-  selector: 'app-create',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MultiSelectModule
-  ],
-  templateUrl: './create.component.html',
-  styleUrl: './create.component.css',
+    selector: 'app-create',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MultiSelectModule
+    ],
+    templateUrl: './create.component.html',
+    styleUrl: './create.component.css'
 })
 export class CreateComponent {
   // @Input() name: string = '';

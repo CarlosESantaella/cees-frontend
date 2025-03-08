@@ -9,11 +9,10 @@ import {
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-create',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './create.component.html',
-  styleUrl: './create.component.css',
+    selector: 'app-create',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './create.component.html',
+    styleUrl: './create.component.css'
 })
 export class CreateComponent {
   // @Input() name: string = '';

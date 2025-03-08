@@ -11,11 +11,10 @@ import { CrudService } from '../../../../../shared/services/crud.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
-  selector: 'app-edit',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MultiSelectModule],
-  templateUrl: './edit.component.html',
-  styleUrl: './edit.component.css',
+    selector: 'app-edit',
+    imports: [CommonModule, ReactiveFormsModule, MultiSelectModule],
+    templateUrl: './edit.component.html',
+    styleUrl: './edit.component.css'
 })
 export class EditComponent {
   @Input() data: any = {};

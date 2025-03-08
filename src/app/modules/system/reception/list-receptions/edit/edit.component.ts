@@ -21,11 +21,10 @@ import { AuthService } from '../../../../../shared/services/auth.service';
 import { CrudService } from '../../../../../shared/services/crud.service';
 
 @Component({
-  selector: 'app-edit',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './edit.component.html',
-  styleUrl: './edit.component.css',
+    selector: 'app-edit',
+    imports: [ReactiveFormsModule, CommonModule],
+    templateUrl: './edit.component.html',
+    styleUrl: './edit.component.css'
 })
 export class EditComponent {
   // @Input() name: string = '';

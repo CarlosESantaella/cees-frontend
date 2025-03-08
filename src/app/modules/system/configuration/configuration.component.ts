@@ -13,11 +13,10 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 @Component({
-  selector: 'app-configuration',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent, ReactiveFormsModule, CommonModule, ImageCropperModule],
-  templateUrl: './configuration.component.html',
-  styleUrl: './configuration.component.css'
+    selector: 'app-configuration',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent, ReactiveFormsModule, CommonModule, ImageCropperModule],
+    templateUrl: './configuration.component.html',
+    styleUrl: './configuration.component.css'
 })
 export class ConfigurationComponent {
 

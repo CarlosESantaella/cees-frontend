@@ -5,11 +5,10 @@ import { HeaderComponent } from '../partials/header/header.component';
 import { SidebarComponent } from '../partials/sidebar/sidebar.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+    selector: 'app-home',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css'
 })
 export class HomeComponent {
 

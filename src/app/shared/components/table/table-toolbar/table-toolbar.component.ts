@@ -23,11 +23,10 @@ import { CreateComponent as CreateRolComponent } from '../../../../modules/syste
 import { CreateComponent as CreateAdminComponent } from '../../../../modules/system/admin/create/create.component';
 
 @Component({
-  selector: 'app-table-toolbar',
-  standalone: true,
-  imports: [CommonModule, FormsModule, CalendarModule, ButtonModule, NgbDropdownModule, TableActionsComponent],
-  templateUrl: './table-toolbar.component.html',
-  styleUrl: './table-toolbar.component.css'
+    selector: 'app-table-toolbar',
+    imports: [CommonModule, FormsModule, CalendarModule, ButtonModule, NgbDropdownModule, TableActionsComponent],
+    templateUrl: './table-toolbar.component.html',
+    styleUrl: './table-toolbar.component.css'
 })
 export class TableToolbarComponent {
   @ViewChild('number_reception')

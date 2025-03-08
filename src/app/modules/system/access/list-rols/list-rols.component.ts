@@ -21,18 +21,17 @@ import {
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-list-rols',
-  standalone: true,
-  imports: [
-    SidebarComponent,
-    HeaderComponent,
-    FooterComponent,
-    TableComponent,
-    ReactiveFormsModule,
-    CommonModule,
-  ],
-  templateUrl: './list-rols.component.html',
-  styleUrl: './list-rols.component.css',
+    selector: 'app-list-rols',
+    imports: [
+        SidebarComponent,
+        HeaderComponent,
+        FooterComponent,
+        TableComponent,
+        ReactiveFormsModule,
+        CommonModule,
+    ],
+    templateUrl: './list-rols.component.html',
+    styleUrl: './list-rols.component.css'
 })
 export class ListRolsComponent {
   private modalService = inject(NgbModal);

@@ -12,12 +12,11 @@ import { TableService } from '../../../shared/services/table.service';
 import { DecimalPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-admin',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css',
-  providers: [TableService, DecimalPipe],
+    selector: 'app-admin',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './admin.component.html',
+    styleUrl: './admin.component.css',
+    providers: [TableService, DecimalPipe]
 })
 export class AdminComponent {
   tableColumns: any[] = [

@@ -4,11 +4,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-create-client',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './create.component.html',
-  styleUrl: './create.component.css'
+    selector: 'app-create-client',
+    imports: [ReactiveFormsModule, CommonModule],
+    templateUrl: './create.component.html',
+    styleUrl: './create.component.css'
 })
 export class CreateComponent {
   // @Input() name: string = '';

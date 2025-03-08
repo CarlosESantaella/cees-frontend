@@ -23,11 +23,10 @@ import { CrudService } from '../../../../../shared/services/crud.service';
 import { TableComponent } from '../../../../../shared/components/table/table.component';
 
 @Component({
-  selector: 'app-create',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, InputSwitchModule],
-  templateUrl: './create.component.html',
-  styleUrl: './create.component.css'
+    selector: 'app-create',
+    imports: [ReactiveFormsModule, CommonModule, InputSwitchModule],
+    templateUrl: './create.component.html',
+    styleUrl: './create.component.css'
 })
 export class CreateComponent {
 

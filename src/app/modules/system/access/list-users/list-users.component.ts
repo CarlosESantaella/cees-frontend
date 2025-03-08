@@ -11,11 +11,10 @@ import { CrudService } from '../../../../shared/services/crud.service';
 
 
 @Component({
-  selector: 'app-list-users',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './list-users.component.html',
-  styleUrl: './list-users.component.css',
+    selector: 'app-list-users',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './list-users.component.html',
+    styleUrl: './list-users.component.css'
 })
 export class ListUsersComponent {
  

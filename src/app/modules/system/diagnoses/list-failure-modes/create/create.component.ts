@@ -6,11 +6,10 @@ import { CrudService } from '../../../../../shared/services/crud.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-create',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './create.component.html',
-  styleUrl: './create.component.css'
+    selector: 'app-create',
+    imports: [ReactiveFormsModule, CommonModule],
+    templateUrl: './create.component.html',
+    styleUrl: './create.component.css'
 })
 export class CreateComponent {
   @Output() createEvent: EventEmitter<any> = new EventEmitter();

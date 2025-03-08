@@ -7,11 +7,10 @@ import { Router } from '@angular/router';
 import { MainMenuService } from '../../../../shared/components/main-menu/services/main-menu.service';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [ToastsContainerComponent, NgbTooltipModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+    selector: 'app-header',
+    imports: [ToastsContainerComponent, NgbTooltipModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.css'
 })
 export class HeaderComponent {
   constructor(

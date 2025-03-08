@@ -8,11 +8,10 @@ import { HeaderComponent } from '../../partials/header/header.component';
 import { SidebarComponent } from '../../partials/sidebar/sidebar.component';
 
 @Component({
-  selector: 'app-list-failure-modes',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './list-failure-modes.component.html',
-  styleUrl: './list-failure-modes.component.css'
+    selector: 'app-list-failure-modes',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './list-failure-modes.component.html',
+    styleUrl: './list-failure-modes.component.css'
 })
 export class ListFailureModesComponent {
   tableColumns: any[] = [

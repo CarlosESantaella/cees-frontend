@@ -15,22 +15,21 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { TableService } from 'primeng/table';
 
 @Component({
-  selector: 'app-list-diagnoses',
-  standalone: true,
-  imports: [
-    SidebarComponent,
-    HeaderComponent,
-    FooterComponent,
-    TableComponent,
-    DialogModule,
-    ButtonModule,
-    InputTextModule,
-    CommonModule,
-    FormsModule,
-    FieldsetModule
-  ],
-  templateUrl: './list-diagnoses.component.html',
-  styleUrl: './list-diagnoses.component.css',
+    selector: 'app-list-diagnoses',
+    imports: [
+        SidebarComponent,
+        HeaderComponent,
+        FooterComponent,
+        TableComponent,
+        DialogModule,
+        ButtonModule,
+        InputTextModule,
+        CommonModule,
+        FormsModule,
+        FieldsetModule
+    ],
+    templateUrl: './list-diagnoses.component.html',
+    styleUrl: './list-diagnoses.component.css'
 })
 export class ListDiagnosesComponent {
   @ViewChild(TableComponent) tableComponent!: TableComponent;

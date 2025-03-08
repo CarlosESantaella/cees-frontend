@@ -7,11 +7,10 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-diagnosis-files-modal',
-  standalone: true,
-  imports: [CommonModule, ButtonModule, DialogModule],
-  templateUrl: './diagnosis-files-modal.component.html',
-  styleUrl: './diagnosis-files-modal.component.css'
+    selector: 'app-diagnosis-files-modal',
+    imports: [CommonModule, ButtonModule, DialogModule],
+    templateUrl: './diagnosis-files-modal.component.html',
+    styleUrl: './diagnosis-files-modal.component.css'
 })
 export class DiagnosisFilesModalComponent {
   visibleDiagnosisFiles: boolean = false;

@@ -8,11 +8,10 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-diagnoses-item-photos-modal',
-  standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonModule],
-  templateUrl: './diagnoses-item-photos-modal.component.html',
-  styleUrl: './diagnoses-item-photos-modal.component.css'
+    selector: 'app-diagnoses-item-photos-modal',
+    imports: [CommonModule, FormsModule, DialogModule, ButtonModule],
+    templateUrl: './diagnoses-item-photos-modal.component.html',
+    styleUrl: './diagnoses-item-photos-modal.component.css'
 })
 export class DiagnosesItemPhotosModalComponent {
   @Input() diagnosis_id_selected: number = 0;

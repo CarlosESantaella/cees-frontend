@@ -22,18 +22,17 @@ import { CommonModule } from '@angular/common';
 import { set } from 'date-fns';
 
 @Component({
-  selector: 'app-list-rols-v2',
-  standalone: true,
-  imports: [
-    SidebarComponent,
-    HeaderComponent,
-    FooterComponent,
-    TableComponent,
-    ReactiveFormsModule,
-    CommonModule,
-  ],
-  templateUrl: './list-rols-v2.component.html',
-  styleUrl: './list-rols-v2.component.css'
+    selector: 'app-list-rols-v2',
+    imports: [
+        SidebarComponent,
+        HeaderComponent,
+        FooterComponent,
+        TableComponent,
+        ReactiveFormsModule,
+        CommonModule,
+    ],
+    templateUrl: './list-rols-v2.component.html',
+    styleUrl: './list-rols-v2.component.css'
 })
 export class ListRolsV2Component {
  private modalService = inject(NgbModal);

@@ -8,11 +8,10 @@ import { CrudService } from '../../../../shared/services/crud.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
-  selector: 'app-list-rates',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './list-rates.component.html',
-  styleUrl: './list-rates.component.css',
+    selector: 'app-list-rates',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './list-rates.component.html',
+    styleUrl: './list-rates.component.css'
 })
 export class ListRatesComponent {
   tableColumns: any[] = [

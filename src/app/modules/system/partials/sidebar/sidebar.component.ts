@@ -21,11 +21,10 @@ import { CrudService } from '../../../../shared/services/crud.service';
 import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css',
+    selector: 'app-sidebar',
+    imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+    templateUrl: './sidebar.component.html',
+    styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
   width_screen: number = 0;

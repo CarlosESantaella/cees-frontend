@@ -3,10 +3,9 @@ import { NgbToastModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-	selector: 'app-toasts-container',
-	standalone: true,
-	imports: [NgbToastModule, NgbTooltipModule],
-	template: `
+    selector: 'app-toasts-container',
+    imports: [NgbToastModule, NgbTooltipModule],
+    template: `
 		@for (toast of toastService.toasts; track toast) {
 			<ngb-toast
 				[class]="toast.classname"
@@ -18,7 +17,7 @@ import { ToastService } from '../../services/toast.service';
 			</ngb-toast>
 		}
 	`,
-	host: { class: 'toast-container position-fixed top-0 end-0 p-3', style: 'z-index: 1200' },
+    host: { class: 'toast-container position-fixed top-0 end-0 p-3', style: 'z-index: 1200' }
 })
 export class ToastsContainerComponent {
 	toastService = inject(ToastService);

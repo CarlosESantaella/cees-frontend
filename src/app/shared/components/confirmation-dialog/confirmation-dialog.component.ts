@@ -14,11 +14,10 @@ import { MatButtonModule } from '@angular/material/button';
  * @title Dialog Animations
  */
 @Component({
-  selector: 'confirmation-dialog-component',
-  styleUrls: ['confirmation-dialog.component.css'],
-  templateUrl: 'confirmation-dialog.component.html',
-  standalone: true,
-  imports: [MatButtonModule],
+    selector: 'confirmation-dialog-component',
+    styleUrls: ['confirmation-dialog.component.css'],
+    templateUrl: 'confirmation-dialog.component.html',
+    imports: [MatButtonModule]
 })
 export class ConfirmationDialogComponent {
 
@@ -42,16 +41,15 @@ export class ConfirmationDialogComponent {
 }
 
 @Component({
-  selector: 'confirmation-dialog',
-  templateUrl: 'confirmation-dialog.html',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogTitle,
-    MatDialogContent
-  ]
+    selector: 'confirmation-dialog',
+    templateUrl: 'confirmation-dialog.html',
+    imports: [
+        MatButtonModule,
+        MatDialogActions,
+        MatDialogClose,
+        MatDialogTitle,
+        MatDialogContent
+    ]
 })
 export class ConfirmationDialog {
   constructor(

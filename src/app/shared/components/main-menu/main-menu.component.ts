@@ -9,11 +9,10 @@ import { AuthService } from '../../services/auth.service';
 import { MainMenuService } from './services/main-menu.service';
 
 @Component({
-  selector: 'app-main-menu',
-  standalone: true,
-  imports: [CommonModule, RouterModule, AnimatedBackgroundComponent],
-  templateUrl: './main-menu.component.html',
-  styleUrl: './main-menu.component.css'
+    selector: 'app-main-menu',
+    imports: [CommonModule, RouterModule, AnimatedBackgroundComponent],
+    templateUrl: './main-menu.component.html',
+    styleUrl: './main-menu.component.css'
 })
 export class MainMenuComponent {
   menuStack: string[] = [];

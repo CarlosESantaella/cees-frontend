@@ -8,11 +8,10 @@ import { CrudService } from '../../../../shared/services/crud.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
-  selector: 'app-list-receptions',
-  standalone: true,
-  imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
-  templateUrl: './list-receptions.component.html',
-  styleUrl: './list-receptions.component.css'
+    selector: 'app-list-receptions',
+    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    templateUrl: './list-receptions.component.html',
+    styleUrl: './list-receptions.component.css'
 })
 export class ListReceptionsComponent {
   // 'equipment_type', 'brand', 'model', 'serie', 'capability', 'client_id'
