@@ -9,7 +9,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
     selector: 'app-list-receptions',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    imports: [ HeaderComponent, FooterComponent, TableComponent],
     templateUrl: './list-receptions.component.html',
     styleUrl: './list-receptions.component.css'
 })
@@ -91,7 +91,7 @@ export class ListReceptionsComponent {
         this.allData = this.allData.map((item) =>
           item.id == resp.id ? resp : item
         );
-        
+
 
         console.log(this.allData, 'hola mundo alldata');
         console.log(resp, 'hola mundo resp');

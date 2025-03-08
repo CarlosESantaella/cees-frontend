@@ -23,7 +23,6 @@ import { CommonModule } from '@angular/common';
 @Component({
     selector: 'app-list-rols',
     imports: [
-        SidebarComponent,
         HeaderComponent,
         FooterComponent,
         TableComponent,
@@ -303,7 +302,7 @@ export class ListRolsComponent {
         });
       }
     });
-  
+
 
   }
 
@@ -314,7 +313,7 @@ export class ListRolsComponent {
       (result: any, value: any, index: any) => {
         if (value) {
           result[all_permissions[index].value] = 'OWN';
-        } 
+        }
         return result;
       },
       {}

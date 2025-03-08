@@ -22,7 +22,7 @@ import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
     selector: 'app-sidebar',
-    imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+    imports: [CommonModule, RouterLink, RouterLinkActive],
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.css'
 })
@@ -64,7 +64,7 @@ export class SidebarComponent {
     });
     let permissions_json = JSON.parse(authService.user).profile_data.permissions;
 
-    
+
 
     Object.entries(permissions_json).forEach(([key, value]) => {
       this.permissions.push(key);
@@ -80,7 +80,7 @@ export class SidebarComponent {
     //   return;
     // }
 
-    
+
   }
 
   @HostListener('window:resize', ['$event'])
@@ -123,7 +123,7 @@ export class SidebarComponent {
     this.openMainOption();
 
   }
- 
+
 
   openMainOption() {
     console.log(this.router.url);
@@ -217,7 +217,7 @@ export class SidebarComponent {
   validateOptions(options: string[]){
     if(this.permissions){
       let option_exists = false;
-      
+
       options.forEach((value: string, i: number)=> {
         if(this.permissions.includes(value)){
           option_exists = true;

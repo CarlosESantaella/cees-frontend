@@ -27,7 +27,7 @@ export class ConfirmationDialogComponent {
     this.dialog
       .open(ConfirmationDialog, {
         data: {title: 'Eliminar2', message: 'seguroo deseas eliminar este registro?'}
-        
+
       })
       .afterClosed()
       .subscribe((confirmado: Boolean) => {
@@ -46,7 +46,6 @@ export class ConfirmationDialogComponent {
     imports: [
         MatButtonModule,
         MatDialogActions,
-        MatDialogClose,
         MatDialogTitle,
         MatDialogContent
     ]
@@ -59,7 +58,7 @@ export class ConfirmationDialog {
   onConfirmClick(): void {
     this.dialogRef.close(true);
   }
-  
+
   onCancelClick(): void {
     this.dialogRef.close(false);
   }

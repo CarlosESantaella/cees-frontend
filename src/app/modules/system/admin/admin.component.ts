@@ -13,7 +13,7 @@ import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'app-admin',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    imports: [HeaderComponent, FooterComponent, TableComponent],
     templateUrl: './admin.component.html',
     styleUrl: './admin.component.css',
     providers: [TableService, DecimalPipe]
@@ -68,7 +68,7 @@ export class AdminComponent {
 
   create(data: any){
 
-    
+
     this.crudService.create(data)
     .subscribe(
       (resp) => {
@@ -94,7 +94,7 @@ export class AdminComponent {
           this.tableComponent.initTable(this.allData);
           this.toastService.show({ message: 'Administrador editado con exito', classname: 'bg-success text-dark'});
         }
-        
+
       }
     )
   }

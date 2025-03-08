@@ -24,7 +24,6 @@ import { set } from 'date-fns';
 @Component({
     selector: 'app-list-rols-v2',
     imports: [
-        SidebarComponent,
         HeaderComponent,
         FooterComponent,
         TableComponent,
@@ -85,7 +84,7 @@ export class ListRolsV2Component {
     this.crudService.api_path_create = '/profiles';
     this.crudService.api_path_update = '/profiles/';
     this.crudService.api_path_delete = '/profiles/';
-    
+
 
     this.crudService.auth_token = this.authService.token;
     this.crudService.list().subscribe((resp) => {

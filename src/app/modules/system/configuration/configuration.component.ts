@@ -14,7 +14,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 
 @Component({
     selector: 'app-configuration',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent, ReactiveFormsModule, CommonModule, ImageCropperModule],
+    imports: [HeaderComponent, FooterComponent, ReactiveFormsModule, CommonModule, ImageCropperModule],
     templateUrl: './configuration.component.html',
     styleUrl: './configuration.component.css'
 })
@@ -31,7 +31,7 @@ export class ConfigurationComponent {
   logo_data: any = null;
   number_reception_disabled: boolean = false;
 
-  //image logo 
+  //image logo
   imgChangeEvt: any = '';
   cropImgPreview: any = '';
   scale = 1;

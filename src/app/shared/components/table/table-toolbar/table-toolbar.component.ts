@@ -24,7 +24,7 @@ import { CreateComponent as CreateAdminComponent } from '../../../../modules/sys
 
 @Component({
     selector: 'app-table-toolbar',
-    imports: [CommonModule, FormsModule, CalendarModule, ButtonModule, NgbDropdownModule, TableActionsComponent],
+    imports: [CommonModule, FormsModule, CalendarModule, ButtonModule, NgbDropdownModule],
     templateUrl: './table-toolbar.component.html',
     styleUrl: './table-toolbar.component.css'
 })
@@ -63,7 +63,7 @@ export class TableToolbarComponent {
   ) {
     this.crudService = inject(CrudService);
   }
- 
+
   ngOnInit() {
     console.log('actions toolbar', this.actions);
     if (this.actions.length > 0 && this.actions[0].name == 'Recepcion') {

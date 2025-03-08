@@ -6,7 +6,7 @@ import { SidebarComponent } from '../partials/sidebar/sidebar.component';
 
 @Component({
     selector: 'app-home',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    imports: [HeaderComponent, FooterComponent],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css'
 })

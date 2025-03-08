@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MenuItem } from '../../interfaces/menu-item.feature';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule, UrlSegment } from '@angular/router';
@@ -18,12 +18,12 @@ export class MainMenuComponent {
   menuStack: string[] = [];
   currentMenu: MenuItem[] = [];
 
+  router: Router = inject(Router);
+  mainMenuService: MainMenuService = inject(MainMenuService);
+  authService: AuthService = inject(AuthService);
+  route: ActivatedRoute = inject(ActivatedRoute);
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private mainMenuService: MainMenuService
   ) { }
 
   ngOnInit(): void {

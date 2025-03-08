@@ -9,7 +9,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
     selector: 'app-list-rates',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    imports: [HeaderComponent, FooterComponent, TableComponent],
     templateUrl: './list-rates.component.html',
     styleUrl: './list-rates.component.css'
 })

@@ -9,7 +9,7 @@ import { SidebarComponent } from '../../partials/sidebar/sidebar.component';
 
 @Component({
     selector: 'app-list-failure-modes',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    imports: [HeaderComponent, FooterComponent, TableComponent],
     templateUrl: './list-failure-modes.component.html',
     styleUrl: './list-failure-modes.component.css'
 })
@@ -84,7 +84,7 @@ export class ListFailureModesComponent {
         this.allData = this.allData.map((item) =>
           item.id == resp.id ? resp : item
         );
-        
+
 
         console.log(this.allData, 'hola mundo alldata');
         console.log(resp, 'hola mundo resp');

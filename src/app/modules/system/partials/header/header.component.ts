@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MenusService } from '../../../../shared/services/menus.service';
 import { ToastsContainerComponent } from '../../../../shared/components/toast/container-toast.component';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { Router } from '@angular/router';
 import { MainMenuService } from '../../../../shared/components/main-menu/services/main-menu.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -13,13 +13,11 @@ import { MainMenuService } from '../../../../shared/components/main-menu/service
     styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  constructor(
-    private menusService: MenusService,
-    private authService: AuthService,
-    private router: Router,
-    private mainMenuService: MainMenuService
-  ){}
-
+  menusService: MenusService = inject(MenusService);
+  authService: AuthService = inject(AuthService);
+  router: Router = inject(Router);
+  mainMenuService: MainMenuService = inject(MainMenuService);
+  
   clickBtnMenu() {
     this.menusService.emitClickBtnMenu();
   }

@@ -12,12 +12,12 @@ import { CrudService } from '../../../../shared/services/crud.service';
 
 @Component({
     selector: 'app-list-users',
-    imports: [SidebarComponent, HeaderComponent, FooterComponent, TableComponent],
+    imports: [HeaderComponent, FooterComponent, TableComponent],
     templateUrl: './list-users.component.html',
     styleUrl: './list-users.component.css'
 })
 export class ListUsersComponent {
- 
+
   tableColumns: any[] = [
     { label: 'ID', field: 'id' },
     { label: 'Nombre del usuario', field: 'username' },

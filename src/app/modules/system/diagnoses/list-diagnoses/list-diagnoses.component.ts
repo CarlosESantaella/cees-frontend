@@ -17,7 +17,6 @@ import { TableService } from 'primeng/table';
 @Component({
     selector: 'app-list-diagnoses',
     imports: [
-        SidebarComponent,
         HeaderComponent,
         FooterComponent,
         TableComponent,
@@ -109,7 +108,7 @@ export class ListDiagnosesComponent {
     console.log(data, 'holasd d');
     this.crudService.api_path_update = '/diagnoses/';
     this.crudService.put(`/diagnoses/${data.id}`, data).subscribe((resp) => {
-      
+
       if (!resp?.error) {
         this.allData = this.allData.map((item) =>
           item.id == resp.id ? resp : item
@@ -170,7 +169,7 @@ export class ListDiagnosesComponent {
           setTimeout(() => {
             this.tableComponent.initTable([this.reception.diagnosis]);
           }, 1000);
-          
+
         }else{
           setTimeout(() => {
             this.tableComponent.initTable([]);
