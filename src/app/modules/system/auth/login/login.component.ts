@@ -56,7 +56,7 @@ export class LoginComponent {
           this.router.navigate(['/system/main-menu']);
           this.toastService.show({
             message:
-              'Bienvenido '+resp.user.name,
+              'Bienvenido '+resp.user.username,
             classname: 'bg-success text-dark ',
           });
         },
