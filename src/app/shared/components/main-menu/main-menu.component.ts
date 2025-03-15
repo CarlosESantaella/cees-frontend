@@ -26,7 +26,7 @@ export class MainMenuComponent {
   authService: AuthService = inject(AuthService);
   route: ActivatedRoute = inject(ActivatedRoute);
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.currentMenu = this.mainMenuService.menuData;
     this.route.url.subscribe(urlSegments => {
       const fullPath = urlSegments.map(segment => segment.path).join('/');
@@ -38,9 +38,7 @@ export class MainMenuComponent {
           this.authService.logout();
         }, 0);
       }
-      console.log('userPermissions', this.userPermissions);
       this.mainMenuService.menuData = this.filterMenuByPermissions(this.userPermissions, this.mainMenuService.menuData);
-      console.log(this.mainMenuService.menuData)
       this.currentMenu = this.mainMenuService.menuData;
       if (fullPath && fullPath !== 'main-menu') {
         this.updateMenuFromPath(fullPath);

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api_domain: 'https://aqua-wildcat-324926.hostingersite.com/api',
-  api_web: 'https://aqua-wildcat-324926.hostingersite.com'
+  api_domain: 'https://api-agile-report.devsprinters.site/api',
+  api_web: 'https://api-agile-report.devsprinters.site'
 };
