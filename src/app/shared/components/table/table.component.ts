@@ -58,7 +58,7 @@ import { DiagnosesItemPhotosModalComponent } from './modals/diagnoses-item-photo
 import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
 import { TableActionsComponent } from './table-actions/table-actions.component';
 import { ButtonModule } from 'primeng/button';
-
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 @Component({
     selector: 'ngbd-table',
     imports: [
@@ -81,7 +81,8 @@ import { ButtonModule } from 'primeng/button';
         DiagnosesItemPhotosModalComponent,
         TableToolbarComponent,
         TableActionsComponent,
-        ButtonModule
+        ButtonModule,
+        ToggleSwitchModule
     ],
     templateUrl: './table.component.html',
     styleUrl: './table.component.css',
@@ -204,7 +205,7 @@ export class TableComponent {
         });
       });
     }
-    if (this.actions[0].name == 'Rol') {
+    if (this.actions[0].name == 'Módulo') {
       this.initRolTable();
     }
   }
@@ -429,5 +430,13 @@ export class TableComponent {
     } else {
       return value;
     }
+  }
+
+  getNestedValue(record: any, path: string): string {
+    if (!path || !record) return '';
+
+    return path.split('.').reduce((obj, key) => {
+      return obj && obj[key] !== undefined ? obj[key] : '';
+    }, record);
   }
 }

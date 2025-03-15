@@ -29,7 +29,7 @@ export class EditComponent {
   all_rols: any = [];
 
   constructor(public modal: NgbActiveModal, public fb: FormBuilder, public crudService: CrudService) {
-    
+
   }
 
   ngOnInit() {
@@ -40,7 +40,7 @@ export class EditComponent {
         email: [this.data.email ?? '', [Validators.required, Validators.email]],
         password: [this.data.password ?? '', [Validators.required, Validators.minLength(6)]],
         confirm_password: ['', Validators.required],
-        profile: ['', Validators.required],
+        // profile: ['', Validators.required],
       },
       {
         validator: this.ConfirmedValidator('password', 'confirm_password'),

@@ -7,35 +7,39 @@ import { SharedModule } from '../../shared.module';
 import { AnimatedBackgroundComponent } from "../animated-background/animated-background.component";
 import { AuthService } from '../../services/auth.service';
 import { MainMenuService } from './services/main-menu.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
+    standalone: true,
     selector: 'app-main-menu',
-    imports: [CommonModule, RouterModule, AnimatedBackgroundComponent],
     templateUrl: './main-menu.component.html',
-    styleUrl: './main-menu.component.css'
+    styleUrl: './main-menu.component.css',
+    imports: [CommonModule, RouterModule, AnimatedBackgroundComponent, ButtonModule]
 })
 export class MainMenuComponent {
   menuStack: string[] = [];
   currentMenu: MenuItem[] = [];
+  userPermissions: string[] = [];
 
   router: Router = inject(Router);
   mainMenuService: MainMenuService = inject(MainMenuService);
   authService: AuthService = inject(AuthService);
   route: ActivatedRoute = inject(ActivatedRoute);
 
-  constructor(
-  ) { }
-
   ngOnInit(): void {
     this.currentMenu = this.mainMenuService.menuData;
     this.route.url.subscribe(urlSegments => {
       const fullPath = urlSegments.map(segment => segment.path).join('/');
       let user = JSON.parse(this.authService.user);
-      let userPermissions: any = user.profile_data.permissions;
-      userPermissions = Object.keys(userPermissions);
-
-      console.log('userPermissions', userPermissions);
-      this.mainMenuService.menuData = this.filterMenuByPermissions(userPermissions, this.mainMenuService.menuData);
+      let userPermissions: any = user.profile_data?.permissions || [];
+      this.userPermissions = Object.keys(userPermissions);
+      if(this.userPermissions.length === 0) {
+        setTimeout(() => {
+          this.authService.logout();
+        }, 0);
+      }
+      console.log('userPermissions', this.userPermissions);
+      this.mainMenuService.menuData = this.filterMenuByPermissions(this.userPermissions, this.mainMenuService.menuData);
       console.log(this.mainMenuService.menuData)
       this.currentMenu = this.mainMenuService.menuData;
       if (fullPath && fullPath !== 'main-menu') {

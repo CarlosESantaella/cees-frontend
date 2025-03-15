@@ -1,0 +1,68 @@
+<div class="modal-content">
+  <!--begin::Modal header-->
+  <div class="modal-header">
+    <!--begin::Modal title-->
+    <h2 class="fw-bolder">Agregar módulos a usuarios</h2>
+    <!--end::Modal title-->
+    <!--begin::Close-->
+    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-roles-modal-action="close"
+      (click)="modal.dismiss('Cross click')">
+      <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+      <span class="svg-icon svg-icon-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+            fill="black" />
+          <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+        </svg>
+      </span>
+      <!--end::Svg Icon-->
+    </div>
+    <!--end::Close-->
+  </div>
+  <!--end::Modal header-->
+  <!--begin::Modal body-->
+  <div class="modal-body scroll-y mx-lg-5 my-7">
+    <!--begin::Form-->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <!--begin::Scroll-->
+      <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_role_scroll" data-kt-scroll="true"
+        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+        data-kt-scroll-dependencies="#kt_modal_add_role_header" data-kt-scroll-wrappers="#kt_modal_add_role_scroll"
+        data-kt-scroll-offset="300px">
+        <!--begin::Input group-->
+        <div class="fv-row" style="height: 200px;">
+          <!--begin::Label-->
+          <label class="fs-5 fw-bolder form-label mb-2">
+            <span class="required">Nombre de usuario</span>
+          </label>
+          <!-- <input class="form-control form-control-solid" placeholder="Ingrese el username" formControlName="name" /> -->
+          <p-autocomplete placeholder="Ingrese el username" styleClass="w-100"
+            inputStyleClass="form-control form-control-solid w-100 py-3 px-4" formControlName="username"
+            [suggestions]="filteredUsers" (completeMethod)="search($event)" [forceSelection]="true" (onSelect)="onUserSelect($event)" field="username" />
+
+          <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+            <p class="text-danger" *ngIf="username?.errors?.['required']">
+              Campo requerido
+            </p>
+            <p class="text-danger" *ngIf="username?.errors?.['minlength']">
+              Debes introducir un mínimo de {{ username?.errors?.['minlength'].requiredLength }}
+              caracteres
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center pt-15">
+        <!-- <button type="reset" class="btn btn-light me-3"
+                                data-kt-roles-modal-action="cancel">Discard</button> -->
+        <button type="submit" class="btn btn-primary" data-kt-roles-modal-action="submit" [disabled]="!form.valid">
+          <span class="indicator-label">Agregar</span>
+          <span class="indicator-progress">Por favor, espera...
+            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+        </button>
+      </div>
+      <!--end::Actions-->
+    </form>
+    <!--end::Form-->
+  </div>
+  <!--end::Modal body-->
+</div>

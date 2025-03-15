@@ -34,7 +34,7 @@ export class CreateComponent {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirm_password: ['', Validators.required],
-        profile: ['', Validators.required],
+        // profile: ['', Validators.required],
       },
       {
         validator: this.ConfirmedValidator('password', 'confirm_password'),

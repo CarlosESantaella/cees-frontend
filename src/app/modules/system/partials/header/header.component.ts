@@ -17,7 +17,7 @@ export class HeaderComponent {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
   mainMenuService: MainMenuService = inject(MainMenuService);
-  
+
   clickBtnMenu() {
     this.menusService.emitClickBtnMenu();
   }

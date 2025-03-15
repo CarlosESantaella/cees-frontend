@@ -86,31 +86,18 @@
         </div>
         <!--end::Input-->
       </div>
-      <!--end::Input group-->
-      <!--begin::Input group-->
-      <div class="mb-7">
-        <!--begin::Label-->
+      <!-- <div class="mb-7">
         <label class="required fw-bold fs-6 mb-5">Rol</label>
-        <!--end::Label-->
-        <!--begin::Roles-->
         <ng-container *ngFor="let rol of all_rols; let i = index">
-          <!--begin::Input row-->
           <div class="d-flex fv-row">
-            <!--begin::Radio-->
             <div class="form-check form-check-custom form-check-solid">
-              <!--begin::Input-->
               <input class="form-check-input me-3" formControlName="profile" type="radio" [value]="rol.id"
                  [checked]='i == 0' />
-              <!--end::Input-->
-              <!--begin::Label-->
               <label class="form-check-label" for="kt_modal_update_role_option_0">
                 <div class="fw-bolder text-gray-800">{{ rol.name }}</div>
               </label>
-              <!--end::Label-->
             </div>
-            <!--end::Radio-->
           </div>
-          <!--end::Input row-->
           <div class='separator separator-dashed my-5'></div>
         </ng-container>
         <div *ngIf="profile?.invalid && (profile?.dirty || profile?.touched)">
@@ -118,10 +105,7 @@
             Campo requerido
           </p>
         </div>
-        <!--end::Input row-->
-        <!--end::Roles-->
-      </div>
-      <!--end::Input group-->
+      </div> -->
       <div class="fv-row mb-7 text-center">
         <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Crear</button>
       </div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -25,7 +25,7 @@ export class LoginComponent {
     public fb: FormBuilder,
     public authService: AuthService,
     public toastService: ToastService,
-    public router: Router
+    public router: Router,
   ) {}
 
   ngOnInit() {
@@ -51,12 +51,21 @@ export class LoginComponent {
           this.authService.token = resp.access_token;
           this.authService.user = JSON.stringify(resp.user);
           console.log('user:', resp.user);
-          this.router.navigate(['/system/main-menu']);
-          this.toastService.show({
-            message:
-              'Bienvenido '+resp.user.username,
-            classname: 'bg-success text-dark ',
-          });
+
+          if(resp.user.profile_data == null){
+            this.toastService.show({
+              message:
+                'No tienen permisos para acceder al sistema, contacte al administrador.',
+              classname: 'bg-danger text-light ',
+            });
+          }else{
+            this.router.navigate(['/system/main-menu']);
+            this.toastService.show({
+              message:
+                'Bienvenido '+resp.user.username,
+              classname: 'bg-success text-dark ',
+            });
+          }
         },
         (error: any) => {
           this.toastService.show({

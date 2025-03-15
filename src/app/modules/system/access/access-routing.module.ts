@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../../shared/guards/auth.guard';
 import { ListRolsComponent } from './list-rols/list-rols.component';
 import { ListUsersComponent } from './list-users/list-users.component';
-import { ListRolsV2Component } from './list-rols-v2/list-rols-v2.component';
+import { ListRolsV3Component } from './list-rols-v3/list-rols-v3.component';
 
 const routes: Routes = [
   {
@@ -26,7 +26,7 @@ const routes: Routes = [
     data: {
       permission: 'MANAGE PROFILES'
     },
-    component: ListRolsV2Component,
+    component: ListRolsV3Component,
     canActivate: [authGuard]
   }
 ];
