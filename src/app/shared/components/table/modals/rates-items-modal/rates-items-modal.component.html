@@ -1,0 +1,62 @@
+<p-dialog header="Items del diagnóstico" [modal]="true" [(visible)]="visibleRatesItems"
+  [style]="{ width: '95%', maxWidth: '900px' }" [draggable]="false">
+  <section class="mb-4">
+    <div>
+    </div>
+    <div>
+      <p-table #dt [value]="all_items" [tableStyle]="{ 'width': '100%' }" dataKey="id" styleClass="p-datatable-striped"
+        [rows]="10" [paginator]="true" [globalFilterFields]="['description',]" styleClass="mb-4">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <input pInputText type="text" (input)="onInputSearchItems($event)" placeholder="Buscar item..." />
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Descripción</th>
+            <th>Unidad de medida</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-i="rowIndex">
+          <tr>
+            <td>{{ item.description }}</td>
+            <td>{{ item.unit_of_measurement }}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="onClickAddItem(item)">Agregar</button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-table [value]="items_to_send" [tableStyle]="{ 'width': '100%' }" styleClass="p-datatable-striped"
+        [scrollable]="true" scrollHeight="500px" styleClass="mb-4">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Descripción</th>
+            <th>Unidad de medida</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-i="rowIndex">
+          <tr>
+            <td>{{ item.description }}</td>
+            <td>{{ item.unit_of_measurement }}</td>
+            <td>
+              <input class="form-control input-quantity-items" type="number"
+                [(ngModel)]="rate_items['item_id_'+item.id]" [name]="'item_quantity_'+item.id" id="" min="0">
+            </td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="onClickRemoveItem(item)">Eliminar</button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </section>
+  <div class="d-flex justify-content-end gap-2">
+    <p-button label="Cerrar" severity="secondary" (click)="closeDialog()" />
+    <p-button label="Actualizar items de tarifa" (click)="updateRateItems()" />
+  </div>
+</p-dialog>

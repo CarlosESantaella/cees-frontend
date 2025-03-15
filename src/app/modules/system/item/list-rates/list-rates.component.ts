@@ -8,15 +8,20 @@ import { CrudService } from '../../../../shared/services/crud.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
-    selector: 'app-list-rates',
-    imports: [HeaderComponent, FooterComponent, TableComponent],
-    templateUrl: './list-rates.component.html',
-    styleUrl: './list-rates.component.css'
+  selector: 'app-list-rates',
+  imports: [HeaderComponent, FooterComponent, TableComponent],
+  templateUrl: './list-rates.component.html',
+  styleUrl: './list-rates.component.css'
 })
 export class ListRatesComponent {
   tableColumns: any[] = [
     { label: 'ID', field: 'id' },
     { label: 'Clientes', field: 'clients', pipe: 'extract_clients' },
+    { label: 'Trabajo requerido', pipe: 'rates_items', html: true },
+    { label: 'Costo bruto', field: 'gross_cost', pipe: 'custom_currency' },
+    { label: 'Costo indirecto', field: 'indirect_cost', pipe: 'custom_currency' },
+    { label: 'Utilidad', field: 'utility', pipe: 'custom_currency' },
+    { label: 'Costo total', field: 'total_cost', pipe: 'custom_currency' }
   ];
   allData: any[] = [];
 
@@ -61,11 +66,10 @@ export class ListRatesComponent {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   create(data: any) {
     this.crudService.create(data).subscribe((resp) => {
-      console.log(resp);
       if (!resp?.error) {
         this.allData.push(resp);
         console.log(this.allData, 2);
@@ -79,7 +83,6 @@ export class ListRatesComponent {
   }
 
   edit(data: any) {
-    console.log(data, data.id, 'holasd d');
     this.crudService.update(data, data.id).subscribe((resp) => {
       console.log(resp, 233);
       if (!resp?.error) {

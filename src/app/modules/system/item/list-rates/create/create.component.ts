@@ -17,14 +17,14 @@ import { MultiSelectModule } from 'primeng/multiselect';
 // }
 
 @Component({
-    selector: 'app-create',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MultiSelectModule
-    ],
-    templateUrl: './create.component.html',
-    styleUrl: './create.component.css'
+  selector: 'app-create',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MultiSelectModule
+  ],
+  templateUrl: './create.component.html',
+  styleUrl: './create.component.css'
 })
 export class CreateComponent {
   // @Input() name: string = '';
@@ -32,6 +32,7 @@ export class CreateComponent {
 
   form!: FormGroup;
   clients!: any[];
+  currency: string = '';
 
   constructor(
     public modal: NgbActiveModal,
@@ -51,13 +52,23 @@ export class CreateComponent {
 
   ngOnInit() {
 
-    
+
     this.form = this.fb.group(
       {
         // name: ['', [Validators.required, Validators.minLength(6)]],
-        selectedClients: [[], Validators.required]
+        selectedClients: [[], Validators.required],
+        gross_cost: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+        indirect_cost: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+        utility: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+        total_cost: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       }
     );
+
+    this.crudService.api_path_show = '/configurations';
+
+    this.crudService.show('').subscribe((resp: any) => {
+      this.currency = resp.currency;
+    });
   }
 
   get selectedClients() {
@@ -74,6 +85,26 @@ export class CreateComponent {
   }
   get profile() {
     return this.form.get('profile');
+  }
+  get gross_cost() {
+    return this.form.get('gross_cost');
+  }
+  get indirect_cost() {
+    return this.form.get('indirect_cost');
+  }
+  get utility() {
+    return this.form.get('utility');
+  }
+  get total_cost() {
+    return this.form.get('total_cost');
+  }
+
+  totalCostCalculate() {
+    let gross_cost = parseInt((this.gross_cost?.value == '') ? 0 : this.gross_cost?.value);
+    let indirect_cost = parseInt((this.indirect_cost?.value == '') ? 0 : this.indirect_cost?.value);
+    let utility = parseInt((this.utility?.value == '') ? 0 : this.utility?.value);
+    console.log(gross_cost, indirect_cost, utility);
+    this.total_cost?.setValue(gross_cost + indirect_cost + utility);
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string) {
@@ -96,14 +127,18 @@ export class CreateComponent {
 
   onSubmit() {
     let formData = new FormData();
-    let clients = this.form.value;
+    let clients = this.form.value.selectedClients;
     let clients_arr: any[] = [];
 
-    clients.selectedClients.forEach((item: any) => {
+    clients.forEach((item: any) => {
       clients_arr.push(item.id);
     });
 
     formData.append('clients', JSON.stringify(clients_arr));
+    formData.append('gross_cost', this.gross_cost?.value || '');
+    formData.append('indirect_cost', this.indirect_cost?.value || '');
+    formData.append('utility', this.utility?.value || '');
+    formData.append('total_cost', this.total_cost?.value || '');
 
     this.createEvent.emit(formData);
     this.modal.dismiss();

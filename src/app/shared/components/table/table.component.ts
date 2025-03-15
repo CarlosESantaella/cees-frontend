@@ -59,6 +59,7 @@ import { TableToolbarComponent } from './table-toolbar/table-toolbar.component';
 import { TableActionsComponent } from './table-actions/table-actions.component';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { RatesItemsModalComponent } from './modals/rates-items-modal/rates-items-modal.component';
 @Component({
     selector: 'ngbd-table',
     imports: [
@@ -78,6 +79,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
         DiagnosisFilesModalComponent,
         FailureModeModalComponent,
         DiagnosesItemsModalComponent,
+        RatesItemsModalComponent,
         DiagnosesItemPhotosModalComponent,
         TableToolbarComponent,
         TableActionsComponent,
@@ -109,6 +111,7 @@ export class TableComponent {
   @ViewChild(DiagnosisFilesModalComponent) diagnosisFilesModal!: DiagnosisFilesModalComponent;
   @ViewChild(FailureModeModalComponent) failureModeModal!: FailureModeModalComponent;
   @ViewChild(DiagnosesItemsModalComponent) diagnosesItemsModal!: DiagnosesItemsModalComponent;
+  @ViewChild(RatesItemsModalComponent) ratesItemsModal!: RatesItemsModalComponent;
   @ViewChild(DiagnosesItemPhotosModalComponent) diagnosesItemPhotosModal!: DiagnosesItemPhotosModalComponent;
   @ViewChild(TableToolbarComponent) tableToolbar!: TableToolbarComponent;
 
@@ -135,6 +138,7 @@ export class TableComponent {
   visibleDiagnosisFiles: boolean = false;
   diagnosis_files_selected: any = {};
   diagnosis_id_selected: number = 0;
+  rate_id_selected: number = 0;
 
   visibleFailureMode: boolean = false;
   failure_mode_selected: number | string = '';
@@ -180,11 +184,11 @@ export class TableComponent {
         console.log(this.clients_all, 'clients_all');
       });
     }
-    if (this.actions[0].name == 'Item') {
+    if (this.actions[0].name == 'Tarifa') {
       this.crudService.api_path_show = '/configurations';
 
       this.crudService.show('').subscribe((resp: any) => {
-        // this.tableService.DATA = resp;
+
         this.custom_currency = resp.currency;
         console.log(resp, 'se cargo');
       });
@@ -371,7 +375,6 @@ export class TableComponent {
         return `<img class="img-thumbnail" src="/assets/media/clients/${value}" width="70" />`;
       }
       if (pipe == 'extract_clients') {
-        console.log(this.clients);
         let clients_new = this.clients.filter((item) =>
           value.includes(item.id)
         );
@@ -382,8 +385,7 @@ export class TableComponent {
         return value;
       }
       if (pipe == 'custom_currency') {
-        console.log(this.custom_currency, 'hola mundo33');
-        return value + this.custom_currency;
+        return (value || 0) + this.custom_currency;
       }
       if (pipe == 'date') {
         // const timeZone = 'America/Bogota';

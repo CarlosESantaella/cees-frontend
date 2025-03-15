@@ -10,61 +10,61 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
-    selector: 'app-diagnoses-items-modal',
-    imports: [CommonModule, FormsModule, DialogModule, TableModule, ButtonModule, InputTextModule],
-    templateUrl: './diagnoses-items-modal.component.html',
-    styleUrl: './diagnoses-items-modal.component.css'
+  selector: 'app-rates-items-modal',
+  imports: [CommonModule, FormsModule, DialogModule, TableModule, ButtonModule, InputTextModule],
+  templateUrl: './rates-items-modal.component.html',
+  styleUrl: './rates-items-modal.component.css'
 })
-export class DiagnosesItemsModalComponent implements AfterViewInit {
-  @Input() diagnosis_id_selected: number = 0;
+export class RatesItemsModalComponent {
+  @Input() rate_id_selected: number = 0;
   @Input() actions: any[] = [];
   @ViewChild('dt') dt!: Table;
 
-  visibleDiagnosticItems: boolean = false;
+  visibleRatesItems: boolean = false;
   all_items: any = [];
   items_to_send: any = [];
-  diagnostic_items: any = {};
+  rate_items: any = {};
 
   private crudService = inject(CrudService);
   private toastService = inject(ToastService);
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    console.log('hola mundo', this.actions[0].name);
-    if(this.actions[0].name == 'Diagnostico'){
+    if (this.actions[0].name == 'Tarifa') {
       this.crudService.get(`/items`).subscribe((resp: any) => {
         this.all_items = resp;
         console.log('items: ', this.all_items);
         this.all_items.forEach((item: any) => {
-          this.diagnostic_items['item_id_' + item.id] = 0;
+          this.rate_items['item_id_' + item.id] = 0;
         });
       });
     }
   }
 
   ngAfterViewInit() {
+    // Ensure dt reference is available
     if (!this.dt) {
       console.error('Table reference (dt) is not available.');
     }
   }
 
-  showDialogDiagnosesItems(diagnosis_id: number) {
-    this.diagnosis_id_selected = diagnosis_id;
-    this.visibleDiagnosticItems = true;
+  showDialogRatesItems(rate_id: number) {
+    this.rate_id_selected = rate_id;
+    this.visibleRatesItems = true;
     this.crudService
-      .get(`/diagnoses/${this.diagnosis_id_selected}/items`)
+      .get(`/rates/${this.rate_id_selected}/items`)
       .subscribe((response: any) => {
         this.items_to_send = [];
 
         let response_items = response;
-        for (let key in this.diagnostic_items) {
-          if (this.diagnostic_items.hasOwnProperty(key)) {
-            this.diagnostic_items[key] = 0;
+        for (let key in this.rate_items) {
+          if (this.rate_items.hasOwnProperty(key)) {
+            this.rate_items[key] = 0;
           }
         }
         response_items.forEach((response_item: any) => {
-          this.diagnostic_items['item_id_' + response_item.item_id] =
+          this.rate_items['item_id_' + response_item.item_id] =
             response_item.quantity;
           this.items_to_send.push(response_item.item);
         });
@@ -78,11 +78,11 @@ export class DiagnosesItemsModalComponent implements AfterViewInit {
     );
     if (!hasItem) {
       this.items_to_send.push(item);
-      this.diagnostic_items['item_id_' + item.id] = 0;
+      this.rate_items['item_id_' + item.id] = 0;
     }
     console.log(this.items_to_send);
 
-    console.log('resultado items: ', this.diagnostic_items);
+    console.log('resultado items: ', this.rate_items);
   }
 
   onClickRemoveItem(item: any) {
@@ -90,36 +90,39 @@ export class DiagnosesItemsModalComponent implements AfterViewInit {
       return itemToFilter.id != item.id;
     });
     let keyToDelete = 'item_id_' + item.id;
-    if (keyToDelete in this.diagnostic_items) {
-      delete this.diagnostic_items[keyToDelete];
-      console.log('resultado items: ', this.diagnostic_items);
+    if (keyToDelete in this.rate_items) {
+      delete this.rate_items[keyToDelete];
+      console.log('resultado items: ', this.rate_items);
     }
   }
 
-  updateDiagnosticItems() {
+  updateRateItems() {
     let items_to_upload: any = {
       items: [],
     };
-
-    for (let key in this.diagnostic_items) {
-      if (this.diagnostic_items.hasOwnProperty(key)) {
-        if (this.diagnostic_items[key] > 0) {
+    console.log('this.rate_items', this.rate_items);
+    for (let key in this.rate_items) {
+      if (this.rate_items.hasOwnProperty(key)) {
+        if (this.rate_items[key] > 0) {
           let item_array: any = key.split('_');
           items_to_upload.items.push({
-            diagnoses_id: this.diagnosis_id_selected,
+            rate_id: this.rate_id_selected,
             item_id: item_array[2],
-            quantity: this.diagnostic_items[key],
+            quantity: this.rate_items[key],
           });
         }
       }
     }
 
+    console.log('items_to_upload', items_to_upload);
+
     this.crudService
-      .put(`/diagnoses/${this.diagnosis_id_selected}/items`, items_to_upload)
+      .put(`/rates/${this.rate_id_selected}/items`, items_to_upload)
       .subscribe((response: any) => {
-        this.visibleDiagnosticItems = false;
+        console.log('response rates', response);
+        this.visibleRatesItems = false;
         this.toastService.show({
-          message: 'Items asociados al diagnostico actualizados con exito',
+          message: 'Items asociados a la tarifa actualizados con exito',
           classname: 'bg-success text-white',
         });
       });
@@ -137,6 +140,6 @@ export class DiagnosesItemsModalComponent implements AfterViewInit {
   }
 
   closeDialog() {
-    this.visibleDiagnosticItems = false;
+    this.visibleRatesItems = false;
   }
 }

@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/button';
     styleUrl: './diagnoses-item-photos-modal.component.css'
 })
 export class DiagnosesItemPhotosModalComponent {
-  @Input() diagnosis_id_selected: number = 0;
+  @Input() diagnosis_id_selected: number | string = 0;
   @Output() visibleDiagnosticItemPhotosChange = new EventEmitter<boolean>();
 
   visibleDiagnosticItemPhotos: boolean = false;

@@ -18,10 +18,6 @@ export class ListItemsComponent {
     { label: 'ID', field: 'id' },
     { label: 'Descripción', field: 'description' },
     { label: 'Unidad de medida', field: 'unit_of_measurement' },
-    { label: 'Costo bruto', field: 'gross_cost' , pipe: 'custom_currency'},
-    { label: 'Costo indirecto', field: 'indirect_cost' , pipe: 'custom_currency'},
-    { label: 'Utilidad', field: 'utility' , pipe: 'custom_currency'},
-    { label: 'Costo total', field: 'total_cost' , pipe: 'custom_currency'},
     { label: 'Descripción inicial', field: 'initial_description' },
     { label: 'Descripción Final', field: 'final_description' },
   ];
