@@ -28,7 +28,7 @@ export class CrudService {
       Authorization: `Bearer ${this.auth_token}`,
     });
     let full_url = environment.api_domain + url;
-    
+
     return this.http
       .get(full_url, {
         headers: headers
@@ -41,7 +41,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -71,7 +71,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -101,7 +101,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -131,7 +131,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -161,7 +161,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -169,7 +169,7 @@ export class CrudService {
             });
           }
           return of(error);
-        }) 
+        })
       );
   }
 
@@ -179,7 +179,7 @@ export class CrudService {
     });
     let URL = environment.api_domain + this.api_path_show + id;
     console.log(URL, 'url');
-    
+
     return this.http
       .get(URL, {
         headers: headers,
@@ -191,9 +191,9 @@ export class CrudService {
               this.authService.logout();
             }
           }
-          
+
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -223,7 +223,9 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          console.log('hola mundo');
+          console.log('errors is it', errors);
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -243,7 +245,7 @@ export class CrudService {
     let URL = environment.api_domain + this.api_path_update + id;
 
     console.log(data, 'antes de enviar');
-    
+
     return this.http
       .put(URL, data, {
         headers: headers,
@@ -255,10 +257,10 @@ export class CrudService {
               this.authService.logout();
             }
           }
-          
+
           let errors = error.error?.errors;
 
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -278,7 +280,7 @@ export class CrudService {
     let URL = environment.api_domain + this.api_path_update_patch + id;
 
     console.log(data, 'antes de enviar');
-    
+
     return this.http
       .patch(URL, data, {
         headers: headers,
@@ -291,7 +293,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+            if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -323,7 +325,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -353,7 +355,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];
@@ -383,7 +385,7 @@ export class CrudService {
             }
           }
           let errors = error.error?.errors;
-          if(errors && errors.length > 0){
+          if(errors && Object.keys(errors).length > 0){
             const keys = Object.keys(errors);
             keys.forEach(key => {
               let value = errors[key];

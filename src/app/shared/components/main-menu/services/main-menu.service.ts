@@ -6,8 +6,8 @@ import { menuData } from '../main-menu';
   providedIn: 'root'
 })
 export class MainMenuService {
-  originalMenuData: MenuItem[] = [...menuData];
-  menuData: MenuItem[] = [...menuData];
+  originalMenuData: MenuItem[] = menuData;
+  menuData: MenuItem[] = menuData;
   lastMenuState: string = '';
   constructor() { }
 

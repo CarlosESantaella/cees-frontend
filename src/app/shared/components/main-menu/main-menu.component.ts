@@ -27,7 +27,8 @@ export class MainMenuComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.updateCurrentMenu(this.mainMenuService.menuData);
+    // this.updateCurrentMenu(this.mainMenuService.menuData);
+    this.currentMenu = this.mainMenuService.menuData;
     this.route.url.subscribe(urlSegments => {
       const fullPath = urlSegments.map(segment => segment.path).join('/');
       let user = JSON.parse(this.authService.user);
